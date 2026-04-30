@@ -1,0 +1,237 @@
+.navbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  max-width: 1300px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  z-index: 1000;
+  padding: 8px 12px;
+  transition: box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease;
+}
+
+/* Dark mode navbar */
+[data-theme="dark"] .navbar {
+  background: rgba(13, 17, 23, 0.85);
+  border-color: rgba(48, 54, 61, 0.7);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.navbar.scrolled {
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(3, 68, 109, 0.15);
+}
+
+[data-theme="dark"] .navbar.scrolled {
+  background: rgba(13, 17, 23, 0.97);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+}
+
+.navWrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.logoText {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--foreground);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.logoImg {
+  object-fit: contain;
+  display: block;
+}
+
+.highlight {
+  color: var(--primary);
+}
+
+.navLinks {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.navLinks li {
+  white-space: nowrap;
+}
+
+.navLinks a {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--foreground);
+  opacity: 0.65;
+  padding: 8px 12px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  display: block;
+}
+
+.navLinks a:hover {
+  opacity: 1;
+  background: rgba(3, 68, 109, 0.08);
+  color: var(--primary);
+}
+
+/* Active nav link */
+.activeLink {
+  opacity: 1 !important;
+  color: var(--primary) !important;
+  background: rgba(3, 68, 109, 0.1) !important;
+}
+
+/* Right side group: theme toggle + CTA */
+.rightGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Dark mode toggle button */
+.themeToggle {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--foreground);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.themeToggle:hover {
+  opacity: 1;
+  background: rgba(3, 68, 109, 0.08);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* ─── Hamburger ──────────────────────────────────────────── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 24px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1010;
+}
+
+.bar {
+  width: 100%;
+  height: 2px;
+  background: var(--foreground);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  transform-origin: left;
+}
+
+.bar1 { transform: rotate(43deg) translateY(-1px); }
+.bar2 { opacity: 0; }
+.bar3 { transform: rotate(-43deg) translateY(1px); }
+
+.mobileCta {
+  display: none;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.ctaButton {
+  flex-shrink: 0;
+}
+
+.ctaButton :global(.btn-primary) {
+  padding: 12px 24px;
+  font-size: 0.9rem;
+  border-radius: 16px;
+}
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .navLinks {
+    gap: 2px;
+  }
+  .navLinks a {
+    padding: 8px 8px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .ctaButton {
+    display: none;
+  }
+
+  .navLinks {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 320px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+    z-index: 1005;
+  }
+
+  [data-theme="dark"] .navLinks {
+    background: rgba(13, 17, 23, 0.98);
+  }
+
+  .linksOpen {
+    right: 0;
+  }
+
+  .navLinks a {
+    font-size: 1.2rem;
+    width: 100%;
+    text-align: center;
+    padding: 14px 24px;
+    border-radius: 12px;
+  }
+
+  .mobileCta {
+    display: block;
+    text-align: center;
+  }
+
+  .mobileCta :global(.btn-primary) {
+    width: 80%;
+    justify-content: center;
+  }
+}

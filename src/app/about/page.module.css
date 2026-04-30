@@ -1,0 +1,381 @@
+.section {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+
+.hero {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 120px;
+}
+
+.heroContent {
+  max-width: 800px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--primary);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 1.1;
+  margin-bottom: 24px;
+  font-weight: 800;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+}
+
+.breadcrumbs {
+  max-width: 1300px;
+  margin: -40px auto 40px;
+  padding: 0 24px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.breadcrumbs a {
+  color: var(--primary);
+}
+
+.breadcrumbs span {
+  margin: 0 12px;
+  opacity: 0.5;
+}
+
+.whoBento {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.imgRounded {
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: var(--shadow-xl);
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  margin-bottom: 24px;
+  color: var(--primary);
+}
+
+.sectionTitleCenter {
+  font-size: 3rem;
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.text {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+.bentoGrid3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.valueCard {
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.valueFeatured {
+  border-color: var(--primary);
+  box-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.25);
+  transform: scale(1.05);
+}
+
+.valueIcon {
+  font-size: 3rem;
+  margin-bottom: 24px;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--foreground);
+}
+
+.textSmall {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.reasonsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+.reasonCard {
+  transition: all 0.3s ease;
+}
+
+.reasonHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.reasonId {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary);
+  opacity: 0.4;
+}
+
+.reasonTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 32px;
+}
+
+.teamCard {
+  padding: 24px;
+  text-align: center;
+}
+
+.teamImg {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.teamName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.teamRole {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Form Styling */
+.formContainer {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.formHeader {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.formContent {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.fullWidth {
+  grid-column: span 2;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputGroup label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.inputGroup input, .inputGroup textarea {
+  background: white;
+  border: 1px solid var(--border-color);
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.inputGroup input:focus, .inputGroup textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+.inputGroup textarea {
+  min-height: 150px;
+}
+
+.servicesSelect .label {
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.checkGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .whoBento {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+  .fullWidth {
+    grid-column: span 1;
+  }
+  .reasonsList {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Dark mode inputs ───────────────────────────────────── */
+[data-theme="dark"] .inputGroup input,
+[data-theme="dark"] .inputGroup textarea {
+  background: rgba(22, 27, 34, 0.8);
+  border-color: rgba(48, 54, 61, 0.8);
+  color: var(--foreground);
+}
+
+[data-theme="dark"] .inputGroup input::placeholder,
+[data-theme="dark"] .inputGroup textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* ─── Required asterisk ──────────────────────────────────── */
+.required {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+/* ─── Checkbox active state ──────────────────────────────── */
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.checkItem input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+}
+
+.checkActive {
+  border-color: var(--primary);
+  background: rgba(3, 68, 109, 0.06);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ─── Error message ──────────────────────────────────────── */
+.errorMsg {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #dc2626;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* ─── Success state ──────────────────────────────────────── */
+.successMsg {
+  text-align: center;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.successIcon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.successMsg h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.successMsg p {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 420px;
+  line-height: 1.7;
+}
+
+/* ─── teamInfo ───────────────────────────────────────────── */
+.teamInfo {
+  margin-top: 16px;
+}
+
