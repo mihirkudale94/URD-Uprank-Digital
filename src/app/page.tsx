@@ -186,7 +186,7 @@ export default function Home() {
           </ScrollReveal>
 
           {/* Advertising */}
-          <ScrollReveal className={styles.offerMedium} delayClass="revealDelay3">
+          <ScrollReveal className={styles.offerMedium} delayClass="revealDelay1">
             <div className="bento-card tilt-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <h3 className={styles.cardTitle}>Strategic Advertising</h3>
               <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
@@ -207,7 +207,7 @@ export default function Home() {
           </ScrollReveal>
 
           {/* Content */}
-          <ScrollReveal className={styles.offerSmall} delayClass="revealDelay1">
+          <ScrollReveal className={styles.offerMedium} delayClass="revealDelay2">
             <div className="bento-card tilt-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <h3 className={styles.cardTitle}>Creative Content</h3>
               <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
@@ -223,7 +223,7 @@ export default function Home() {
           </ScrollReveal>
 
           {/* Software */}
-          <ScrollReveal className={styles.offerSmall} delayClass="revealDelay2">
+          <ScrollReveal className={styles.offerMedium} delayClass="revealDelay3">
             <div className="bento-card tilt-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <h3 className={styles.cardTitle}>Enterprise Software</h3>
               <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
@@ -234,6 +234,52 @@ export default function Home() {
                 <li>Custom SaaS</li>
                 <li>LMS Solutions</li>
                 <li>CRM Integration</li>
+              </ul>
+            </div>
+          </ScrollReveal>
+
+          {/* Autonomous AI & Agents */}
+          <ScrollReveal className={styles.offerLarge} delayClass="revealDelay1">
+            <div className="bento-card tilt-card" style={{ height: '100%', display: 'flex', gap: '40px', alignItems: 'center' }}>
+              <div className={styles.offerContent}>
+                <h3 className={styles.cardTitle}>AI-Driven Growth &amp; Automation</h3>
+                <p className={styles.textSmall}>Integrate intelligent AI models to automate your marketing campaigns, hyper-personalize customer experiences, and scale lead generation with unprecedented precision.</p>
+                <ul className={styles.featureList}>
+                  <li>AI-Driven SEO &amp; Content</li>
+                  <li>Automated Lead Nurturing</li>
+                  <li>Predictive Ad Targeting</li>
+                  <li>Intelligent Concierge Bots</li>
+                </ul>
+                <Link href="/about" className={styles.learnMore}>
+                  Scale With AI
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </Link>
+              </div>
+              <Image
+                src="/img/ai-automation.png"
+                alt="AI-Driven Growth and Automation"
+                width={200}
+                height={200}
+                className={styles.offerImg}
+                style={{ width: 'auto', height: 'auto' }}
+                sizes="200px"
+              />
+            </div>
+          </ScrollReveal>
+
+          {/* Business Intelligence */}
+          <ScrollReveal className={styles.offerMedium} delayClass="revealDelay2">
+            <div className="bento-card tilt-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <h3 className={styles.cardTitle}>Growth Analytics &amp; BI</h3>
+              <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
+                <Image src="/img/bi.png" alt="Growth Analytics and BI" width={200} height={200} style={{ width: 'auto', height: 'auto' }} sizes="200px" />
+              </div>
+              <p className={styles.textSmall}>Transform scattered marketing data into clear dashboards. Attribute ROI accurately and make growth decisions with absolute confidence.</p>
+              <ul className={styles.featureList}>
+                <li>Cross-Channel Attribution</li>
+                <li>Real-time ROI Dashboards</li>
+                <li>Competitor Intelligence</li>
+                <li>Predictive Sales Funnels</li>
               </ul>
             </div>
           </ScrollReveal>

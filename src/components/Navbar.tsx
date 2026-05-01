@@ -43,47 +43,37 @@ export default function Navbar() {
     return pathname.startsWith(href.split("#")[0]);
   };
 
+  const renderLinks = () => (
+    <>
+      <li><Link href="/" className={isActive("/") && pathname === "/" ? styles.activeLink : ""} onClick={() => setIsOpen(false)}>What we do</Link></li>
+      <li><Link href="/about" className={isActive("/about") ? styles.activeLink : ""} onClick={() => setIsOpen(false)}>Who are we</Link></li>
+      <li><Link href="/#how-we-do" onClick={() => setIsOpen(false)}>How we do</Link></li>
+      <li><Link href="/#what-we-do" onClick={() => setIsOpen(false)}>What we offer</Link></li>
+      <li><Link href="/#work" onClick={() => setIsOpen(false)}>Who we work with</Link></li>
+      <li><Link href="/#client" onClick={() => setIsOpen(false)}>Clients</Link></li>
+    </>
+  );
+
   return (
-    <nav className={`${styles.navbar} ${isOpen ? styles.navOpen : ""} ${scrolled ? styles.scrolled : ""}`}>
-      <div className={styles.navWrap}>
-        <div className={styles.logo}>
-          <Link href="/">
-            <Image
-              src="/img/logo-header.png"
-              alt="Uprank Digital Logo"
-              width={160}
-              height={45}
-              className={styles.logoImg}
-              priority
-            />
-          </Link>
-        </div>
-
-        {/* Hamburger Icon */}
-        <button
-          className={styles.hamburger}
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle Menu"
-          aria-expanded={isOpen}
-        >
-          <span className={`${styles.bar} ${isOpen ? styles.bar1 : ""}`}></span>
-          <span className={`${styles.bar} ${isOpen ? styles.bar2 : ""}`}></span>
-          <span className={`${styles.bar} ${isOpen ? styles.bar3 : ""}`}></span>
-        </button>
-
-        <ul className={`${styles.navLinks} ${isOpen ? styles.linksOpen : ""}`}>
-          <li><Link href="/" className={isActive("/") && pathname === "/" ? styles.activeLink : ""} onClick={() => setIsOpen(false)}>What we do</Link></li>
-          <li><Link href="/about" className={isActive("/about") ? styles.activeLink : ""} onClick={() => setIsOpen(false)}>Who are we</Link></li>
-          <li><Link href="/#how-we-do" onClick={() => setIsOpen(false)}>How we do</Link></li>
-          <li><Link href="/#what-we-do" onClick={() => setIsOpen(false)}>What we offer</Link></li>
-          <li><Link href="/#work" onClick={() => setIsOpen(false)}>Who we work with</Link></li>
-          <li><Link href="/#client" onClick={() => setIsOpen(false)}>Clients</Link></li>
-          <li className={styles.mobileCta}>
-            <Link href="/about#contact-form" className="btn-primary" onClick={() => setIsOpen(false)}>
-              Get Started
+    <>
+      <nav className={`${styles.navbar} ${isOpen ? styles.navOpen : ""} ${scrolled ? styles.scrolled : ""}`}>
+        <div className={styles.navWrap}>
+          <div className={styles.logo}>
+            <Link href="/">
+              <Image
+                src="/img/logo-header.png"
+                alt="Uprank Digital Logo"
+                width={160}
+                height={45}
+                className={styles.logoImg}
+                priority
+              />
             </Link>
-          </li>
-        </ul>
+          </div>
+
+          <ul className={styles.desktopNavLinks}>
+            {renderLinks()}
+          </ul>
 
         <div className={styles.rightGroup}>
           {/* Dark Mode Toggle */}
@@ -115,8 +105,45 @@ export default function Navbar() {
               </Link>
             </Magnetic>
           </div>
+
+          {/* Hamburger Icon */}
+          <button
+            className={styles.hamburger}
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle Menu"
+            aria-expanded={isOpen}
+          >
+            <span className={`${styles.bar} ${isOpen ? styles.bar1 : ""}`}></span>
+            <span className={`${styles.bar} ${isOpen ? styles.bar2 : ""}`}></span>
+            <span className={`${styles.bar} ${isOpen ? styles.bar3 : ""}`}></span>
+          </button>
         </div>
+        </div>
+      </nav>
+      {/* Mobile Menu */}
+      <div className={`${styles.mobileMenu} ${isOpen ? styles.mobileMenuOpen : ""}`}>
+        <button 
+          className={styles.closeMenuBtn} 
+          onClick={() => setIsOpen(false)}
+          aria-label="Close Menu"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <ul className={styles.mobileNavLinks}>
+          {renderLinks()}
+          <li className={styles.mobileCta}>
+            <Link href="/about#contact-form" className="btn-primary" onClick={() => setIsOpen(false)}>
+              Get Started
+            </Link>
+          </li>
+        </ul>
       </div>
-    </nav>
+
+      {/* Backdrop for mobile menu */}
+      {isOpen && <div className={styles.menuBackdrop} onClick={() => setIsOpen(false)}></div>}
+    </>
   );
 }
