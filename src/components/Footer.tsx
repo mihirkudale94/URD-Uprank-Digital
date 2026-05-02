@@ -66,11 +66,12 @@ export default function Footer() {
         <div className={styles.links}>
           <h3>Quick Links</h3>
           <ul>
-            <li><Link href="/">What we do</Link></li>
-            <li><Link href="/about">Who are we</Link></li>
+            <li><Link href="/#how-we-do">What we do</Link></li>
+            <li><Link href="/#who-we-are">Who are we</Link></li>
             <li><Link href="/#how-we-do">How we do</Link></li>
-            <li><Link href="/#what-we-do">What we offer</Link></li>
-            <li><Link href="https://uprankdigital.com/blog/" target="_blank">Blog</Link></li>
+            <li><Link href="/#what-we-offer">What we offer</Link></li>
+            <li><Link href="/#clients">Who we work with</Link></li>
+            <li><Link href="/#client">Testimonials</Link></li>
           </ul>
         </div>
 

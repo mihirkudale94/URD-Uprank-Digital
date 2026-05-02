@@ -45,12 +45,12 @@ export default function Navbar() {
 
   const renderLinks = () => (
     <>
-      <li><Link href="/" className={isActive("/") && pathname === "/" ? styles.activeLink : ""} onClick={() => setIsOpen(false)}>What we do</Link></li>
-      <li><Link href="/about" className={isActive("/about") ? styles.activeLink : ""} onClick={() => setIsOpen(false)}>Who are we</Link></li>
+      <li><Link href="/#how-we-do" onClick={() => setIsOpen(false)}>What we do</Link></li>
+      <li><Link href="/#who-we-are" onClick={() => setIsOpen(false)}>Who are we</Link></li>
       <li><Link href="/#how-we-do" onClick={() => setIsOpen(false)}>How we do</Link></li>
-      <li><Link href="/#what-we-do" onClick={() => setIsOpen(false)}>What we offer</Link></li>
-      <li><Link href="/#work" onClick={() => setIsOpen(false)}>Who we work with</Link></li>
-      <li><Link href="/#client" onClick={() => setIsOpen(false)}>Clients</Link></li>
+      <li><Link href="/#what-we-offer" onClick={() => setIsOpen(false)}>What we offer</Link></li>
+      <li><Link href="/#clients" onClick={() => setIsOpen(false)}>Who we work with</Link></li>
+      <li><Link href="/#client" onClick={() => setIsOpen(false)}>Testimonials</Link></li>
     </>
   );
 

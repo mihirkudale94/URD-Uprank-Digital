@@ -226,12 +226,19 @@
   margin-top: auto;
 }
 
+
+
 .learnMore:hover {
   gap: 12px;
   color: var(--accent);
 }
 
 /* Logo Marquee */
+.section {
+  padding: 100px 5%;
+  position: relative;
+  scroll-margin-top: 100px; /* Safety margin for fixed header */
+}
 .logoMarquee {
   overflow: hidden;
   padding: 40px 0;
@@ -407,6 +414,9 @@
 }
 
 @media (max-width: 768px) {
+  .section {
+    padding: 60px 20px;
+  }
   .offerBento {
     grid-template-columns: 1fr;
   }
@@ -416,26 +426,33 @@
   .offerLarge > div {
     flex-direction: column !important;
     text-align: center;
+    padding: 40px 24px !important;
   }
   .offerImg {
-    width: 200px;
-    margin: 0 auto;
+    width: 180px;
+    margin: 20px auto 0;
   }
   .featureList {
     justify-items: center;
+    grid-template-columns: 1fr; /* Stack features on very small screens */
   }
   .title {
-    font-size: clamp(2.2rem, 10vw, 3rem);
-    line-height: 1.2;
+    font-size: clamp(2rem, 12vw, 3.5rem);
+    line-height: 1.1;
   }
   .subtitle {
     font-size: 1.1rem;
+    padding: 0 10px;
   }
   .sectionTitleCenter {
-    font-size: 2.2rem;
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
   }
   .impactGrid {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .impactCard {
+    padding: 40px 20px;
   }
   .testimonialsGrid {
     grid-template-columns: 1fr;

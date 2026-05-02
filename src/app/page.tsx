@@ -3,7 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
 import Typewriter from "@/components/Typewriter";
-import ROIEstimator from "@/components/ROIEstimator";
 import Counter from "@/components/Counter";
 
 export default function Home() {
@@ -105,7 +104,7 @@ export default function Home() {
       {/* How We Do */}
       <section className={styles.section} id="how-we-do">
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitleCenter}>How we do</h2>
+          <h2 className={styles.sectionTitleCenter}>What we do &amp; How we do it</h2>
           <p className={styles.textCenter}>A proven four-stage framework designed for scalability and precision.</p>
         </div>
         <div className={styles.bentoGrid4}>
@@ -130,7 +129,7 @@ export default function Home() {
       </section>
 
       {/* What We Offer */}
-      <section className={styles.section} id="what-we-do">
+      <section className={styles.section} id="what-we-offer">
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitleCenter}>What we offer</h2>
           <p className={styles.textCenter}>End-to-end digital services designed to accelerate your brand's growth and digital maturity.</p>
@@ -277,8 +276,9 @@ export default function Home() {
         </div>
       </section>
 
+
       {/* Who We Work With */}
-      <section className={styles.section} id="work">
+      <section className={styles.section} id="clients">
         <ScrollReveal>
           <h2 className={styles.sectionTitleCenter}>Who we work with</h2>
           <div className={styles.logoMarquee}>
@@ -302,12 +302,12 @@ export default function Home() {
 
       {/* Testimonials */}
       <section className={styles.section} id="client">
-        <h2 className={styles.sectionTitleCenter}>Client Success</h2>
+        <h2 className={styles.sectionTitleCenter}>What our clients say</h2>
         <div className={styles.testimonialsGrid}>
           {[
             { text: "We developed a great bonding with Up Rank Digital and their dedication to our website is evident in all aspects of the site. We appreciate their attention to detail and creative approach to bringing our new exhibit to life online.", name: "Mr. Achyut Chitale", title: "MD, Candid Confectioneries", img: "/img/Testimonial/p1.png" },
             { text: "Up Rank Digital is a master at making your website fantasies come true. They handle things very efficiently and keep us updated with performance posts. I would highly recommend them to anyone in need of web development or SEO services!", name: "Dr. Vasudha Keskar", title: "Founder, Kanak Jaggery", img: "/img/Testimonial/p2.png" },
-            { text: "We were very pleased with the work of Up Rank Digital. They were very thorough and professional in their approach. We were able to launch our new website on time and within budget. I would highly recommend them!", name: "Nishit Patel", title: "Founder, Nisara", img: "/img/Testimonial/p1.png" },
+            { text: "We were very pleased with the work of Up Rank Digital. They were very thorough and professional in their approach. We were able to launch our new website on time and within budget. I would highly recommend them!", name: "Nishit Patel", title: "Founder, Nisara", img: "/img/user-placeholder.png" },
             { text: "With their help, we were able to do 17 product shoots within just 2 days during the pandemic, which helped us grow in US and UK. Their commitment is visible in every element of our digital branding.", name: "Mr. Prasad Apte", title: "MD, Shree Devashree Foods", img: "/img/Testimonial/p3.png" },
             { text: "Our site views and simplicity of maintenance have improved dramatically. Every step of the way, I was heard and valued. Our new website has exceeded our expectations.", name: "Mr. Abhijeet Gangdhar", title: "Owner, Gangdhar Mithaiwale", img: "/img/Testimonial/p4.png" }
           ].map((item, i) => (
@@ -336,6 +336,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+
 
       {/* Final CTA */}
       <section className={styles.finalCta}>
