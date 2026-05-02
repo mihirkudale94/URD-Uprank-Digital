@@ -25,21 +25,19 @@ export default function Typewriter({
       const currentFullWord = words[currentWordIndex];
       
       if (isDeleting) {
-        setCurrentText(prev => prev.slice(0, -1));
-        
         if (currentText === "") {
           setIsDeleting(false);
           setCurrentWordIndex((prev) => (prev + 1) % words.length);
-          timeout = setTimeout(handleTyping, typingSpeed);
+          timeout = setTimeout(handleTyping, 500); // Small pause before typing next word
         } else {
+          setCurrentText(prev => prev.slice(0, -1));
           timeout = setTimeout(handleTyping, deletingSpeed);
         }
       } else {
-        setCurrentText(currentFullWord.slice(0, currentText.length + 1));
-        
         if (currentText === currentFullWord) {
           timeout = setTimeout(() => setIsDeleting(true), pauseTime);
         } else {
+          setCurrentText(currentFullWord.slice(0, currentText.length + 1));
           timeout = setTimeout(handleTyping, typingSpeed);
         }
       }

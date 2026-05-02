@@ -29,8 +29,9 @@ export default function Home() {
             We Help Brands <br/>
             <span className="heading-gradient">
               <Typewriter words={["Develop", "Design", "Scale"]} />
-            </span><br/>
-            their Digital Future
+            </span>
+            <br />
+            &nbsp;their Digital Future
           </h1>
           <p className={`${styles.subtitle} animate-fade-in`} style={{ animationDelay: "0.3s" }}>
             Transforming complex business challenges into intuitive digital experiences that drive real growth.
@@ -50,7 +51,7 @@ export default function Home() {
           <ScrollReveal delayClass="revealDelay1">
             <div className={`bento-card tilt-card ${styles.impactCard}`}>
               <div className={styles.impactValue}>
-                <Counter target={15} suffix="+" duration={1800} />
+                <Counter target={9} suffix="+" duration={1800} />
               </div>
               <div className={styles.impactLabel}>Years of Experience</div>
             </div>
@@ -142,15 +143,12 @@ export default function Home() {
                 <h3 className={styles.cardTitle}>Digital Excellence</h3>
                 <p className={styles.textSmall}>Transforming your brand into a high-performance digital asset that drives traffic and converts visitors into loyal customers.</p>
                 <ul className={styles.featureList}>
-                  <li>Graphic &amp; Web Design</li>
-                  <li>Full-Stack Development</li>
-                  <li>E-commerce Solutions</li>
-                  <li>Mobile App Ecosystems</li>
+                  <li>Graphic Design &amp; Branding</li>
+                  <li>UI/UX &amp; Web Design</li>
+                  <li>E-commerce Development</li>
+                  <li>Custom CMS &amp; Web Apps</li>
                 </ul>
-                <Link href="/about" className={styles.learnMore}>
-                  Explore Services
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </Link>
+
               </div>
               <Image
                 src="/img/v2_digital.png"
@@ -178,10 +176,7 @@ export default function Home() {
                 <li>Content Strategy</li>
                 <li>Performance Ads</li>
               </ul>
-              <Link href="/about" className={styles.learnMore}>
-                Boost Reach
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </Link>
+
             </div>
           </ScrollReveal>
 
@@ -197,12 +192,9 @@ export default function Home() {
                 <li>PPC Campaigns</li>
                 <li>Display Advertising</li>
                 <li>PR &amp; Media Buying</li>
-                <li>Retargeting Ads</li>
+                <li>Paid PR Distribution</li>
               </ul>
-              <Link href="/about" className={styles.learnMore}>
-                Scale Results
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </Link>
+
             </div>
           </ScrollReveal>
 
@@ -217,7 +209,8 @@ export default function Home() {
               <ul className={styles.featureList}>
                 <li>Copywriting</li>
                 <li>Video Production</li>
-                <li>Motion Design</li>
+                <li>Product Photoshoots</li>
+                <li>Animations &amp; Motion</li>
               </ul>
             </div>
           </ScrollReveal>
@@ -231,9 +224,10 @@ export default function Home() {
               </div>
               <p className={styles.textSmall}>Scalable, reliable, and cost-effective software solutions built for business performance.</p>
               <ul className={styles.featureList}>
-                <li>Custom SaaS</li>
-                <li>LMS Solutions</li>
-                <li>CRM Integration</li>
+                <li>SaaS &amp; Product Development</li>
+                <li>CMS Solutions</li>
+                <li>LMS (Learning Management)</li>
+                <li>CRM &amp; ERP Solutions</li>
               </ul>
             </div>
           </ScrollReveal>
@@ -247,13 +241,10 @@ export default function Home() {
                 <ul className={styles.featureList}>
                   <li>AI-Driven SEO &amp; Content</li>
                   <li>Automated Lead Nurturing</li>
-                  <li>Predictive Ad Targeting</li>
+                  <li>Predictive ROI Targeting</li>
                   <li>Intelligent Concierge Bots</li>
                 </ul>
-                <Link href="/about" className={styles.learnMore}>
-                  Scale With AI
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </Link>
+
               </div>
               <Image
                 src="/img/v2_ai_automation.png"
@@ -263,10 +254,10 @@ export default function Home() {
                 className={styles.offerImg}
                 style={{ width: 'auto', height: 'auto' }}
                 sizes="200px"
+                priority
               />
             </div>
           </ScrollReveal>
-
           {/* Business Intelligence */}
           <ScrollReveal className={styles.offerMedium} delayClass="revealDelay2">
             <div className="bento-card tilt-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -281,13 +272,6 @@ export default function Home() {
                 <li>Competitor Intelligence</li>
                 <li>Predictive Sales Funnels</li>
               </ul>
-            </div>
-          </ScrollReveal>
-
-          {/* ROI Estimator */}
-          <ScrollReveal className={styles.offerFull} delayClass="revealDelay1">
-            <div className="bento-card tilt-card">
-              <ROIEstimator />
             </div>
           </ScrollReveal>
         </div>
@@ -321,10 +305,11 @@ export default function Home() {
         <h2 className={styles.sectionTitleCenter}>Client Success</h2>
         <div className={styles.testimonialsGrid}>
           {[
-            { text: "Their dedication to our website is evident in all aspects. We appreciate their attention to detail and creative approach to bringing our exhibit to life online.", name: "Mr. Achyut Chitale", title: "MD, Candid Confectioneries", img: "/img/Testimonial/p1.png" },
-            { text: "Master at making your website fantasies come true. Efficient, communicative, and highly recommended for web development or SEO services!", name: "Dr. Vasudha Keskar", title: "Founder, Kanak Jaggery", img: "/img/Testimonial/p2.png" },
-            { text: "They helped grow our business in US and UK globally. Their commitment is visible in every element of our digital presence.", name: "Mr. Prasad Apte", title: "MD, Shree Devashree Foods", img: "/img/Testimonial/p3.png" },
-            { text: "Our site views and simplicity of maintenance have improved dramatically thanks to Uprank's design work. Every step of the way, I was heard.", name: "Mr. Abhijeet Gangdhar", title: "Owner, Gangdhar Mithaiwale", img: "/img/Testimonial/p4.png" }
+            { text: "We developed a great bonding with Up Rank Digital and their dedication to our website is evident in all aspects of the site. We appreciate their attention to detail and creative approach to bringing our new exhibit to life online.", name: "Mr. Achyut Chitale", title: "MD, Candid Confectioneries", img: "/img/Testimonial/p1.png" },
+            { text: "Up Rank Digital is a master at making your website fantasies come true. They handle things very efficiently and keep us updated with performance posts. I would highly recommend them to anyone in need of web development or SEO services!", name: "Dr. Vasudha Keskar", title: "Founder, Kanak Jaggery", img: "/img/Testimonial/p2.png" },
+            { text: "We were very pleased with the work of Up Rank Digital. They were very thorough and professional in their approach. We were able to launch our new website on time and within budget. I would highly recommend them!", name: "Nishit Patel", title: "Founder, Nisara", img: "/img/Testimonial/p1.png" },
+            { text: "With their help, we were able to do 17 product shoots within just 2 days during the pandemic, which helped us grow in US and UK. Their commitment is visible in every element of our digital branding.", name: "Mr. Prasad Apte", title: "MD, Shree Devashree Foods", img: "/img/Testimonial/p3.png" },
+            { text: "Our site views and simplicity of maintenance have improved dramatically. Every step of the way, I was heard and valued. Our new website has exceeded our expectations.", name: "Mr. Abhijeet Gangdhar", title: "Owner, Gangdhar Mithaiwale", img: "/img/Testimonial/p4.png" }
           ].map((item, i) => (
             <ScrollReveal key={i} delayClass={`revealDelay${i + 1}`}>
               <div className={`bento-card tilt-card ${styles.testCard}`}>

@@ -65,12 +65,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Breadcrumbs */}
-      <div className={styles.breadcrumbs}>
-        <div className={styles.wrap}>
-          <Link href="/">Homepage</Link> <span>→</span> <strong>About us</strong>
-        </div>
-      </div>
+
 
       {/* Who We Are Bento */}
       <section className={styles.section}>
@@ -85,12 +80,14 @@ export default function About() {
                 className={styles.imgRounded}
                 style={{ width: '100%', height: 'auto' }}
                 sizes="(max-width: 768px) 100vw, 50vw"
+                priority
               />
             </div>
             <div className={styles.whoText}>
               <h2 className={styles.sectionTitle}>A Progressive Digital Agency with Creative Spark</h2>
               <p className={styles.text}>
-                A leading agency established to help clients connect with their target audience by advocating progressive and innovative digital marketing strategies that drive meaningful, measurable results.
+                A leading agency established to help clients connect with their target audience by advocating progressive and innovative digital marketing strategies that drive meaningful, measurable results.<br/><br/>
+                We are backed by <strong>decades of experience working with digital agencies from the US, UK, and Australia</strong>. We bring that global digital strategy and understanding to every project we undertake in the Indian and international markets.
               </p>
             </div>
           </div>
@@ -126,7 +123,7 @@ export default function About() {
               <div className={styles.valueIcon}>💎</div>
               <h3 className={styles.cardTitle}>VALUES</h3>
               <p className={styles.textSmall}>
-                We believe every business is unique — and so are its goals. Our approach adapts to your specific needs and objectives. Guided by our two core T&apos;s: <strong>Transparency</strong> and <strong>Trust</strong>, we build partnerships that last.
+                We believe every business is unique — and so are its goals. Our approach adapts to your specific needs and objectives. Guided by our two core <strong>T&apos;s: Transparency and Trust</strong>, we build partnerships that last. We don&apos;t believe in selling you what you don&apos;t need — we focus on what helps you grow.
               </p>
             </div>
           </ScrollReveal>

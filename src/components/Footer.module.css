@@ -2,6 +2,17 @@
   background: var(--primary);
   padding: 80px 24px 40px;
   color: white;
+  transition: background-color 0.3s ease;
+}
+
+[data-theme="dark"] .footer {
+  background: #0a0e14;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .footer {
+    background: #0a0e14;
+  }
 }
 
 .container {
@@ -112,6 +123,20 @@
   border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 0.9rem;
+}
+
+[data-theme="dark"] .subscribeBox input {
+  background: #161b22;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .subscribeBox input {
+    background: #161b22;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
 }
 
 .subscribeBox :global(.btn-primary) {

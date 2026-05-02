@@ -9,6 +9,10 @@ export default function Concierge() {
 
   return (
     <div className={styles.wrapper}>
+      <div className={styles.greetingBubble}>
+        <span className={styles.wavingHand}>👋</span>
+        Chat with us
+      </div>
       <button className={styles.launcher} onClick={openWhatsApp} aria-label="Chat on WhatsApp">
         <Image src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" className={styles.waIcon} width={32} height={32} />
       </button>

@@ -146,6 +146,19 @@
   font-weight: 800;
   color: var(--primary);
   opacity: 0.4;
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .reasonId {
+  opacity: 0.35;
+  color: var(--accent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .reasonId {
+    opacity: 0.35;
+    color: var(--accent);
+  }
 }
 
 .reasonTitle {
