@@ -6,7 +6,7 @@ export default function ROIEstimator() {
   const [budget, setBudget] = useState(50000);
 
   const calculateROI = () => {
-    // A simplified agency logic for 2026 estimation
+    // A simplified agency logic for current estimation
     const estimatedTraffic = Math.floor(budget / 12);
     const estimatedLeads = Math.floor(estimatedTraffic * 0.08);
     return { estimatedTraffic, estimatedLeads };
@@ -48,7 +48,7 @@ export default function ROIEstimator() {
         </div>
       </div>
 
-      <div className={styles.foot}>*Estimates based on current 2026 market benchmarks and industry averages.</div>
+      <div className={styles.foot}>*Estimates based on current market benchmarks and industry averages.</div>
     </div>
   );
 }

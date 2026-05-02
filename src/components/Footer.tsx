@@ -108,7 +108,7 @@ export default function Footer() {
       </div>
 
       <div className={styles.bottom}>
-        <p>URD SOLUTIONS PVT. LTD. &copy; COPYRIGHT {new Date().getFullYear()}. All Rights Reserved</p>
+        <p>Up Rank Digital | URD SOLUTIONS PVT. LTD. &copy; 2017. All Rights Reserved</p>
       </div>
     </footer>
   );

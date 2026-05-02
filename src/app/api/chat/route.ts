@@ -41,7 +41,11 @@ export async function POST(req: Request) {
     );
 
     const data = await response.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, I'm having trouble connecting right now. Please try again or contact us directly!";
+    let reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    
+    if (!reply || reply.trim().length === 0) {
+      reply = "I'm here to help! Could you please rephrase that, or would you like to speak with Sachin directly?";
+    }
 
     return NextResponse.json({ reply });
   } catch (error) {

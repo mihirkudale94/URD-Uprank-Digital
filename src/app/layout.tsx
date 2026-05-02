@@ -10,7 +10,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://uprankdigital.com"),
   title: "URD Uprank Digital | AI-Driven Growth Agency | Pune",
-  description: "A leading creative digital marketing agency in Pune offering SEO, Web Development, and Social Media Marketing with a 2026 futuristic edge.",
+  description: "A leading creative digital marketing agency in Pune offering SEO, Web Development, and Social Media Marketing with a futuristic edge.",
   keywords: ["Digital Marketing Pune", "SEO Services", "Web Development Agency", "Social Media Marketing", "AI Growth Agency", "Next-Gen Marketing"],
   icons: {
     icon: "/img/favcon.png",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "URD Uprank Digital | AI-Driven Growth Agency",
-    description: "Leading creative digital marketing agency with a 2026 futuristic edge.",
+    description: "Leading creative digital marketing agency with a futuristic edge.",
     images: ["/img/og-banner.png"],
   },
 };
