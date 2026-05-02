@@ -58,7 +58,7 @@ export default function Concierge() {
           <div className={styles.header}>
             <div className={styles.agentInfo}>
               <div className={styles.avatarWrap}>
-                <img src="/img/favcon.png" alt="Uprank Digital" className={styles.avatar} />
+                <Image src="/img/favcon.png" alt="Uprank Digital" className={styles.avatar} width={40} height={40} />
                 <span className={styles.onlineDot}></span>
               </div>
               <div className={styles.agentMeta}>
@@ -66,7 +66,7 @@ export default function Concierge() {
                 <span className={styles.agentStatus}>Online</span>
               </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className={styles.close}>✕</button>
+            <button onClick={() => setIsOpen(false)} className={styles.close} aria-label="Close chat">✕</button>
           </div>
           
           <div className={styles.messages} ref={scrollRef}>
@@ -91,20 +91,20 @@ export default function Concierge() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}
             />
-            <button onClick={handleSend} disabled={isLoading} className={styles.sendBtn}>
+            <button onClick={handleSend} disabled={isLoading} className={styles.sendBtn} aria-label="Send message">
               <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"></path></svg>
             </button>
           </div>
 
           <button className={styles.whatsappDirect} onClick={openWhatsApp}>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+            <Image src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width={20} height={20} />
             Continue to WhatsApp Chat
           </button>
         </div>
       )}
       
-      <button className={styles.launcher} onClick={() => setIsOpen(!isOpen)}>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" className={styles.waIcon} />
+      <button className={styles.launcher} onClick={() => setIsOpen(!isOpen)} aria-label="Open chat widget">
+        <Image src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" className={styles.waIcon} width={32} height={32} />
         <span className={styles.badge}>1</span>
       </button>
     </div>

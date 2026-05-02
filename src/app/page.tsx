@@ -153,7 +153,7 @@ export default function Home() {
                 </Link>
               </div>
               <Image
-                src="/img/digital.webp"
+                src="/img/v2_digital.png"
                 alt="Digital Excellence services"
                 width={200}
                 height={200}
@@ -169,7 +169,7 @@ export default function Home() {
             <div className="bento-card tilt-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <h3 className={styles.cardTitle}>Precision Marketing</h3>
               <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
-                <Image src="/img/marketing.webp" alt="Precision Marketing" width={200} height={200} style={{ width: 'auto', height: 'auto' }} sizes="200px" />
+                <Image src="/img/v2_marketing.png" alt="Precision Marketing" width={200} height={200} style={{ width: 'auto', height: 'auto' }} sizes="200px" />
               </div>
               <p className={styles.textSmall}>Right platform. Right audience. Real results that amplify your brand's reach and authority.</p>
               <ul className={styles.featureList}>
@@ -190,7 +190,7 @@ export default function Home() {
             <div className="bento-card tilt-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <h3 className={styles.cardTitle}>Strategic Advertising</h3>
               <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
-                <Image src="/img/advertising.webp" alt="Strategic Advertising" width={200} height={200} style={{ width: 'auto', height: 'auto' }} sizes="200px" />
+                <Image src="/img/v2_advertising.png" alt="Strategic Advertising" width={200} height={200} style={{ width: 'auto', height: 'auto' }} sizes="200px" />
               </div>
               <p className={styles.textSmall}>ROI-focused campaigns designed for maximum engagement and market impact across all channels.</p>
               <ul className={styles.featureList}>
@@ -211,7 +211,7 @@ export default function Home() {
             <div className="bento-card tilt-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <h3 className={styles.cardTitle}>Creative Content</h3>
               <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
-                <Image src="/img/content.webp" alt="Creative Content" width={200} height={200} style={{ width: 'auto', height: 'auto' }} sizes="200px" />
+                <Image src="/img/v2_content.png" alt="Creative Content" width={200} height={200} style={{ width: 'auto', height: 'auto' }} sizes="200px" />
               </div>
               <p className={styles.textSmall}>Compelling stories via words, graphics, and video that strengthen audience relationships.</p>
               <ul className={styles.featureList}>
@@ -227,7 +227,7 @@ export default function Home() {
             <div className="bento-card tilt-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <h3 className={styles.cardTitle}>Enterprise Software</h3>
               <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
-                <Image src="/img/software.webp" alt="Enterprise Software" width={200} height={200} style={{ width: 'auto', height: 'auto' }} sizes="200px" />
+                <Image src="/img/v2_software.png" alt="Enterprise Software" width={200} height={200} style={{ width: 'auto', height: 'auto' }} sizes="200px" />
               </div>
               <p className={styles.textSmall}>Scalable, reliable, and cost-effective software solutions built for business performance.</p>
               <ul className={styles.featureList}>
@@ -256,7 +256,7 @@ export default function Home() {
                 </Link>
               </div>
               <Image
-                src="/img/ai-automation.png"
+                src="/img/v2_ai_automation.png"
                 alt="AI-Driven Growth and Automation"
                 width={200}
                 height={200}
@@ -272,7 +272,7 @@ export default function Home() {
             <div className="bento-card tilt-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <h3 className={styles.cardTitle}>Growth Analytics &amp; BI</h3>
               <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
-                <Image src="/img/bi.png" alt="Growth Analytics and BI" width={200} height={200} style={{ width: 'auto', height: 'auto' }} sizes="200px" />
+                <Image src="/img/v2_bi.png" alt="Growth Analytics and BI" width={200} height={200} style={{ width: 'auto', height: 'auto' }} sizes="200px" />
               </div>
               <p className={styles.textSmall}>Transform scattered marketing data into clear dashboards. Attribute ROI accurately and make growth decisions with absolute confidence.</p>
               <ul className={styles.featureList}>
