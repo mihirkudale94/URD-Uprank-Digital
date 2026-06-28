@@ -1,0 +1,324 @@
+import React, { useState, useEffect } from 'react';
+import { ArrowDown, MessageSquare, Sparkles } from 'lucide-react';
+
+const words = ["Design", "Develop", "Promote", "Optimize"];
+
+export default function Hero() {
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentText, setCurrentText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const typingSpeed = 120;
+  const deletingSpeed = 60;
+  const delayBetweenWords = 2200;
+
+  useEffect(() => {
+    let timer;
+    const currentWord = words[currentWordIndex];
+
+    if (isDeleting) {
+      timer = setTimeout(() => {
+        setCurrentText(currentWord.substring(0, currentText.length - 1));
+      }, deletingSpeed);
+    } else {
+      timer = setTimeout(() => {
+        setCurrentText(currentWord.substring(0, currentText.length + 1));
+      }, typingSpeed);
+    }
+
+    if (!isDeleting && currentText === currentWord) {
+      timer = setTimeout(() => setIsDeleting(true), delayBetweenWords);
+    } else if (isDeleting && currentText === '') {
+      setIsDeleting(false);
+      setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
+    }
+
+    return () => clearTimeout(timer);
+  }, [currentText, isDeleting, currentWordIndex]);
+
+  const handleScrollToContact = (e) => {
+    e.preventDefault();
+    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleScrollToServices = (e) => {
+    e.preventDefault();
+    document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <header className="hero" id="home">
+      {/* Dynamic ambient background glows */}
+      <div className="hero-glow hero-glow-1"></div>
+      <div className="hero-glow hero-glow-2"></div>
+      <div className="hero-grid"></div>
+
+      <div className="container hero-grid-split animate-fade-in-up">
+        {/* Centered Headline & Action */}
+        <div className="hero-left-content">
+          <span className="hero-tag">
+            <Sparkles size={13} className="hero-tag-sparkle" /> Elevating Digital Presence
+          </span>
+          
+          <h1 className="hero-title">
+            We Help Brands <br />
+            <span className="gradient-text hero-typewriter-wrapper">
+              {currentText}
+              <span className="cursor-blink">|</span>
+            </span>
+            <br />
+            Your Business Needs
+          </h1>
+
+          <p className="hero-description">
+            A progressive digital growth agency using AI, analytics, performance marketing, and conversion-focused website development to help brands improve visibility, leads, and measurable results.
+          </p>
+
+          <div className="hero-ctas">
+            <a href="#contact" className="btn btn-primary" onClick={handleScrollToContact}>
+              Contact Us <MessageSquare size={18} />
+            </a>
+            <a href="#services" className="btn btn-secondary" onClick={handleScrollToServices}>
+              Explore Services <ArrowDown size={18} className="arrow-bounce" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div className="hero-scroll-indicator" onClick={handleScrollToServices}>
+        <span>Scroll Down</span>
+        <ArrowDown size={16} />
+      </div>
+
+      <style>{`
+        .hero {
+          position: relative;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding-top: 100px;
+          padding-bottom: 4rem;
+          overflow: hidden;
+          background-color: var(--bg-primary);
+        }
+
+        .hero-glow {
+          position: absolute;
+          width: 600px;
+          height: 600px;
+          border-radius: 50%;
+          filter: blur(150px);
+          opacity: 0.07;
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        .hero-glow-1 {
+          background-color: var(--primary);
+          top: 10%;
+          left: 10%;
+          animation: float-glow 20s infinite alternate ease-in-out;
+        }
+
+        .hero-glow-2 {
+          background-color: var(--tech-glow);
+          bottom: 10%;
+          right: 15%;
+          animation: float-glow 25s infinite alternate-reverse ease-in-out;
+        }
+
+        .hero-grid {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: 
+            radial-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+            radial-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+          background-size: 40px 40px;
+          background-position: 0 0, 20px 20px;
+          pointer-events: none;
+          z-index: 2;
+        }
+
+        .hero-grid-split {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          position: relative;
+          z-index: 10;
+          max-width: 850px;
+          margin: 0 auto;
+        }
+
+        .hero-left-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .hero-tag {
+          font-size: 0.85rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.25em;
+          color: var(--primary);
+          border: 1px solid rgba(247, 151, 31, 0.25);
+          background: rgba(247, 151, 31, 0.06);
+          padding: 0.45rem 1.4rem;
+          border-radius: 50px;
+          margin-bottom: 2rem;
+          backdrop-filter: blur(10px);
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .hero-tag-sparkle {
+          animation: rotate-sparkle 4s linear infinite;
+        }
+
+        .hero-title {
+          font-size: 4.2rem;
+          font-weight: 800;
+          line-height: 1.15;
+          letter-spacing: -0.03em;
+          color: var(--text-main);
+          margin-bottom: 1.5rem;
+        }
+
+        .hero-typewriter-wrapper {
+          position: relative;
+          display: inline-block;
+          min-height: 5.2rem;
+          font-weight: 800;
+        }
+
+        .cursor-blink {
+          display: inline-block;
+          font-weight: 300;
+          color: var(--primary);
+          animation: blink 0.8s infinite;
+          margin-left: 4px;
+        }
+
+        .hero-description {
+          font-size: 1.2rem;
+          color: var(--text-muted);
+          max-width: 600px;
+          margin-left: auto;
+          margin-right: auto;
+          margin-bottom: 3rem;
+          line-height: 1.6;
+        }
+
+        .hero-ctas {
+          display: flex;
+          gap: 1.25rem;
+        }
+
+        .arrow-bounce {
+          animation: bounce 2s infinite;
+        }
+
+        .hero-scroll-indicator {
+          position: absolute;
+          bottom: 2rem;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.5rem;
+          color: var(--text-dim);
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          cursor: pointer;
+          transition: var(--transition-fast);
+          z-index: 10;
+        }
+
+        .hero-scroll-indicator:hover {
+          color: var(--text-main);
+        }
+
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+
+        @keyframes float-glow {
+          0% { transform: translate(0, 0) scale(1); }
+          100% { transform: translate(50px, -50px) scale(1.15); }
+        }
+
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(6px); }
+        }
+
+        @keyframes rotate-sparkle {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        @keyframes status-pulse {
+          0% { opacity: 0.5; }
+          100% { opacity: 1; }
+        }
+
+        @media (max-width: 1024px) {
+          .hero-grid-split {
+            grid-template-columns: 1fr;
+            gap: 4rem;
+            text-align: center;
+          }
+          .hero-left-content {
+            align-items: center;
+            text-align: center;
+          }
+          .hero-title {
+            font-size: 3.5rem;
+          }
+          .hero-typewriter-wrapper {
+            min-height: 4.2rem;
+          }
+          .hero-description {
+            margin: 0 auto 2.5rem auto;
+          }
+          .hero-right-dashboard {
+            max-width: 440px;
+            margin: 0 auto;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .hero {
+            padding-top: 120px;
+          }
+          .hero-title {
+            font-size: 2.5rem;
+          }
+          .hero-typewriter-wrapper {
+            min-height: 3rem;
+          }
+          .hero-description {
+            font-size: 1.05rem;
+          }
+          .hero-ctas {
+            flex-direction: column;
+            width: 100%;
+          }
+          .hero-ctas .btn {
+            width: 100%;
+          }
+        }
+      `}</style>
+    </header>
+  );
+}
