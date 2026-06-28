@@ -171,6 +171,7 @@ export default function Footer() {
         .footer-contact-list li {
           display: flex;
           gap: 1rem;
+          min-width: 0;
         }
 
         .footer-contact-icon {
@@ -191,6 +192,7 @@ export default function Footer() {
           color: var(--text-main);
           font-size: 0.9rem;
           line-height: 1.5;
+          overflow-wrap: anywhere;
         }
 
         .footer-contact-list a:hover {
@@ -282,6 +284,9 @@ export default function Footer() {
           }
           .footer-bottom-spacer {
             display: none;
+          }
+          .footer-contact-list li {
+            gap: 0.75rem;
           }
         }
       `}</style>

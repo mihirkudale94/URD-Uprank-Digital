@@ -239,6 +239,8 @@ export default function Leadership() {
           gap: 0.75rem;
           color: var(--text-muted);
           font-size: 0.9rem;
+          min-width: 0;
+          overflow-wrap: anywhere;
         }
 
         .connect-icon {
@@ -277,7 +279,7 @@ export default function Leadership() {
           font-weight: 800;
           color: var(--text-main);
           line-height: 1.1;
-          letter-spacing: -0.02em;
+          letter-spacing: 0;
         }
 
         .leader-role {
@@ -323,6 +325,7 @@ export default function Leadership() {
           font-size: 0.8rem;
           font-weight: 600;
           color: var(--text-muted);
+          min-width: 0;
         }
 
         .tag-bullet {
@@ -400,6 +403,43 @@ export default function Leadership() {
           }
           .leader-image-wrapper {
             aspect-ratio: 1.1;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .leader-profile-grid {
+            gap: 2.25rem;
+          }
+          .leader-image-wrapper {
+            aspect-ratio: 0.95;
+          }
+          .leader-experience-tag {
+            right: 12px;
+            bottom: 12px;
+            padding: 0.65rem 0.85rem;
+          }
+          .leader-connect-card {
+            padding: 1.4rem;
+          }
+          .leader-name {
+            font-size: 2rem;
+          }
+          .leader-pitch {
+            padding-left: 1rem;
+          }
+          .leader-pitch h4 {
+            font-size: 1.05rem;
+          }
+          .expertise-checkbox-grid {
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+          }
+          .leader-quote-block {
+            margin-top: 3rem;
+            padding: 1.5rem;
+          }
+          .leader-quote-block p {
+            font-size: 1.05rem;
           }
         }
       `}</style>

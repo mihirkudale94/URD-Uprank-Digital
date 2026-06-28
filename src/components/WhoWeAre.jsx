@@ -291,6 +291,7 @@ export default function WhoWeAre() {
           padding: 0.35rem;
           border-radius: 50px;
           gap: 0.5rem;
+          min-width: 0;
         }
 
         .who-tab-btn {
@@ -428,6 +429,10 @@ export default function WhoWeAre() {
           .who-grid {
             grid-template-columns: 1fr;
             gap: 3rem;
+            margin-bottom: 4rem;
+          }
+          .who-mockup-visual {
+            max-width: 100%;
           }
           .who-floating-card {
             bottom: -15px;
@@ -439,6 +444,41 @@ export default function WhoWeAre() {
           .bento-card.bento-large, .bento-card.bento-small {
             grid-column: span 1;
             min-height: auto;
+          }
+        }
+
+        @media (max-width: 520px) {
+          .who-tabs-header {
+            border-radius: 14px;
+            display: grid;
+            grid-template-columns: 1fr;
+          }
+          .who-tab-btn {
+            border-radius: 10px;
+            justify-content: flex-start;
+            padding: 0.8rem 0.9rem;
+          }
+          .who-floating-card {
+            position: static;
+            margin: 1rem auto 0;
+            max-width: 100%;
+          }
+          .visual-block-inner {
+            padding: 1.5rem;
+          }
+          .who-center-icon {
+            width: 48px;
+            height: 48px;
+          }
+          .bento-card {
+            padding: 1.4rem;
+          }
+          .bento-header {
+            align-items: flex-start;
+          }
+          .why-us-card-title {
+            font-size: 1.08rem;
+            line-height: 1.3;
           }
         }
       `}</style>

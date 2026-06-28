@@ -26,6 +26,13 @@ export default function Navbar() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
@@ -88,6 +95,7 @@ export default function Navbar() {
           className="nav-mobile-toggle" 
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
+          aria-expanded={isMobileMenuOpen}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -144,6 +152,7 @@ export default function Navbar() {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          gap: 1rem;
         }
 
         .logo-header-img {
@@ -223,30 +232,38 @@ export default function Navbar() {
 
         .nav-mobile-toggle {
           display: none;
-          background: none;
-          border: none;
+          background: var(--bg-hover-pills);
+          border: 1px solid var(--border-color);
           color: var(--text-main);
           cursor: pointer;
           z-index: 1100;
           outline: none;
+          width: 42px;
+          height: 42px;
+          border-radius: 8px;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
         }
 
         .nav-mobile-drawer {
           position: fixed;
           top: 0;
-          right: -100%;
-          width: 300px;
-          height: 100vh;
+          right: 0;
+          width: min(320px, 100vw);
+          height: 100dvh;
           background: var(--bg-secondary);
           border-left: 1px solid var(--border-color);
           z-index: 1050;
-          transition: var(--transition-normal);
+          transform: translateX(100%);
+          transition: transform var(--transition-normal);
           padding: 6rem 2rem 2rem 2rem;
           box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+          overflow-y: auto;
         }
 
         .nav-mobile-drawer.open {
-          right: 0;
+          transform: translateX(0);
         }
 
         .nav-mobile-drawer-wrap {
@@ -278,6 +295,10 @@ export default function Navbar() {
           gap: 1.25rem;
         }
 
+        .mobile-action-row .btn {
+          width: 100%;
+        }
+
         .mobile-theme-btn {
           width: 100%;
           display: flex;
@@ -290,31 +311,35 @@ export default function Navbar() {
           height: auto;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1120px) {
           .nav-links {
             display: none;
           }
           .nav-mobile-toggle {
-            display: block;
+            display: inline-flex;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .logo-header-img {
+            height: 34px;
           }
           .nav-container {
             padding: 1rem 0;
           }
+          .nav-scrolled {
+            padding: 0.75rem 0;
+          }
         }
 
-        @media (max-width: 1120px) {
-          .nav-links {
-            gap: 1rem;
+        @media (max-width: 420px) {
+          .nav-mobile-drawer {
+            width: 100%;
+            padding: 5.5rem 1.25rem 1.5rem;
+            border-left: 0;
           }
-          .nav-links ul {
-            gap: 1.1rem;
-            margin-right: 0;
-          }
-          .nav-item-link {
-            font-size: 0.88rem;
-          }
-          .btn-sm-nav {
-            padding: 0.58rem 1rem;
+          .nav-mobile-drawer-wrap {
+            gap: 2rem;
           }
         }
       `}</style>

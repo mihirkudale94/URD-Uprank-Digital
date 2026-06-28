@@ -188,6 +188,7 @@ export default function Testimonials() {
           gap: 1.25rem;
           border-top: 1px solid var(--border-color);
           padding-top: 2rem;
+          min-width: 0;
         }
 
         .avatar-frame-box {
@@ -229,6 +230,7 @@ export default function Testimonials() {
         .author-info p {
           font-size: 0.85rem;
           color: var(--text-muted);
+          overflow-wrap: anywhere;
         }
 
         .highlight-company {
@@ -299,6 +301,28 @@ export default function Testimonials() {
           }
           .quote-mark {
             display: none;
+          }
+        }
+
+        @media (max-width: 520px) {
+          .testimonial-active-card {
+            padding: 1.5rem;
+          }
+          .testimonial-content {
+            gap: 1.75rem;
+          }
+          .testimonial-author {
+            align-items: flex-start;
+            gap: 0.9rem;
+            padding-top: 1.5rem;
+          }
+          .avatar-frame-box {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+          }
+          .testimonials-controls {
+            gap: 1rem;
           }
         }
       `}</style>

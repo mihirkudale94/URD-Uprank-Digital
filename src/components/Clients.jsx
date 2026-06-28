@@ -87,7 +87,7 @@ export default function Clients() {
         .logo-slide-track {
           display: flex;
           gap: 4rem;
-          width: calc(240px * 24); /* Matches card width * duplicate quantity */
+          width: max-content;
           animation: scroll-left 40s linear infinite;
         }
 
@@ -126,6 +126,38 @@ export default function Clients() {
           }
           100% {
             transform: translateX(calc(-160px * 12 - 4rem * 12));
+          }
+        }
+
+        @media (max-width: 640px) {
+          .clients-section {
+            padding: 3rem 0;
+          }
+          .clients-title {
+            font-size: 0.72rem;
+            margin-bottom: 2rem;
+          }
+          .logo-slider-container::before,
+          .logo-slider-container::after {
+            width: 64px;
+          }
+          .logo-slide-track {
+            gap: 2.25rem;
+            animation-duration: 34s;
+          }
+          .logo-slide-card {
+            width: 132px;
+            height: 48px;
+            padding: 0 0.75rem;
+          }
+
+          @keyframes scroll-left {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(calc(-132px * 12 - 2.25rem * 12));
+            }
           }
         }
       `}</style>

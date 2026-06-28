@@ -248,7 +248,7 @@ export default function FAQ() {
         }
 
         .faq-item.active .faq-answer {
-          max-height: 190px;
+          max-height: 520px;
         }
 
         .faq-answer p {
@@ -283,6 +283,10 @@ export default function FAQ() {
         @media (max-width: 640px) {
           .faq-trust-list {
             grid-template-columns: 1fr;
+          }
+
+          .faq-cta {
+            width: 100%;
           }
 
           .faq-question {

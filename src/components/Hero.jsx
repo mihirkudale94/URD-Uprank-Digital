@@ -92,7 +92,7 @@ export default function Hero() {
       <style>{`
         .hero {
           position: relative;
-          min-height: 100vh;
+          min-height: 100svh;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -175,7 +175,9 @@ export default function Hero() {
           backdrop-filter: blur(10px);
           display: inline-flex;
           align-items: center;
+          justify-content: center;
           gap: 0.5rem;
+          max-width: 100%;
         }
 
         .hero-tag-sparkle {
@@ -186,9 +188,10 @@ export default function Hero() {
           font-size: 4.2rem;
           font-weight: 800;
           line-height: 1.15;
-          letter-spacing: -0.03em;
+          letter-spacing: 0;
           color: var(--text-main);
           margin-bottom: 1.5rem;
+          max-width: 100%;
         }
 
         .hero-typewriter-wrapper {
@@ -219,6 +222,8 @@ export default function Hero() {
         .hero-ctas {
           display: flex;
           gap: 1.25rem;
+          flex-wrap: wrap;
+          justify-content: center;
         }
 
         .arrow-bounce {
@@ -299,10 +304,24 @@ export default function Hero() {
 
         @media (max-width: 768px) {
           .hero {
-            padding-top: 120px;
+            min-height: auto;
+            padding-top: 110px;
+            padding-bottom: 5rem;
+          }
+          .hero-glow {
+            width: 360px;
+            height: 360px;
+            filter: blur(90px);
+          }
+          .hero-tag {
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            padding: 0.45rem 0.9rem;
+            flex-wrap: wrap;
           }
           .hero-title {
             font-size: 2.5rem;
+            line-height: 1.18;
           }
           .hero-typewriter-wrapper {
             min-height: 3rem;
@@ -316,6 +335,29 @@ export default function Hero() {
           }
           .hero-ctas .btn {
             width: 100%;
+          }
+          .hero-scroll-indicator {
+            display: none;
+          }
+        }
+
+        @media (max-width: 420px) {
+          .hero {
+            padding-top: 96px;
+            padding-bottom: 4rem;
+          }
+          .hero-title {
+            font-size: 2.05rem;
+          }
+          .hero-typewriter-wrapper {
+            min-height: 2.5rem;
+          }
+          .hero-description {
+            font-size: 0.98rem;
+            margin-bottom: 2rem;
+          }
+          .hero-ctas {
+            gap: 0.85rem;
           }
         }
       `}</style>

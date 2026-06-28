@@ -335,6 +335,7 @@ export default function ContactForm() {
         .contact-method-card p {
           color: var(--text-muted);
           font-size: 0.925rem;
+          overflow-wrap: anywhere;
         }
 
         .highlight-contact {
@@ -443,6 +444,7 @@ export default function ContactForm() {
           cursor: pointer;
           transition: var(--transition-fast);
           outline: none;
+          min-height: 40px;
         }
 
         .service-chip:hover {
@@ -507,6 +509,31 @@ export default function ContactForm() {
           }
           .contact-form-panel {
             padding: 2.25rem 1.5rem;
+          }
+          .contact-method-card {
+            padding: 1.35rem;
+          }
+          .chips-container {
+            gap: 0.55rem;
+          }
+          .service-chip {
+            flex: 1 1 100%;
+            border-radius: 8px;
+            padding: 0.65rem 0.85rem;
+            text-align: center;
+          }
+          .contact-form h3 {
+            font-size: 1.35rem;
+          }
+        }
+
+        @media (max-width: 420px) {
+          .contact-form-panel {
+            padding: 1.35rem;
+          }
+          .input-group input,
+          .input-group textarea {
+            padding: 0.9rem 1rem;
           }
         }
       `}</style>

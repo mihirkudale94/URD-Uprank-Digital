@@ -100,10 +100,25 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   overflow-x: hidden;
-  letter-spacing: -0.015em;
+  letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+#root,
+.app-root {
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
 }
 
 a {
@@ -118,6 +133,8 @@ ul {
 
 button, input, select, textarea {
   font-family: inherit;
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* Custom Scrollbar */
@@ -149,6 +166,7 @@ button, input, select, textarea {
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 2.5rem;
+  min-width: 0;
 }
 
 .section {
@@ -211,7 +229,7 @@ button, input, select, textarea {
   font-size: 4rem;
   font-weight: 800;
   line-height: 1.15;
-  letter-spacing: -0.035em;
+  letter-spacing: 0;
   color: var(--text-main);
   margin-bottom: 1.5rem;
 }
@@ -220,7 +238,7 @@ button, input, select, textarea {
   font-size: 3rem;
   font-weight: 800;
   line-height: 1.2;
-  letter-spacing: -0.025em;
+  letter-spacing: 0;
   color: var(--text-main);
   margin-bottom: 1rem;
 }
@@ -228,7 +246,7 @@ button, input, select, textarea {
 .heading-sm {
   font-size: 1.85rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   color: var(--text-main);
   margin-bottom: 0.75rem;
 }
@@ -250,7 +268,9 @@ button, input, select, textarea {
   margin-bottom: 1.25rem;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  max-width: 100%;
 }
 
 .section-subtitle::before, .section-subtitle::after {
@@ -267,6 +287,7 @@ button, input, select, textarea {
   font-size: 1.15rem;
   font-weight: 400;
   line-height: 1.6;
+  overflow-wrap: break-word;
 }
 
 /* Glassmorphism Bento Cards */
@@ -320,9 +341,12 @@ button, input, select, textarea {
   transition: var(--transition-fast);
   border: none;
   gap: 0.6rem;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   position: relative;
   overflow: hidden;
+  min-height: 44px;
+  text-align: center;
+  white-space: normal;
 }
 
 .btn-primary {
@@ -381,7 +405,57 @@ button, input, select, textarea {
     padding: 5rem 0;
   }
   .container {
-    padding: 0 1.5rem;
+    padding: 0 1.25rem;
+  }
+  .section-header {
+    margin-bottom: 3rem;
+  }
+  .section-subtitle {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    flex-wrap: wrap;
+  }
+  .section-description {
+    font-size: 1rem;
+  }
+  .glass-card {
+    padding: 1.5rem;
+  }
+  .glow-bg {
+    width: 320px;
+    height: 320px;
+    filter: blur(60px);
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 15px;
+  }
+  .container {
+    padding: 0 1rem;
+  }
+  .section {
+    padding: 4rem 0;
+  }
+  .heading-lg {
+    font-size: 2.35rem;
+  }
+  .heading-md {
+    font-size: 1.85rem;
+  }
+  .heading-sm {
+    font-size: 1.45rem;
+  }
+  .section-header {
+    margin-bottom: 2.5rem;
+  }
+  .btn {
+    width: 100%;
+    padding: 0.88rem 1rem;
+  }
+  .glass-card {
+    padding: 1.25rem;
   }
 }
 

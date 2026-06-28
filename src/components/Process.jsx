@@ -231,9 +231,21 @@ export default function Process() {
         }
 
         @media (max-width: 600px) {
+          .process-timeline-wrap {
+            margin-top: 2.5rem;
+            padding: 0;
+          }
           .process-grid {
             grid-template-columns: 1fr;
             gap: 2rem;
+          }
+          .process-node-card {
+            padding: 1.75rem 1.35rem;
+          }
+          .process-icon-box {
+            width: 68px;
+            height: 68px;
+            margin-bottom: 1.35rem;
           }
         }
       `}</style>

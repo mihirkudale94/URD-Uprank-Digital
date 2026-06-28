@@ -299,6 +299,7 @@ export default function Services() {
           cursor: pointer;
           color: var(--text-muted);
           transition: var(--transition-normal);
+          min-width: 0;
         }
 
         .services-menu-btn:hover {
@@ -327,6 +328,7 @@ export default function Services() {
           font-size: 1.1rem;
           font-weight: 700;
           margin-bottom: 0.2rem;
+          white-space: nowrap;
         }
 
         .service-menu-text p {
@@ -338,6 +340,7 @@ export default function Services() {
           padding: 3rem;
           min-height: 100%;
           display: flex;
+          min-width: 0;
         }
 
         .services-details-content {
@@ -396,6 +399,11 @@ export default function Services() {
           border-radius: 8px;
           font-size: 0.85rem;
           color: var(--text-muted);
+          min-width: 0;
+        }
+
+        .service-bullet-chip span:last-child {
+          overflow-wrap: anywhere;
         }
 
         .bullet-indicator {
@@ -430,6 +438,7 @@ export default function Services() {
           display: flex;
           align-items: center;
           justify-content: center;
+          min-width: 0;
         }
 
         /* Mockup Styles */
@@ -674,6 +683,8 @@ export default function Services() {
         .channel-breakdown {
           display: flex;
           justify-content: space-between;
+          gap: 0.75rem;
+          flex-wrap: wrap;
           font-size: 0.65rem;
           margin-top: 0.75rem;
           color: var(--text-muted);
@@ -882,6 +893,10 @@ export default function Services() {
             flex-direction: row;
             overflow-x: auto;
             padding-bottom: 0.5rem;
+            scrollbar-width: none;
+          }
+          .services-menu::-webkit-scrollbar {
+            display: none;
           }
           .services-menu-btn {
             flex-shrink: 0;
@@ -937,6 +952,24 @@ export default function Services() {
             padding: 0.4rem 0.8rem;
             border-radius: 50px;
             color: var(--text-muted);
+            overflow-wrap: anywhere;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .service-mobile-card {
+            padding: 1.35rem;
+          }
+          .mobile-card-header {
+            align-items: flex-start;
+          }
+          .mobile-card-header h3 {
+            font-size: 1.15rem;
+            line-height: 1.25;
+          }
+          .mobile-bullet-badge {
+            width: 100%;
+            border-radius: 8px;
           }
         }
       `}</style>
