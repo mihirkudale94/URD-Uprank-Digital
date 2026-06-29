@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Send, CheckCircle2, ArrowRight } from 'lucide-react';
-
-const getBaseUrl = () => import.meta.env.BASE_URL || '/';
-const contactEndpoint = `${getBaseUrl().replace(/\/?$/, '/')}contact-submit.php`;
+import { buildLeadPayload, submitLead } from '../utils/leadSubmission';
+import './ContactForm.css';
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -11,24 +10,21 @@ export default function ContactForm() {
     phone: '',
     businessName: '',
     url: '',
-    message: '',
-    website: ''
+    message: ''
   });
   
   const [selectedServices, setSelectedServices] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const [websiteConfirmation, setWebsiteConfirmation] = useState('');
 
   const servicesList = [
     { id: 'digital', label: 'Digital Services' },
-    { id: 'marketing', label: 'Performance Marketing' },
-    { id: 'ai', label: 'AI Powered Marketing' },
-    { id: 'conversion', label: 'Conversion Optimization' },
-    { id: 'analytics', label: 'Analytics & Growth Strategy' },
-    { id: 'advertise', label: 'Paid Advertising' },
-    { id: 'content', label: 'Content Design' },
-    { id: 'software', label: 'Software Solutions' }
+    { id: 'marketing', label: 'Marketing Services' },
+    { id: 'advertise', label: 'Advertising Services' },
+    { id: 'content', label: 'Content Services' },
+    { id: 'software', label: 'Software Services' }
   ];
 
   const handleInputChange = (e) => {
@@ -48,6 +44,11 @@ export default function ContactForm() {
     e.preventDefault();
     setErrorMsg('');
 
+    if (websiteConfirmation.trim()) {
+      setIsSubmitted(true);
+      return;
+    }
+
     if (!formData.name.trim()) {
       setErrorMsg('Please enter your name.');
       return;
@@ -64,25 +65,10 @@ export default function ContactForm() {
     setLoading(true);
 
     try {
-      const response = await fetch(contactEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: JSON.stringify({
-          ...formData,
-          services: selectedServices,
-          page: window.location.href
-        })
-      });
-
-      const result = await response.json().catch(() => ({}));
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || 'We could not submit your inquiry right now. Please call or WhatsApp us directly.');
-      }
+      await submitLead(buildLeadPayload({
+        formData,
+        selectedServices
+      }));
 
       setIsSubmitted(true);
       setFormData({
@@ -91,8 +77,7 @@ export default function ContactForm() {
         phone: '',
         businessName: '',
         url: '',
-        message: '',
-        website: ''
+        message: ''
       });
       setSelectedServices([]);
     } catch (error) {
@@ -150,12 +135,12 @@ export default function ContactForm() {
                 <label htmlFor="contact-website-confirmation">Website confirmation</label>
                 <input
                   type="text"
-                  name="website"
                   id="contact-website-confirmation"
+                  name="websiteConfirmation"
                   tabIndex={-1}
                   autoComplete="off"
-                  value={formData.website}
-                  onChange={handleInputChange}
+                  value={websiteConfirmation}
+                  onChange={(event) => setWebsiteConfirmation(event.target.value)}
                 />
               </div>
 
@@ -279,264 +264,6 @@ export default function ContactForm() {
           )}
         </div>
       </div>
-
-      <style>{`
-        .contact-container {
-          display: grid;
-          grid-template-columns: 0.9fr 1.1fr;
-          gap: 4rem;
-          align-items: center;
-          position: relative;
-          z-index: 10;
-        }
-
-        .contact-info-panel {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
-
-        .contact-info-desc {
-          color: var(--text-muted);
-          font-size: 1.1rem;
-          line-height: 1.6;
-        }
-
-        .contact-methods {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-          margin-top: 2rem;
-        }
-
-        .contact-method-card {
-          padding: 1.75rem;
-        }
-
-        .contact-form-panel:hover,
-        .contact-method-card:hover {
-          transform: translateY(0);
-          background: var(--bg-card);
-          box-shadow: var(--glass-shadow);
-        }
-
-        .contact-form-panel:hover::after,
-        .contact-method-card:hover::after {
-          background: var(--gradient-card-border);
-        }
-
-        .contact-method-card h4 {
-          color: var(--primary);
-          font-weight: 700;
-          font-size: 1.05rem;
-          margin-bottom: 0.5rem;
-        }
-
-        .contact-method-card p {
-          color: var(--text-muted);
-          font-size: 0.925rem;
-          overflow-wrap: anywhere;
-        }
-
-        .highlight-contact {
-          color: var(--text-main) !important;
-          font-weight: 600;
-        }
-
-        .contact-form-panel {
-          padding: 3rem;
-        }
-
-        .contact-form h3 {
-          font-size: 1.6rem;
-          font-weight: 800;
-          color: var(--text-main);
-          margin-bottom: 0.5rem;
-        }
-
-        .form-sub-header {
-          font-size: 0.875rem;
-          color: var(--text-dim);
-          margin-bottom: 2rem;
-        }
-
-        .form-error-alert {
-          background: rgba(239, 68, 68, 0.1);
-          border: 1px solid rgba(239, 68, 68, 0.3);
-          color: #f87171;
-          padding: 0.8rem 1.2rem;
-          border-radius: 8px;
-          margin-bottom: 1.5rem;
-          font-size: 0.9rem;
-        }
-
-        .website-confirmation {
-          position: absolute;
-          left: -10000px;
-          top: auto;
-          width: 1px;
-          height: 1px;
-          overflow: hidden;
-        }
-
-        .form-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1.25rem;
-          margin-bottom: 1.5rem;
-        }
-
-        .input-group {
-          position: relative;
-        }
-
-        .input-group.full-width {
-          grid-column: span 2;
-        }
-
-        .input-group input,
-        .input-group textarea {
-          width: 100%;
-          background: var(--bg-hover-pills);
-          border: 1px solid var(--border-color);
-          padding: 1rem 1.25rem;
-          border-radius: 10px;
-          color: var(--text-main);
-          font-size: 0.95rem;
-          outline: none;
-          transition: var(--transition-fast);
-        }
-
-        .input-group input:focus,
-        .input-group textarea:focus {
-          border-color: var(--primary);
-          background: var(--bg-hover-pills-hover);
-          box-shadow: 0 0 12px rgba(59, 130, 246, 0.15);
-        }
-
-        .services-selector-wrap {
-          margin-bottom: 1.75rem;
-        }
-
-        .services-selector-wrap h4 {
-          font-size: 0.95rem;
-          font-weight: 700;
-          color: var(--text-main);
-          margin-bottom: 1rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-
-        .chips-container {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.75rem;
-        }
-
-        .service-chip {
-          background: var(--bg-hover-pills);
-          border: 1px solid var(--border-color);
-          color: var(--text-muted);
-          padding: 0.55rem 1.35rem;
-          border-radius: 50px;
-          font-size: 0.85rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: var(--transition-fast);
-          outline: none;
-          min-height: 40px;
-        }
-
-        .service-chip:hover {
-          background: var(--bg-hover-pills-hover);
-          border-color: var(--border-color-hover);
-          color: var(--text-main);
-        }
-
-        .service-chip.active {
-          background: var(--gradient-accent);
-          color: #ffffff;
-          border-color: var(--primary);
-          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
-        }
-
-        .submit-btn {
-          width: 100%;
-          padding: 1rem;
-          border-radius: 8px;
-        }
-
-        .success-state {
-          text-align: center;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 1.5rem;
-          padding: 2rem 0;
-        }
-
-        .success-icon {
-          color: #10b981;
-          filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.3));
-        }
-
-        .success-state h3 {
-          font-size: 2rem;
-          font-weight: 800;
-          color: var(--text-main);
-        }
-
-        .success-state p {
-          color: var(--text-muted);
-          max-width: 400px;
-          margin-bottom: 1rem;
-          line-height: 1.6;
-        }
-
-        @media (max-width: 900px) {
-          .contact-container {
-            grid-template-columns: 1fr;
-            gap: 3rem;
-          }
-        }
-
-        @media (max-width: 600px) {
-          .form-grid {
-            grid-template-columns: 1fr;
-          }
-          .input-group.full-width {
-            grid-column: span 1;
-          }
-          .contact-form-panel {
-            padding: 2.25rem 1.5rem;
-          }
-          .contact-method-card {
-            padding: 1.35rem;
-          }
-          .chips-container {
-            gap: 0.55rem;
-          }
-          .service-chip {
-            flex: 1 1 100%;
-            border-radius: 8px;
-            padding: 0.65rem 0.85rem;
-            text-align: center;
-          }
-          .contact-form h3 {
-            font-size: 1.35rem;
-          }
-        }
-
-        @media (max-width: 420px) {
-          .contact-form-panel {
-            padding: 1.35rem;
-          }
-          .input-group input,
-          .input-group textarea {
-            padding: 0.9rem 1rem;
-          }
-        }
-      `}</style>
     </section>
   );
 }

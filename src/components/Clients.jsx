@@ -1,5 +1,6 @@
 import React from 'react';
 import { publicAsset } from '../utils/publicAsset';
+import './Clients.css';
 
 export default function Clients() {
   const logos = [
@@ -29,138 +30,12 @@ export default function Clients() {
           <div className="logo-slide-track">
             {doubleLogos.map((logo, idx) => (
               <div key={idx} className="logo-slide-card">
-                <img src={logo} alt={`Client logo ${idx + 1}`} className="client-logo-img" />
+                <img src={logo} alt={`Client logo ${idx + 1}`} className="client-logo-img" width="170" height="60" loading="lazy" />
               </div>
             ))}
           </div>
         </div>
       </div>
-
-      <style>{`
-        .clients-section {
-          padding: 4rem 0;
-          background-color: var(--bg-primary);
-          border-bottom: 1px solid var(--border-color);
-          overflow: hidden;
-          position: relative;
-        }
-
-        .clients-title {
-          font-size: 0.85rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.15em;
-          color: var(--text-dim);
-          text-align: center;
-          margin-bottom: 3rem;
-        }
-
-        .logo-slider-container {
-          width: 100%;
-          position: relative;
-          overflow: hidden;
-          padding: 1rem 0;
-        }
-
-        /* Gradient mask for smooth fade out at edges */
-        .logo-slider-container::before,
-        .logo-slider-container::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          width: 150px;
-          height: 100%;
-          z-index: 10;
-          pointer-events: none;
-        }
-
-        .logo-slider-container::before {
-          left: 0;
-          background: linear-gradient(90deg, var(--bg-primary) 0%, transparent 100%);
-        }
-
-        .logo-slider-container::after {
-          right: 0;
-          background: linear-gradient(270deg, var(--bg-primary) 0%, transparent 100%);
-        }
-
-        .logo-slide-track {
-          display: flex;
-          gap: 4rem;
-          width: max-content;
-          animation: scroll-left 40s linear infinite;
-        }
-
-        .logo-slide-card {
-          flex-shrink: 0;
-          width: 170px;
-          height: 60px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0 1.5rem;
-          transition: var(--transition-fast);
-        }
-
-        .logo-slide-card:hover {
-          transform: scale(1.08);
-        }
-
-        .client-logo-img {
-          max-width: 100%;
-          max-height: 100%;
-          object-fit: contain;
-          filter: none;
-          opacity: 0.75;
-          transition: var(--transition-fast);
-        }
-
-        .logo-slide-card:hover .client-logo-img {
-          opacity: 1;
-          filter: none;
-        }
-
-        @keyframes scroll-left {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(calc(-160px * 12 - 4rem * 12));
-          }
-        }
-
-        @media (max-width: 640px) {
-          .clients-section {
-            padding: 3rem 0;
-          }
-          .clients-title {
-            font-size: 0.72rem;
-            margin-bottom: 2rem;
-          }
-          .logo-slider-container::before,
-          .logo-slider-container::after {
-            width: 64px;
-          }
-          .logo-slide-track {
-            gap: 2.25rem;
-            animation-duration: 34s;
-          }
-          .logo-slide-card {
-            width: 132px;
-            height: 48px;
-            padding: 0 0.75rem;
-          }
-
-          @keyframes scroll-left {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(calc(-132px * 12 - 2.25rem * 12));
-            }
-          }
-        }
-      `}</style>
     </section>
   );
 }

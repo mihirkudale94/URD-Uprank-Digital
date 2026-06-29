@@ -8,18 +8,27 @@ import {
   Globe2,
   Megaphone,
   MessageSquare,
+  Mic,
+  MicOff,
+  Phone,
   PhoneCall,
   Search,
   Send,
-  ShieldCheck,
   Target,
   X
 } from 'lucide-react';
+import { ConversationProvider, useConversation } from '@elevenlabs/react';
+import { SERVICE_PLAYBOOK as rawPlaybook } from '../utils/servicePlaybook';
+import { normalizePhoneForVoice } from '../utils/phone';
+import { isSupabaseConfigured, supabase } from '../utils/supabaseClient';
+import './Chatbot.css';
+
 
 const WHATSAPP_PREFILL_MESSAGE = 'Hi URD team, I visited your website and would like to know more about your services.';
 const WHATSAPP_LINK = `https://wa.me/919371116165?text=${encodeURIComponent(WHATSAPP_PREFILL_MESSAGE)}`;
 const ADMIN_WHATSAPP_NUMBER = '919371116165';
 const ADMIN_EMAIL = 'sachin@uprankdigital.com';
+const SUPABASE_VOICE_FUNCTION = import.meta.env.VITE_SUPABASE_VOICE_FUNCTION || 'request-voice-call';
 
 const getIndiaDateParts = () => {
   const parts = new Intl.DateTimeFormat('en-US', {
@@ -41,7 +50,7 @@ const getOfficeStatus = () => {
   const { weekday, hour, minute } = getIndiaDateParts();
   const isSunday = weekday === 'Sun';
   const minutesNow = hour * 60 + minute;
-  const opensAt = 10 * 60;
+  const opensAt = 9 * 60;
   const closesAt = 19 * 60;
   const isOpen = !isSunday && minutesNow >= opensAt && minutesNow < closesAt;
 
@@ -75,56 +84,19 @@ const buildAdminWhatsAppLink = (message) =>
 const buildAdminEmailLink = (message) =>
   `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent('New callback request from URD website')}&body=${encodeURIComponent(message)}`;
 
-const SERVICE_PLAYBOOK = [
-  {
-    id: 'digital',
-    title: 'Digital & UI/UX',
-    icon: Globe2,
-    aliases: ['website', 'web', 'ui', 'ux', 'design', 'landing page', 'ecommerce', 'shopify'],
-    fit: 'Best for new websites, redesigns, landing pages, and conversion-focused digital experiences.',
-    bullets: ['Website and landing page builds', 'UI/UX design systems', 'Conversion-first page structure']
-  },
-  {
-    id: 'marketing',
-    title: 'Performance Marketing',
-    icon: Target,
-    aliases: ['growth', 'leads', 'seo', 'traffic', 'campaign', 'performance', 'funnel'],
-    fit: 'Best for brands that need more qualified traffic, stronger funnels, and measurable growth.',
-    bullets: ['SEO and lead-generation strategy', 'Growth funnel planning', 'Analytics and reporting']
-  },
-  {
-    id: 'ai-growth',
-    title: 'AI Growth & CRO',
-    icon: Bot,
-    aliases: ['ai', 'automation', 'analytics', 'cro', 'conversion', 'optimize', 'optimisation', 'optimization', 'growth strategy', 'reporting', 'dashboard'],
-    fit: 'Best for businesses that want AI-supported campaign planning, conversion optimization, analytics, and smarter growth decisions.',
-    bullets: ['AI-powered marketing workflows', 'Conversion optimization', 'Analytics and growth strategy']
-  },
-  {
-    id: 'advertising',
-    title: 'Paid Advertising',
-    icon: Megaphone,
-    aliases: ['ads', 'advertising', 'google ads', 'meta', 'linkedin', 'ppc', 'paid'],
-    fit: 'Best for brands ready to drive demand through Google, Meta, LinkedIn, and paid media.',
-    bullets: ['Search and display campaigns', 'Social media ads', 'Budget and audience planning']
-  },
-  {
-    id: 'content',
-    title: 'Content Design',
-    icon: Camera,
-    aliases: ['content', 'video', 'shoot', 'photoshoot', 'copy', 'brand', 'creative'],
-    fit: 'Best for brands that need sharper storytelling, product visuals, and campaign-ready content.',
-    bullets: ['Brand storytelling', 'Product shoots and videos', 'Social content systems']
-  },
-  {
-    id: 'software',
-    title: 'Custom Software',
-    icon: Code2,
-    aliases: ['software', 'app', 'application', 'cms', 'lms', 'api', 'integration', 'portal'],
-    fit: 'Best for businesses that need custom apps, portals, CMS/LMS work, or business integrations.',
-    bullets: ['Web and mobile applications', 'CMS/LMS integrations', 'Business system workflows']
-  }
-];
+const ICON_MAP = {
+  digital: Globe2,
+  marketing: Target,
+  'ai-growth': Bot,
+  advertising: Megaphone,
+  content: Camera,
+  software: Code2
+};
+
+const SERVICE_PLAYBOOK = rawPlaybook.map(s => ({
+  ...s,
+  icon: ICON_MAP[s.id] || Bot
+}));
 
 const currentTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -143,11 +115,19 @@ const createUserMessage = (text) => ({
 });
 
 export default function Chatbot() {
+  return (
+    <ConversationProvider>
+      <ChatbotInner />
+    </ConversationProvider>
+  );
+}
+
+function ChatbotInner() {
   const [isOpen, setIsOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(true);
   const [messages, setMessages] = useState([
     createBotMessage(
-      'Hi, I am URD Chat Assistant. I can help you find the right service, understand pricing, or connect you with the team.',
+      'Hi, I am URD Copilot. I can help you find the right service, understand pricing, or connect you with the team.',
       [
         { label: 'Find my service', action: 'start-service-match' },
         { label: 'View services', action: 'scroll-services' },
@@ -165,6 +145,26 @@ export default function Chatbot() {
   const [latestLeadMessage, setLatestLeadMessage] = useState('');
   const [selectedServiceId, setSelectedServiceId] = useState(null);
   const [officeStatus, setOfficeStatus] = useState(() => getOfficeStatus());
+
+  // ElevenLabs Integration States
+  const [showVoiceCall, setShowVoiceCall] = useState(false);
+  const [voiceTranscript, setVoiceTranscript] = useState([]);
+  const [callbackType, setCallbackType] = useState('human'); // 'human' | 'ai'
+  const [callbackError, setCallbackError] = useState('');
+  const [isMuted, setIsMuted] = useState(false);
+
+  // ElevenLabs local config
+  const [elevenLabsConfig] = useState(() => {
+    return {
+      agentId: import.meta.env.VITE_ELEVENLABS_AGENT_ID || localStorage.getItem('urd_elevenlabs_agent_id') || ''
+    };
+  });
+
+  // Demo mode / simulation states
+  const [isDemoMode, setIsDemoMode] = useState(false);
+  const [demoStatus, setDemoStatus] = useState('disconnected'); // 'disconnected' | 'connecting' | 'connected'
+  const [isSpeakingSimulated, setIsSpeakingSimulated] = useState(false);
+  const [recognitionInstance, setRecognitionInstance] = useState(null);
 
   const chatEndRef = useRef(null);
 
@@ -189,6 +189,256 @@ export default function Chatbot() {
 
     return () => window.clearInterval(timer);
   }, []);
+
+  const voiceTranscriptRef = useRef([]);
+  useEffect(() => {
+    voiceTranscriptRef.current = voiceTranscript;
+  }, [voiceTranscript]);
+
+  // Real ElevenLabs Hook integration
+  const conversation = useConversation({
+    onConnect: () => {
+      console.log('ElevenLabs Connected');
+      setVoiceTranscript([{ text: 'Connected to AI voice agent. Speak now...', sender: 'bot' }]);
+    },
+    onDisconnect: () => {
+      console.log('ElevenLabs Disconnected');
+      const finalTranscript = voiceTranscriptRef.current;
+      if (finalTranscript.length > 0) {
+        const summary = finalTranscript
+          .map(t => `${t.sender === 'user' ? 'You' : 'AI'}: ${t.text}`)
+          .join('\n');
+        setMessages(prev => [
+          ...prev,
+          createBotMessage(
+            `Voice call summary:\n\n${summary}`,
+            [],
+            'Voice session ended'
+          )
+        ]);
+      }
+    },
+    onMessage: (msg) => {
+      // msg = { message: string, source: 'user' | 'ai' }
+      if (msg.message && msg.source) {
+        setVoiceTranscript(prev => [...prev, { text: msg.message, sender: msg.source === 'user' ? 'user' : 'bot' }]);
+      }
+    },
+    onError: (err) => {
+      console.error('ElevenLabs Error:', err);
+      setVoiceTranscript(prev => [
+        ...prev,
+        { text: `Connection error: ${err.message || err || 'Failed to connect'}`, sender: 'bot' }
+      ]);
+    }
+  });
+
+  // Simulated Speech recognition engine for Demo Mode
+  const startSimulatedSpeechRecognition = () => {
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Recognition) return;
+
+    try {
+      const rec = new Recognition();
+      rec.continuous = false;
+      rec.interimResults = false;
+      rec.lang = 'en-US';
+
+      rec.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        if (transcript && transcript.trim()) {
+          handleSimulatedUserInput(transcript);
+        }
+      };
+
+      rec.onend = () => {
+        // If still active, continue listening
+        if (showVoiceCall && !isSpeakingSimulated && !isMuted) {
+          setTimeout(() => {
+            try {
+              rec.start();
+            } catch {}
+          }, 800);
+        }
+      };
+
+      rec.start();
+      setRecognitionInstance(rec);
+    } catch (err) {
+      console.warn('Browser speech recognition not supported or denied:', err);
+    }
+  };
+
+  const handleSimulatedUserInput = (text) => {
+    setVoiceTranscript(prev => [...prev, { text, sender: 'user' }]);
+    
+    // Simulate thinking/response latency
+    setTimeout(() => {
+      let reply = '';
+      const lower = text.toLowerCase();
+      
+      if (lower.includes('rag') || lower.includes('retrieval')) {
+        reply = "Retrieval-Augmented Generation, or RAG, is an AI architecture that retrieves relevant documents from an external database to ground the LLM, ensuring factual, hallucination-free answers.";
+      } else if (lower.includes('ai growth') || lower.includes('growth strategy')) {
+        reply = "AI Growth refers to integrating custom AI agents, automated operations, and machine learning models directly into your business to scale customer acquisition and cut costs.";
+      } else if (lower.includes('seo') || lower.includes('search engine')) {
+        reply = "SEO involves optimizing site architecture, speed, and content relevancy to rank highly on search engines like Google, capturing free, high-intent organic traffic.";
+      } else if (lower.includes('cro') || lower.includes('conversion')) {
+        reply = "Conversion Rate Optimization, or CRO, is the practice of designing, testing, and refining landing pages to convert a higher percentage of visitors into active leads or sales.";
+      } else if (lower.includes('software') || lower.includes('app') || lower.includes('code') || lower.includes('program')) {
+        reply = "URD builds custom web applications, native mobile apps, and headless CMS integrations. We focus on modern frameworks, clean code, and API scalability.";
+      } else if (lower.includes('marketing') || lower.includes('lead') || lower.includes('ads') || lower.includes('google') || lower.includes('meta')) {
+        reply = "Our growth campaigns drive target traffic using high-intent Google PPC, paid social advertising on Meta and LinkedIn, and automated analytics funnels.";
+      } else if (lower.includes('ai') || lower.includes('automation') || lower.includes('chatbot') || lower.includes('copilot')) {
+        reply = "We integrate custom AI agents, LLMs, and voice assistants into websites to automate customer support and optimize user workflows.";
+      } else if (lower.includes('price') || lower.includes('cost') || lower.includes('package') || lower.includes('budget')) {
+        reply = "Pricing depends on your project goals and scope. We suggest scheduling a callback so our strategist can prepare a custom proposal for you.";
+      } else {
+        reply = "I'm currently in Demo Mode. To enable live web search and allow me to answer any custom technical question, please enter your real ElevenLabs Agent ID.";
+      }
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(reply);
+        const voices = window.speechSynthesis.getVoices();
+        const englishVoice = voices.find(v => v.lang.startsWith('en-US') || v.lang.startsWith('en-GB')) || voices[0];
+        if (englishVoice) utterance.voice = englishVoice;
+        
+        utterance.onstart = () => setIsSpeakingSimulated(true);
+        utterance.onend = () => {
+          setIsSpeakingSimulated(false);
+          startSimulatedSpeechRecognition();
+        };
+        utterance.onerror = () => setIsSpeakingSimulated(false);
+
+        window.speechSynthesis.speak(utterance);
+      }
+
+      setVoiceTranscript(prev => [...prev, { text: reply, sender: 'bot' }]);
+    }, 1000);
+  };
+
+  const startVoiceSession = async () => {
+    setVoiceTranscript([]);
+    setShowVoiceCall(true);
+    const hasAgentId = !!elevenLabsConfig.agentId;
+
+    if (hasAgentId) {
+      setIsDemoMode(false);
+      try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+        await conversation.startSession({
+          agentId: elevenLabsConfig.agentId
+        });
+      } catch (err) {
+        console.error('Failed to start real session:', err);
+        setVoiceTranscript([{ text: `Error: ${err.message || 'Microphone access denied.'}`, sender: 'bot' }]);
+      }
+    } else {
+      setIsDemoMode(true);
+      setDemoStatus('connecting');
+      setVoiceTranscript([{ text: 'Connecting to Demo AI Voice Agent...', sender: 'bot' }]);
+
+      setTimeout(() => {
+        setDemoStatus('connected');
+        const welcome = "Hi there! I am Jon, URD's AI Growth Copilot. I can answer any technical questions about websites, SEO, performance marketing, ads, or AI growth. How can I help you today?";
+        
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(welcome);
+          const voices = window.speechSynthesis.getVoices();
+          const englishVoice = voices.find(v => v.lang.startsWith('en-US') || v.lang.startsWith('en-GB')) || voices[0];
+          if (englishVoice) utterance.voice = englishVoice;
+          
+          utterance.onstart = () => setIsSpeakingSimulated(true);
+          utterance.onend = () => {
+            setIsSpeakingSimulated(false);
+            startSimulatedSpeechRecognition();
+          };
+          utterance.onerror = () => setIsSpeakingSimulated(false);
+
+          window.speechSynthesis.speak(utterance);
+        } else {
+          setVoiceTranscript(prev => [...prev, { text: welcome, sender: 'bot' }]);
+        }
+      }, 1500);
+    }
+  };
+
+  const endVoiceSession = async () => {
+    const hasAgentId = !!elevenLabsConfig.agentId;
+    if (!isDemoMode && hasAgentId) {
+      await conversation.endSession();
+    } else {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      setIsSpeakingSimulated(false);
+      setDemoStatus('disconnected');
+      if (recognitionInstance) {
+        recognitionInstance.stop();
+      }
+
+      const finalTranscript = voiceTranscriptRef.current;
+      if (finalTranscript.length > 0) {
+        const summary = finalTranscript
+          .map(t => `${t.sender === 'user' ? 'You' : 'AI'}: ${t.text}`)
+          .join('\n');
+        setMessages(prev => [
+          ...prev,
+          createBotMessage(
+            `Voice call summary (Demo Mode):\n\n${summary}`,
+            [],
+            'Voice session ended'
+          )
+        ]);
+      }
+    }
+    setShowVoiceCall(false);
+  };
+
+  const handleInitiateAICall = async () => {
+    setCallbackState('submitting');
+    setCallbackError('');
+    const normalizedPhone = normalizePhoneForVoice(callbackPhone);
+
+    if (!normalizedPhone) {
+      setCallbackError('Please enter a valid phone number with country code, for example +919371116165.');
+      setCallbackState('error_ai');
+      return;
+    }
+    
+    try {
+      if (!isSupabaseConfigured) {
+        throw new Error('Supabase is not configured for AI voice requests.');
+      }
+
+      const { error } = await supabase.functions.invoke(SUPABASE_VOICE_FUNCTION, {
+        body: {
+          to_number: normalizedPhone
+        }
+      });
+
+      if (error) {
+        throw new Error(error.message || 'AI voice request failed.');
+      }
+
+      setCallbackState('success_ai');
+      setMessages(prev => [
+        ...prev,
+        createBotMessage(
+          `AI mobile voice call request sent to ${normalizedPhone}.\n\nOur AI Growth Copilot will call through the active ElevenLabs telephony provider.`,
+          [],
+          'AI voice connected'
+        )
+      ]);
+      setCallbackPhone('');
+    } catch (err) {
+      console.error('AI call failure:', err);
+      setCallbackError(err.message || 'Failed to initiate the AI voice call. Please check your network or credentials.');
+      setCallbackState('error_ai');
+    }
+  };
 
   const openWhatsApp = () => {
     window.open(WHATSAPP_LINK, '_blank');
@@ -384,6 +634,11 @@ export default function Chatbot() {
     e.preventDefault();
     if (!callbackPhone.trim()) return;
 
+    if (callbackType === 'ai') {
+      handleInitiateAICall();
+      return;
+    }
+
     const leadMessage = buildCallbackLeadMessage({
       phone: callbackPhone.trim(),
       need: callbackNeed
@@ -427,21 +682,20 @@ export default function Chatbot() {
             <div className="avatar-glow"></div>
           </div>
           <div className="chat-header-info">
-            <h4>URD Chat Assistant</h4>
+            <h4>URD Copilot</h4>
             <div className={`online-indicator ${officeStatus.isOpen ? 'is-open' : 'is-closed'}`}>
               <span className="g-dot"></span>
               <span>{officeStatus.label}</span>
             </div>
           </div>
-          <button className="chat-header-action" onClick={openWhatsApp} aria-label="Open WhatsApp">
-            <PhoneCall size={15} />
-          </button>
-        </div>
-
-        <div className="chat-trust-row">
-          <span><ShieldCheck size={13} /> No spam</span>
-          <span>Human follow-up</span>
-          <span>{officeStatus.isOpen ? 'Office hours' : 'Next-day reply'}</span>
+          <div style={{ display: 'flex', gap: '0.35rem' }}>
+            <button className="chat-header-action" onClick={startVoiceSession} aria-label="Start AI Voice Call" title="Start AI Voice Chat">
+              <Mic size={15} />
+            </button>
+            <button className="chat-header-action" onClick={openWhatsApp} aria-label="Open WhatsApp" title="WhatsApp Business">
+              <PhoneCall size={15} />
+            </button>
+          </div>
         </div>
 
         <div className="chat-messages-container">
@@ -524,9 +778,65 @@ export default function Chatbot() {
                 )}
                 <button className="back-chat-btn" onClick={() => setCallbackState('idle')}>Back to chat</button>
               </div>
+            ) : callbackState === 'success_ai' ? (
+              <div className="callback-success-view">
+                <Check size={20} className="chk-circle" />
+                <span>AI Call Initiated!</span>
+                <p>Our AI Voice Agent is dialing your number now to answer your technical questions.</p>
+                <button className="back-chat-btn" onClick={() => setCallbackState('idle')}>Back to chat</button>
+              </div>
+            ) : callbackState === 'error_ai' ? (
+              <div className="callback-success-view">
+                <X size={20} style={{ color: '#ef4444' }} />
+                <span style={{ color: '#ef4444' }}>AI Call Failed</span>
+                <p style={{ fontSize: '0.74rem', margin: '0.4rem 0', color: 'var(--text-muted)' }}>{callbackError}</p>
+                <button className="back-chat-btn" onClick={() => setCallbackState('inputting')} style={{ color: 'var(--primary)', fontWeight: '800' }}>Try again</button>
+                <button className="back-chat-btn" onClick={() => setCallbackState('idle')} style={{ marginTop: '0.2rem' }}>Cancel</button>
+              </div>
             ) : (
               <form onSubmit={handleCallbackSubmit} className="callback-form-inner">
                 <span>Request a quick callback</span>
+                
+                {/* AI / Human Callback selector */}
+                <div className="callback-type-selector" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', margin: '0.2rem 0' }}>
+                  <button
+                    type="button"
+                    className={`callback-type-btn ${callbackType === 'human' ? 'active' : ''}`}
+                    onClick={() => setCallbackType('human')}
+                    style={{
+                      background: callbackType === 'human' ? 'var(--gradient-accent)' : 'var(--bg-hover-pills)',
+                      border: '1px solid var(--border-color)',
+                      color: '#fff',
+                      fontSize: '0.72rem',
+                      fontWeight: '800',
+                      padding: '0.45rem',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      boxShadow: callbackType === 'human' ? '0 2px 6px rgba(247, 151, 31, 0.3)' : 'none'
+                    }}
+                  >
+                    Human Call
+                  </button>
+                  <button
+                    type="button"
+                    className={`callback-type-btn ${callbackType === 'ai' ? 'active' : ''}`}
+                    onClick={() => setCallbackType('ai')}
+                    style={{
+                      background: callbackType === 'ai' ? 'var(--gradient-accent)' : 'var(--bg-hover-pills)',
+                      border: '1px solid var(--border-color)',
+                      color: '#fff',
+                      fontSize: '0.72rem',
+                      fontWeight: '800',
+                      padding: '0.45rem',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      boxShadow: callbackType === 'ai' ? '0 2px 6px rgba(247, 151, 31, 0.3)' : 'none'
+                    }}
+                  >
+                    AI Voice Call (Instant)
+                  </button>
+                </div>
+
                 <select value={callbackNeed} onChange={(e) => setCallbackNeed(e.target.value)}>
                   <option>General enquiry</option>
                   {SERVICE_PLAYBOOK.map(service => (
@@ -536,18 +846,21 @@ export default function Chatbot() {
                 <div className="callback-input-wrap">
                   <input
                     type="tel"
-                    placeholder="Phone number"
+                    placeholder={callbackType === 'ai' ? "Phone number with country code" : "Phone number"}
                     value={callbackPhone}
                     onChange={(e) => setCallbackPhone(e.target.value)}
                     required
                     autoFocus
                   />
                   <button type="submit" className="callback-send-btn">
-                    <PhoneCall size={14} />
+                    {callbackType === 'ai' ? <Phone size={14} /> : <PhoneCall size={14} />}
                   </button>
                 </div>
                 <p className="callback-privacy-note">
-                  Your number is used only for this callback request and is shared with the URD team.
+                  {callbackType === 'ai' 
+                    ? "Our AI voice agent will call instantly through the active ElevenLabs calling integration."
+                    : "Your number is used only for this callback request and is shared with the URD team."
+                  }
                 </p>
 
                 <div className="callback-divider"><span>or</span></div>
@@ -580,703 +893,91 @@ export default function Chatbot() {
             <Send size={16} />
           </button>
         </div>
+
+        {/* Voice Call Overlay */}
+        {showVoiceCall && (
+          <div className="voice-call-overlay">
+            <div className="voice-call-header">
+              <span>AI VOICE AGENT</span>
+              <button onClick={endVoiceSession} aria-label="End Voice Call"><X size={16} /></button>
+            </div>
+            
+            <div className="voice-call-body">
+              {/* Fluid Liquid Morphing Orb */}
+              <div className={`voice-orb-container ${
+                isDemoMode 
+                  ? (demoStatus === 'connecting' ? 'connecting' : (isSpeakingSimulated ? 'speaking' : 'listening')) 
+                  : (conversation.status === 'connecting' ? 'connecting' : (conversation.status === 'connected' ? (conversation.isSpeaking ? 'speaking' : 'listening') : 'listening'))
+              }`}>
+                <div className="voice-orb-layer-2"></div>
+                <div className="voice-orb-layer-1"></div>
+                <div className="voice-orb"></div>
+              </div>
+              
+              <span className="voice-status-text">
+                {isDemoMode 
+                  ? (demoStatus === 'connecting' ? 'Connecting to Demo...' : (isSpeakingSimulated ? 'AI Agent Speaking...' : 'Listening... Speak now'))
+                  : (conversation.status === 'connecting' ? 'Connecting to Agent...' : (conversation.status === 'connected' ? (conversation.isSpeaking ? 'AI Agent Speaking...' : 'Listening... Speak now') : 'Offline'))
+                }
+              </span>
+              
+              {/* Live transcript scrolling box */}
+              <div className="voice-transcript-box">
+                {voiceTranscript.length === 0 ? (
+                  <p className="voice-transcript-placeholder">Start speaking or ask a technical question below...</p>
+                ) : (
+                  voiceTranscript.map((t, idx) => (
+                    <div key={idx} className={`voice-transcript-line ${t.sender}`}>
+                      <strong>{t.sender === 'user' ? 'You: ' : 'AI: '}</strong>
+                      <span>{t.text}</span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Simulated / Demo chips */}
+            {isDemoMode && demoStatus === 'connected' && (
+              <div className="voice-suggestion-chips">
+                <span className="chips-label">Technical Topics:</span>
+                <div className="chips-scroll">
+                  <button onClick={() => handleSimulatedUserInput('How do you build custom software?')} className="voice-chip">Custom Software</button>
+                  <button onClick={() => handleSimulatedUserInput('What is performance marketing?')} className="voice-chip">Performance Marketing</button>
+                  <button onClick={() => handleSimulatedUserInput('How can AI optimize my marketing?')} className="voice-chip">AI & Automation</button>
+                  <button onClick={() => handleSimulatedUserInput('What is the pricing for a website?')} className="voice-chip">Pricing / Budget</button>
+                </div>
+              </div>
+            )}
+            
+            <div className="voice-call-footer">
+              <button 
+                className={`voice-action-btn mute-btn ${conversation.isMuted || isMuted ? 'muted' : ''}`}
+                onClick={() => {
+                  if (isDemoMode) {
+                    setIsMuted(!isMuted);
+                    if (recognitionInstance) {
+                      if (!isMuted) {
+                        recognitionInstance.stop();
+                      } else {
+                        startSimulatedSpeechRecognition();
+                      }
+                    }
+                  } else {
+                    conversation.setMuted(!conversation.isMuted);
+                  }
+                }}
+                aria-label="Mute Microphone"
+              >
+                {conversation.isMuted || isMuted ? <MicOff size={16} /> : <Mic size={16} />}
+              </button>
+              
+              <button className="voice-action-btn hangup-btn" onClick={endVoiceSession} aria-label="End Call">
+                <Phone size={18} style={{ transform: 'rotate(135deg)' }} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-
-      <style>{`
-        .chatbot-wrapper {
-          position: fixed;
-          bottom: 2rem;
-          right: 2rem;
-          z-index: 10000;
-          font-family: inherit;
-        }
-
-        .chat-toggle-bubble {
-          width: 58px;
-          height: 58px;
-          border-radius: 50%;
-          background: var(--gradient-accent);
-          border: none;
-          color: #ffffff;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 12px 34px rgba(59, 130, 246, 0.38);
-          transition: var(--transition-normal);
-          position: relative;
-          outline: none;
-          animation: chat-idle-float 3.8s ease-in-out infinite;
-        }
-
-        .chat-toggle-bubble:hover {
-          transform: scale(1.05) translateY(-3px);
-          box-shadow: 0 12px 34px rgba(59, 130, 246, 0.38);
-        }
-
-        .chat-toggle-bubble.open {
-          background: #111827;
-          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42);
-          animation: none;
-        }
-
-        .notif-badge {
-          position: absolute;
-          top: -2px;
-          right: -2px;
-          background: #ef4444;
-          color: white;
-          font-size: 0.65rem;
-          font-weight: 800;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border: 2px solid var(--bg-primary);
-          animation: pulse-badge 1.5s infinite alternate;
-        }
-
-        .chat-drawer-window {
-          position: absolute;
-          bottom: 78px;
-          right: 0;
-          width: min(390px, calc(100vw - 2rem));
-          height: min(610px, calc(100vh - 120px));
-          max-height: 610px;
-          background: var(--bg-card);
-          border: 1px solid var(--border-color);
-          box-shadow: var(--shadow-lg);
-          border-radius: 16px;
-          display: flex;
-          flex-direction: column;
-          min-height: 0;
-          overflow: hidden;
-          opacity: 0;
-          transform: translateY(22px) scale(0.94);
-          pointer-events: none;
-          transform-origin: bottom right;
-          transition: opacity 0.28s ease, transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
-          padding: 0;
-        }
-
-        .chat-drawer-window.visible {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-          pointer-events: all;
-          animation: chat-window-pop 0.42s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .chat-drawer-window:hover {
-          transform: translateY(0) scale(1);
-          background: var(--bg-card);
-          border-color: var(--border-color);
-          box-shadow: var(--shadow-lg);
-        }
-
-        .chat-drawer-window:hover::after {
-          background: var(--gradient-card-border);
-        }
-
-        .chat-header {
-          display: grid;
-          grid-template-columns: auto 1fr auto;
-          align-items: center;
-          gap: 0.75rem;
-          padding: 1.1rem 1.2rem;
-          border-bottom: 1px solid var(--border-color);
-          background: var(--bg-hover-pills);
-        }
-
-        .chat-drawer-window.visible .chat-header {
-          animation: chat-slide-down 0.36s ease both;
-        }
-
-        .chat-avatar-box {
-          position: relative;
-          width: 34px;
-          height: 34px;
-          border-radius: 50%;
-          background: var(--gradient-accent);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-        }
-
-        .avatar-glow {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          box-shadow: 0 0 12px rgba(59, 130, 246, 0.45);
-          animation: pulse-glow 1.5s infinite alternate;
-        }
-
-        .chat-header-info h4 {
-          font-size: 0.95rem;
-          font-weight: 800;
-          color: var(--text-main);
-          line-height: 1.2;
-        }
-
-        .online-indicator {
-          display: flex;
-          align-items: center;
-          gap: 0.35rem;
-          font-size: 0.68rem;
-          color: var(--text-dim);
-          margin-top: 0.1rem;
-        }
-
-        .g-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #10b981;
-        }
-
-        .online-indicator.is-closed .g-dot {
-          background: #f59e0b;
-        }
-
-        .chat-header-action {
-          width: 32px;
-          height: 32px;
-          border-radius: 8px;
-          border: 1px solid var(--border-color);
-          background: rgba(255, 255, 255, 0.03);
-          color: var(--primary);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-        }
-
-        .chat-trust-row {
-          display: flex;
-          gap: 0.45rem;
-          padding: 0.65rem 0.9rem;
-          border-bottom: 1px solid var(--border-color);
-          overflow-x: auto;
-          scrollbar-width: none;
-        }
-
-        .chat-trust-row::-webkit-scrollbar {
-          display: none;
-        }
-
-        .chat-trust-row span {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.25rem;
-          white-space: nowrap;
-          font-size: 0.66rem;
-          font-weight: 700;
-          color: var(--text-muted);
-          background: rgba(255, 255, 255, 0.025);
-          border: 1px solid var(--border-color);
-          border-radius: 999px;
-          padding: 0.28rem 0.55rem;
-        }
-
-        .chat-messages-container {
-          flex: 1 1 auto;
-          min-height: 0;
-          padding: 1rem;
-          overflow-y: auto;
-          overflow-x: hidden;
-          display: flex;
-          flex-direction: column;
-          gap: 0.85rem;
-          overscroll-behavior: contain;
-        }
-
-        .msg-row {
-          display: flex;
-          width: 100%;
-          animation: chat-message-in 0.28s ease both;
-        }
-
-        .user-row {
-          justify-content: flex-end;
-        }
-
-        .bot-row {
-          justify-content: flex-start;
-        }
-
-        .msg-bubble {
-          max-width: 86%;
-          min-width: 0;
-          padding: 0.75rem 0.9rem;
-          border-radius: 12px;
-          font-size: 0.84rem;
-          position: relative;
-          line-height: 1.45;
-          white-space: pre-wrap;
-          overflow-wrap: anywhere;
-        }
-
-        .msg-meta {
-          display: block;
-          color: var(--primary);
-          font-size: 0.62rem;
-          font-weight: 800;
-          text-transform: uppercase;
-          margin-bottom: 0.35rem;
-        }
-
-        .user-row .msg-bubble {
-          background: var(--gradient-accent);
-          color: #ffffff;
-          border-bottom-right-radius: 3px;
-        }
-
-        .bot-row .msg-bubble {
-          background: var(--bg-hover-pills);
-          color: var(--text-muted);
-          border: 1px solid var(--border-color);
-          border-bottom-left-radius: 3px;
-        }
-
-        .message-actions {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.45rem;
-          margin-top: 0.8rem;
-        }
-
-        .message-action-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.35rem;
-          border: 1px solid rgba(247, 151, 31, 0.28);
-          background: rgba(247, 151, 31, 0.07);
-          color: var(--primary);
-          padding: 0.38rem 0.55rem;
-          border-radius: 7px;
-          cursor: pointer;
-          font-size: 0.7rem;
-          font-weight: 800;
-          transition: transform 0.2s ease, opacity 0.2s ease;
-        }
-
-        .message-action-btn:hover {
-          transform: translateY(-1px);
-        }
-
-        .msg-time {
-          display: block;
-          font-size: 0.58rem;
-          color: var(--text-dim);
-          margin-top: 0.4rem;
-          text-align: right;
-        }
-
-        .service-summary-card {
-          border: 1px solid var(--border-color);
-          background: rgba(255, 255, 255, 0.025);
-          border-radius: 12px;
-          padding: 0.85rem;
-          color: var(--text-muted);
-          font-size: 0.78rem;
-          animation: chat-message-in 0.3s ease both;
-        }
-
-        .service-summary-head {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          color: var(--text-main);
-          font-weight: 800;
-          margin-bottom: 0.5rem;
-        }
-
-        .service-summary-card ul {
-          margin-top: 0.55rem;
-          padding-left: 1rem;
-        }
-
-        .service-summary-card li {
-          margin-bottom: 0.22rem;
-        }
-
-        .typing-bubble {
-          display: flex;
-          gap: 0.25rem;
-          padding: 0.62rem 0.85rem;
-        }
-
-        .typing-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: var(--text-dim);
-          display: inline-block;
-          animation: dot-jump 1.4s infinite ease-in-out both;
-        }
-
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-
-        .chat-suggestion-chips {
-          display: flex;
-          gap: 0.5rem;
-          flex: 0 0 auto;
-          padding: 0.6rem 1rem;
-          overflow-x: auto;
-          overflow-y: hidden;
-          scrollbar-width: none;
-          white-space: nowrap;
-          border-top: 1px solid var(--border-color);
-        }
-
-        .chat-suggestion-chips::-webkit-scrollbar {
-          display: none;
-        }
-
-        .suggestion-chip {
-          background: var(--bg-hover-pills);
-          border: 1px solid var(--border-color);
-          color: var(--text-muted);
-          padding: 0.43rem 0.72rem;
-          border-radius: 999px;
-          font-size: 0.74rem;
-          cursor: pointer;
-          transition: var(--transition-fast);
-          flex-shrink: 0;
-          animation: chat-chip-in 0.28s ease both;
-        }
-
-        .suggestion-chip:nth-child(2) { animation-delay: 0.03s; }
-        .suggestion-chip:nth-child(3) { animation-delay: 0.06s; }
-        .suggestion-chip:nth-child(4) { animation-delay: 0.09s; }
-        .suggestion-chip:nth-child(5) { animation-delay: 0.12s; }
-        .suggestion-chip:nth-child(6) { animation-delay: 0.15s; }
-
-        .suggestion-chip.priority {
-          color: #ffffff;
-          background: var(--gradient-accent);
-          border-color: var(--primary);
-          font-weight: 800;
-        }
-
-        .suggestion-chip:hover {
-          background: var(--bg-hover-pills);
-          border-color: var(--border-color);
-          color: var(--text-muted);
-        }
-
-        .suggestion-chip.priority:hover {
-          color: #ffffff;
-          background: var(--gradient-accent);
-          border-color: var(--primary);
-        }
-
-        .chat-input-footer {
-          display: grid;
-          grid-template-columns: auto 1fr auto;
-          align-items: center;
-          gap: 0.6rem;
-          flex: 0 0 auto;
-          border-top: 1px solid var(--border-color);
-          background: var(--bg-hover-pills);
-          padding: 0.72rem 1rem;
-        }
-
-        .input-search-icon {
-          color: var(--text-dim);
-        }
-
-        .chat-input-footer input {
-          width: 100%;
-          min-width: 0;
-          background: transparent;
-          border: none;
-          color: var(--text-main);
-          font-size: 0.82rem;
-          outline: none;
-        }
-
-        .chat-input-footer button {
-          width: 30px;
-          height: 30px;
-          border-radius: 8px;
-          background: rgba(247, 151, 31, 0.08);
-          border: 1px solid rgba(247, 151, 31, 0.18);
-          color: var(--primary);
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          outline: none;
-        }
-
-        .chat-input-footer button:disabled {
-          color: var(--text-dim);
-          background: transparent;
-          border-color: var(--border-color);
-          cursor: not-allowed;
-        }
-
-        .callback-overlay-card {
-          flex: 0 0 auto;
-          max-height: 245px;
-          overflow-y: auto;
-          border-top: 1px solid var(--border-color);
-          background: var(--bg-secondary);
-          padding: 1rem;
-          animation: chat-panel-up 0.32s ease both;
-        }
-
-        .callback-form-inner {
-          display: flex;
-          flex-direction: column;
-          gap: 0.7rem;
-        }
-
-        .callback-form-inner span {
-          font-size: 0.78rem;
-          color: var(--text-main);
-          font-weight: 800;
-        }
-
-        .callback-form-inner select,
-        .callback-input-wrap {
-          background: var(--bg-hover-pills);
-          border: 1px solid var(--border-color);
-          border-radius: 8px;
-          color: var(--text-main);
-        }
-
-        .callback-form-inner select {
-          padding: 0.55rem 0.7rem;
-          font-size: 0.8rem;
-          outline: none;
-        }
-
-        .callback-input-wrap {
-          display: flex;
-          overflow: hidden;
-        }
-
-        .callback-input-wrap input {
-          flex-grow: 1;
-          min-width: 0;
-          background: transparent;
-          border: none;
-          color: var(--text-main);
-          padding: 0.58rem 0.7rem;
-          font-size: 0.82rem;
-          outline: none;
-        }
-
-        .callback-send-btn {
-          background: var(--gradient-accent);
-          color: #fff;
-          border: none;
-          padding: 0.5rem 0.75rem;
-          cursor: pointer;
-        }
-
-        .callback-privacy-note {
-          color: var(--text-dim);
-          font-size: 0.68rem;
-          line-height: 1.4;
-        }
-
-        .callback-divider {
-          display: flex;
-          align-items: center;
-          text-align: center;
-          color: var(--text-dim);
-          font-size: 0.68rem;
-          font-weight: 700;
-        }
-
-        .callback-divider::before,
-        .callback-divider::after {
-          content: '';
-          flex: 1;
-          border-bottom: 1px solid var(--border-color);
-        }
-
-        .callback-divider::before { margin-right: 0.55rem; }
-        .callback-divider::after { margin-left: 0.55rem; }
-
-        .whatsapp-callback-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #25d366;
-          color: #ffffff;
-          border: none;
-          padding: 0.58rem;
-          border-radius: 8px;
-          font-size: 0.8rem;
-          font-weight: 800;
-          cursor: pointer;
-          transition: var(--transition-fast);
-          text-decoration: none;
-          width: 100%;
-          box-sizing: border-box;
-        }
-
-        .cancel-callback-btn,
-        .back-chat-btn {
-          font-size: 0.72rem;
-          color: var(--text-dim);
-          background: none;
-          border: none;
-          cursor: pointer;
-          align-self: flex-start;
-        }
-
-        .callback-success-view {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.45rem;
-          text-align: center;
-        }
-
-        .chk-circle {
-          color: #10b981;
-        }
-
-        .callback-success-view span {
-          font-size: 0.82rem;
-          font-weight: 800;
-          color: var(--text-main);
-        }
-
-        .callback-success-view p {
-          color: var(--text-muted);
-          font-size: 0.75rem;
-          line-height: 1.45;
-        }
-
-        .admin-handoff-actions {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0.5rem;
-          width: 100%;
-        }
-
-        .admin-handoff-actions a {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          min-height: 34px;
-          border-radius: 8px;
-          border: 1px solid var(--border-color);
-          background: rgba(255, 255, 255, 0.035);
-          color: var(--text-muted);
-          font-size: 0.72rem;
-          font-weight: 800;
-          text-decoration: none;
-          padding: 0.35rem;
-        }
-
-        .admin-handoff-actions a:first-child {
-          background: #25d366;
-          border-color: #25d366;
-          color: #ffffff;
-        }
-
-        @keyframes pulse-badge {
-          0% { transform: scale(0.9); }
-          100% { transform: scale(1.1); }
-        }
-
-        @keyframes chat-idle-float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-5px); }
-        }
-
-        @keyframes chat-window-pop {
-          0% { transform: translateY(22px) scale(0.94); opacity: 0; }
-          100% { transform: translateY(0) scale(1); opacity: 1; }
-        }
-
-        @keyframes chat-slide-down {
-          0% { opacity: 0; transform: translateY(-10px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes chat-message-in {
-          0% { opacity: 0; transform: translateY(8px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes chat-chip-in {
-          0% { opacity: 0; transform: translateY(6px) scale(0.98); }
-          100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes chat-panel-up {
-          0% { opacity: 0; transform: translateY(12px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse-glow {
-          0% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.25); }
-          100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.55); }
-        }
-
-        @keyframes dot-jump {
-          0%, 80%, 100% { transform: scale(0); }
-          40% { transform: scale(1); }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .chat-toggle-bubble,
-          .chat-drawer-window.visible,
-          .chat-drawer-window.visible .chat-header,
-          .msg-row,
-          .service-summary-card,
-          .suggestion-chip,
-          .callback-overlay-card,
-          .avatar-glow,
-          .notif-badge,
-          .typing-dot {
-            animation: none;
-          }
-
-          .chat-drawer-window,
-          .message-action-btn,
-          .suggestion-chip {
-            transition: none;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .chatbot-wrapper {
-            bottom: 1rem;
-            right: 1rem;
-            left: 1rem;
-          }
-
-          .chat-toggle-bubble {
-            margin-left: auto;
-          }
-
-          .chat-drawer-window {
-            width: 100%;
-            height: min(610px, calc(100vh - 112px));
-            right: 0;
-            bottom: 74px;
-          }
-
-          .msg-bubble {
-            max-width: 90%;
-          }
-        }
-      `}</style>
     </div>
   );
 }

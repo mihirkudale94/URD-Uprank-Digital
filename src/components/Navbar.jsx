@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowUpRight, Sun, Moon } from 'lucide-react';
 import { publicAsset } from '../utils/publicAsset';
+import './Navbar.css';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'dark';
   });
@@ -12,6 +14,11 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+      
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        setScrollProgress((window.scrollY / totalHeight) * 100);
+      }
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -38,11 +45,10 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { label: 'What we do', href: '#services' },
-    { label: 'Who are we', href: '#who' },
-    { label: 'How we do', href: '#process' },
-    { label: 'Who we work with', href: '#clients' },
-    { label: 'What they say', href: '#testimonials' },
+    { label: 'Services', href: '#services' },
+    { label: 'About', href: '#who' },
+    { label: 'Approach', href: '#process' },
+    { label: 'Testimonials', href: '#testimonials' },
     { label: 'FAQ', href: '#faq' },
   ];
 
@@ -68,7 +74,7 @@ export default function Navbar() {
     <nav className={`nav-container ${isScrolled ? 'nav-scrolled' : ''}`}>
       <div className="container nav-wrap">
         <a href="#home" className="nav-logo" onClick={(e) => handleLinkClick(e, '#home')}>
-          <img src={publicAsset('/img/logo-header.png')} alt="Uprank Digital" className="logo-header-img" />
+          <img src={publicAsset('/img/logo-header.png')} alt="Uprank Digital" className="logo-header-img" width="160" height="40" />
         </a>
 
         {/* Desktop Nav */}
@@ -125,224 +131,8 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Styling specific to navbar */}
-      <style>{`
-        .nav-container {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          z-index: 1000;
-          padding: 1.5rem 0;
-          transition: var(--transition-normal);
-          border-bottom: 1px solid transparent;
-          background: transparent;
-        }
-        
-        .nav-scrolled {
-          padding: 0.85rem 0;
-          background: var(--bg-nav);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-bottom: 1px solid var(--border-color);
-          box-shadow: var(--shadow-md);
-        }
-
-        .nav-wrap {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 1rem;
-        }
-
-        .logo-header-img {
-          height: 40px;
-          display: block;
-          object-fit: contain;
-        }
-
-        .nav-links {
-          display: flex;
-          align-items: center;
-          gap: 1.5rem;
-        }
-
-        .nav-links ul {
-          display: flex;
-          gap: 2rem;
-          margin-right: 1rem;
-        }
-
-        .nav-item-link {
-          font-weight: 500;
-          font-size: 0.95rem;
-          color: var(--text-muted);
-          position: relative;
-          padding: 0.25rem 0;
-        }
-
-        .nav-item-link::after {
-          content: '';
-          position: absolute;
-          width: 100%;
-          transform: scaleX(0);
-          height: 2px;
-          bottom: 0;
-          left: 0;
-          background: var(--gradient-accent);
-          transform-origin: bottom right;
-          transition: transform 0.25s ease-out;
-        }
-
-        .nav-item-link:hover {
-          color: var(--text-main);
-        }
-
-        .nav-item-link:hover::after {
-          transform: scaleX(1);
-          transform-origin: bottom left;
-        }
-
-        .theme-toggle-btn {
-          background: var(--bg-hover-pills);
-          border: 1px solid var(--border-color);
-          color: var(--text-main);
-          width: 38px;
-          height: 38px;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: var(--transition-fast);
-          outline: none;
-        }
-
-        .theme-toggle-btn:hover {
-          background: var(--bg-hover-pills-hover);
-          border-color: var(--primary);
-          color: var(--primary);
-        }
-
-        .btn-sm-nav {
-          padding: 0.6rem 1.35rem;
-          font-size: 0.875rem;
-          border-radius: 8px;
-        }
-
-        .nav-mobile-toggle {
-          display: none;
-          background: var(--bg-hover-pills);
-          border: 1px solid var(--border-color);
-          color: var(--text-main);
-          cursor: pointer;
-          z-index: 1100;
-          outline: none;
-          width: 42px;
-          height: 42px;
-          border-radius: 8px;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-
-        .nav-mobile-drawer {
-          position: fixed;
-          top: 0;
-          right: 0;
-          width: min(320px, 100vw);
-          height: 100dvh;
-          background: var(--bg-secondary);
-          border-left: 1px solid var(--border-color);
-          z-index: 1050;
-          transform: translateX(100%);
-          transition: transform var(--transition-normal);
-          padding: 6rem 2rem 2rem 2rem;
-          box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-          overflow-y: auto;
-        }
-
-        .nav-mobile-drawer.open {
-          transform: translateX(0);
-        }
-
-        .nav-mobile-drawer-wrap {
-          display: flex;
-          flex-direction: column;
-          gap: 3rem;
-        }
-
-        .nav-mobile-drawer-wrap ul {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
-
-        .nav-mobile-drawer-wrap a {
-          font-size: 1.15rem;
-          font-weight: 600;
-          color: var(--text-main);
-          display: block;
-        }
-
-        .nav-mobile-drawer-wrap a:hover {
-          color: var(--primary);
-        }
-
-        .mobile-action-row {
-          display: flex;
-          flex-direction: column;
-          gap: 1.25rem;
-        }
-
-        .mobile-action-row .btn {
-          width: 100%;
-        }
-
-        .mobile-theme-btn {
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.75rem;
-          font-weight: 600;
-          font-size: 1rem;
-          padding: 0.8rem;
-          height: auto;
-        }
-
-        @media (max-width: 1120px) {
-          .nav-links {
-            display: none;
-          }
-          .nav-mobile-toggle {
-            display: inline-flex;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .logo-header-img {
-            height: 34px;
-          }
-          .nav-container {
-            padding: 1rem 0;
-          }
-          .nav-scrolled {
-            padding: 0.75rem 0;
-          }
-        }
-
-        @media (max-width: 420px) {
-          .nav-mobile-drawer {
-            width: 100%;
-            padding: 5.5rem 1.25rem 1.5rem;
-            border-left: 0;
-          }
-          .nav-mobile-drawer-wrap {
-            gap: 2rem;
-          }
-        }
-      `}</style>
+      {/* Scroll Progress Bar */}
+      <div className="nav-scroll-progress" style={{ width: `${scrollProgress}%` }} />
     </nav>
   );
 }

@@ -92,6 +92,8 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  overflow-x: clip;
+  width: 100%;
 }
 
 body {
@@ -99,7 +101,8 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-main);
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
+  width: 100%;
   letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -110,7 +113,7 @@ body {
 .app-root {
   width: 100%;
   min-width: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 img,
@@ -205,6 +208,7 @@ button, input, select, textarea {
   position: absolute;
   width: 600px;
   height: 600px;
+  max-width: 100%;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(var(--primary-rgb), 0.04) 0%, transparent 70%);
   filter: blur(80px);
@@ -476,3 +480,21 @@ button, input, select, textarea {
 .delay-200 { transition-delay: 200ms; }
 .delay-300 { transition-delay: 300ms; }
 .delay-400 { transition-delay: 400ms; }
+
+/* Keyboard Accessibility - Focus Indicators */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Specific elements focus indicator matching */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}
+

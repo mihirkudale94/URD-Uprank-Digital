@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Clients from './components/Clients';
@@ -9,7 +9,7 @@ import Process from './components/Process';
 import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
 import ContactForm from './components/ContactForm';
-import Chatbot from './components/Chatbot';
+const Chatbot = lazy(() => import('./components/Chatbot'));
 import Footer from './components/Footer';
 
 function App() {
@@ -39,16 +39,18 @@ function App() {
       <Navbar />
       <main>
         <Hero />
-        <Clients />
         <Services />
         <WhoWeAre />
         <Leadership />
         <Process />
+        <Clients />
         <Testimonials />
         <FAQ />
         <ContactForm />
       </main>
-      <Chatbot />
+      <Suspense fallback={null}>
+        <Chatbot />
+      </Suspense>
       <Footer />
     </div>
   );
