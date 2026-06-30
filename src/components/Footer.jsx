@@ -68,7 +68,7 @@ export default function Footer() {
               <div>
                 <h4>India Office</h4>
                 <p>Shyamal CHS</p>
-                <p>Pune 411038, India</p>
+                <p>Pune 411048, India</p>
               </div>
             </li>
           </ul>

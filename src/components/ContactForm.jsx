@@ -108,8 +108,8 @@ export default function ContactForm() {
             
             <div className="contact-method-card glass-card">
               <h4>Headquarters</h4>
-              <p>16 Harshnil Society, 81 Rambag Colony,</p>
-              <p>Paud Road, Pune 411038, INDIA</p>
+              <p>Shyamal CHS</p>
+              <p>Pune 411048, India</p>
             </div>
           </div>
         </div>
