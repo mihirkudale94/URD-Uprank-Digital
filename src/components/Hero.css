@@ -162,6 +162,12 @@
   color: var(--text-main);
 }
 
+@media (max-height: 768px) {
+  .hero-scroll-indicator {
+    display: none;
+  }
+}
+
 @keyframes float-glow {
   0% { transform: translate(0, 0) scale(1); }
   100% { transform: translate(50px, -50px) scale(1.15); }
