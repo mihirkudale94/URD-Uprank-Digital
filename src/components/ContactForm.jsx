@@ -94,9 +94,9 @@ export default function ContactForm() {
       <div className="container contact-container">
         <div className="contact-info-panel scroll-animate">
           <span className="section-subtitle">Get in Touch</span>
-          <h2 className="heading-md">Let's Build Something Sparking Together</h2>
+          <h2 className="heading-md">Let's Build Your Next Growth System</h2>
           <p className="contact-info-desc">
-            Ready to take your business to the next level? Fill out our questionnaire and our team will get in touch with you within 24 hours.
+            Share your business goal, website, timeline, and budget comfort. The URD team will review the context and suggest the most useful next step.
           </p>
 
           <div className="contact-methods">

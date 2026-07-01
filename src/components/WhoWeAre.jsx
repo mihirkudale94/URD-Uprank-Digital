@@ -10,22 +10,22 @@ export default function WhoWeAre() {
     vision: {
       label: 'Vision',
       icon: <Eye size={18} />,
-      title: 'Next-Gen Digital Pioneers',
-      content: 'To establish Up Rank Digital as an agency that advocates progressive and innovative ideas to its clients, framing strategies with next generation techniques.',
+      title: 'Practical Digital Growth',
+      content: 'To help businesses use websites, marketing, content, analytics, and automation in a practical way that creates measurable growth, not digital noise.',
       image: publicAsset('/img/vision.png')
     },
     mission: {
       label: 'Mission',
       icon: <Target size={18} />,
       title: 'Value-Driven Execution',
-      content: 'To help businesses grow by understanding their business needs and requirements, then delivering high quality and value-for-money solutions with complete satisfaction. We do not believe in selling services that our clients do not need, and transparency is at the core of our business relationship.',
+      content: 'To understand the business goal first, recommend the right scope, and deliver work that improves visibility, enquiries, conversion, and long-term digital performance.',
       image: publicAsset('/img/mission.png')
     },
     values: {
       label: 'Values',
       icon: <Heart size={18} />,
       title: 'The Two T\'s: Trust & Transparency',
-      content: 'We make every effort to align with our client\'s business goals. All strategies are custom-built. We believe that trust and transparency are the fundamental keys to developing highly successful long-term partnerships.',
+      content: 'We align strategy with the client\'s business goals, keep ownership clear, communicate openly, and avoid selling work that does not support the next growth step.',
       image: publicAsset('/img/values.png')
     }
   };
@@ -76,9 +76,9 @@ export default function WhoWeAre() {
       <div className="container">
         <div className="section-header scroll-animate">
           <span className="section-subtitle">Who Are We</span>
-          <h2 className="heading-md">A Progressive Digital Agency with a Creating Spark</h2>
+          <h2 className="heading-md">A Digital Growth Partner Focused on Measurable Outcomes</h2>
           <p className="section-description">
-            Up Rank Digital is a digital marketing agency with over 10 years of experience managing 100+ national and international clients. Our expert team of web designers and developers work with our digital marketers and software developers to ensure we exceed your expectations at every opportunity.
+            Up Rank Digital brings website development, marketing, content, analytics, and software execution together so businesses can improve visibility, lead quality, and digital performance.
           </p>
         </div>
 
@@ -124,7 +124,7 @@ export default function WhoWeAre() {
           <div className="who-content-box">
             <h3 className="heading-sm">Our Purpose & Values</h3>
             <p className="who-intro-text">
-              The digital world gives us the ability to reach into the lives of all your consumers at work, at home or on the move. Wherever they are we can help you reach them.
+              We focus on the work that moves a business forward: clearer positioning, better digital experiences, stronger campaigns, cleaner tracking, and practical next steps.
             </p>
 
             {/* Tabs Selector */}

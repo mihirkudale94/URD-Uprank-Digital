@@ -95,7 +95,7 @@ export default function Leadership() {
             <div className="leader-pitch">
               <h4>Website development and digital performance marketing using AI</h4>
               <p>
-                "I help sports clubs, brands, and businesses grow their digital presence with AI-supported planning, data-driven marketing, engaging content, conversion optimization, and practical strategies that deliver real results."
+                "We help sports clubs, brands, and businesses grow their digital presence with AI-supported planning, data-driven marketing, engaging content, conversion optimization, and practical strategies that deliver real results."
               </p>
             </div>
 

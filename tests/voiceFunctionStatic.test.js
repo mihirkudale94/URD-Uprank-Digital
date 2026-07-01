@@ -29,6 +29,12 @@ test('AI voice Supabase Edge Function production guards', async (t) => {
     assert.match(functionSource, /'xi-api-key': apiKey/);
   });
 
+  await t.test('surfaces ElevenLabs credential failures clearly', () => {
+    assert.match(functionSource, /providerErrorMessage/);
+    assert.match(functionSource, /status === 401 \|\| status === 403/);
+    assert.match(functionSource, /ElevenLabs rejected the API key configured in Supabase/);
+  });
+
   await t.test('protects browser calls with CORS and rate limits', () => {
     assert.match(functionSource, /VOICE_ALLOWED_ORIGINS/);
     assert.match(functionSource, /isAllowedOrigin/);
@@ -41,6 +47,12 @@ test('AI voice Supabase Edge Function production guards', async (t) => {
     assert.match(functionSource, /normalizePhoneNumber/);
     assert.match(functionSource, /\^\\\+\[1-9\]\\d\{7,14\}\$/);
     assert.match(functionSource, /Please enter a valid mobile number with country code/);
+  });
+
+  await t.test('requires explicit consent before outbound AI calls', () => {
+    assert.match(functionSource, /consent_accepted/);
+    assert.match(functionSource, /isTruthyConsent/);
+    assert.match(functionSource, /Please confirm consent before requesting an AI voice call/);
   });
 });
 

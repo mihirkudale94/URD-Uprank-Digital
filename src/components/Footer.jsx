@@ -25,7 +25,7 @@ export default function Footer() {
         <div className="footer-brand-col">
           <img src={publicAsset('/img/logo-footer.png')} alt="Uprank Digital" className="footer-logo" width="168" height="42" loading="lazy" />
           <p className="footer-slogan">
-            Transforming brands, designing websites, and scaling digital solutions with global expertise.
+            Websites, campaigns, content, analytics, and automation built to generate qualified business enquiries.
           </p>
           <div className="footer-socials">
             <a href="https://in.linkedin.com/company/uprankdigital" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
@@ -52,8 +52,7 @@ export default function Footer() {
               <Phone size={16} className="footer-contact-icon" />
               <div>
                 <h4>Call Us</h4>
-                <p>+91 7391096690</p>
-                <p>+91 9371116165</p>
+                <p>+91 93711 16165</p>
               </div>
             </li>
           </ul>

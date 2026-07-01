@@ -7,25 +7,25 @@ export default function Process() {
     {
       num: '01',
       title: 'Ask',
-      desc: 'Every business is unique. We start by asking critical questions to explore your brand and understand your specific challenges and goals.',
+      desc: 'We start with the business goal, current website or campaign, audience, budget comfort, timeline, and the challenge that needs solving.',
       icon: <MessageSquare size={26} />
     },
     {
       num: '02',
       title: 'Think',
-      desc: 'Once we gain a clear understanding, we put our thinking hats on and brainstorm outside-the-box ideas to align your strategy with success.',
+      desc: 'We map the right service mix, prioritize the highest-impact work, and define what should be measured before execution starts.',
       icon: <Lightbulb size={26} />
     },
     {
       num: '03',
       title: 'Create',
-      desc: 'This is where the magic happens. We transform strategy and code into fully realized, beautiful, high-performance digital products.',
+      desc: 'We build the website, campaign, content, tracking, or automation workflow with clear ownership and conversion-focused execution.',
       icon: <PenTool size={26} />
     },
     {
       num: '04',
       title: 'Repeat',
-      desc: 'Because repetition leads to perfection, we continuously run feedback loops (Ask, Think, Create) to keep your brand optimized and ahead.',
+      desc: 'We review performance, learn from the data, and improve the next cycle so the digital system keeps getting sharper.',
       icon: <RotateCw size={26} />
     }
   ];

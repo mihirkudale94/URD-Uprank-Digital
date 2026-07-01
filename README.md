@@ -28,7 +28,9 @@ React form -> Supabase Edge Function -> public.leads -> optional Resend email
 Recommended production setup:
 
 1. Create a Supabase project.
-2. Run `supabase/migrations/202606290001_create_leads.sql` in Supabase SQL Editor.
+2. Run the Supabase migrations in Supabase SQL Editor:
+   - `supabase/migrations/202606290001_create_leads.sql`
+   - `supabase/migrations/202606300001_create_chatbot_leads.sql`
 3. Add these browser-safe Vite env values:
 
 ```bash
@@ -75,6 +77,10 @@ No PHP or Twilio endpoint is used. The browser only sends the lead's mobile numb
 
 Set `ELEVENLABS_CALL_PROVIDER=exotel` for India-friendly mobile calling through an ElevenLabs-connected Exotel number. Use `sip_trunk` only if you already have your own SIP trunk. Use `whatsapp` only when you intentionally want WhatsApp permission-request calling instead of a normal mobile call.
 
+Chatbot callback and AI voice handoff records are stored in `public.chatbot_leads`. The table is insert-only for public users through RLS and requires explicit consent for AI voice callback records.
+
+See `docs/ai-agent-production-guide.md` for the voice-agent script, analytics events, launch checklist, and handoff rules.
+
 ## BigRock Deployment
 
 BigRock only needs to serve the built React files.
@@ -102,3 +108,4 @@ The deploy script builds the Vite app and uploads the contents of `dist/`.
 - The migration enables RLS and allows public insert-only access to valid leads.
 - Email notification should run from the Supabase Edge Function or an automation, never directly from React.
 - AI voice requests run through Supabase Edge Functions, so BigRock does not need PHP for this site.
+- Connect chatbot analytics events to GTM/GA after launch to measure assistant-driven leads.

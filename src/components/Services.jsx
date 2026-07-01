@@ -201,9 +201,9 @@ export default function Services() {
       <div className="container">
         <div className="section-header scroll-animate">
           <span className="section-subtitle">What We Offer</span>
-          <h2 className="heading-md">Result-Oriented Digital Services</h2>
+          <h2 className="heading-md">Digital Growth Services Built Around Leads</h2>
           <p className="section-description">
-            We provide a comprehensive range of creative, technical, and analytical services to grow your brand in this digitalized world.
+            We connect website experience, search, ads, content, analytics, and automation so your digital presence turns into measurable enquiries.
           </p>
         </div>
 

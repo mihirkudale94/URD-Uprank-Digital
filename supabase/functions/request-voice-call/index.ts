@@ -21,6 +21,9 @@ const cleanText = (value: unknown, maxLength = 500) =>
     .trim()
     .slice(0, maxLength);
 
+const isTruthyConsent = (value: unknown) =>
+  value === true || value === 'true' || value === '1' || value === 1;
+
 const jsonResponse = (body: Record<string, unknown>, status = 200, origin = '') =>
   new Response(JSON.stringify(body), {
     status,
@@ -90,11 +93,21 @@ const phoneNumberId = () =>
     || Deno.env.get('ELEVENLABS_EXOTEL_PHONE_NUMBER_ID')
     || '';
 
-const buildProviderPayload = (provider: CallProvider, agentId: string, toNumber: string) => {
+const buildProviderPayload = (
+  provider: CallProvider,
+  agentId: string,
+  toNumber: string,
+  context: Record<string, string>
+) => {
   const conversationData = {
     dynamic_variables: {
       lead_source: 'uprankdigital.com',
-      requested_number: toNumber
+      requested_number: toNumber,
+      service_interest: context.serviceInterest,
+      intent_signals: context.intentSignals,
+      page_url: context.pageUrl,
+      consent_text: context.consentText,
+      handoff_expectation: 'Qualify the lead, answer briefly, and offer human follow-up for pricing or detailed proposals.'
     }
   };
 
@@ -155,6 +168,32 @@ const postToElevenLabs = async (provider: CallProvider, payload: Record<string, 
   return { ok: response.ok, status: response.status, data };
 };
 
+const firstString = (...values: unknown[]) =>
+  values.find((value): value is string => typeof value === 'string' && value.trim().length > 0)?.trim();
+
+const providerErrorMessage = (status: number, data: Record<string, unknown>) => {
+  const detail = data?.detail;
+  const detailMessage = typeof detail === 'object' && detail !== null
+    ? firstString(
+      (detail as Record<string, unknown>).message,
+      (detail as Record<string, unknown>).error,
+      (detail as Record<string, unknown>).status
+    )
+    : undefined;
+
+  if (status === 401 || status === 403) {
+    return detailMessage
+      || 'ElevenLabs rejected the API key configured in Supabase. Update ELEVENLABS_API_KEY in Edge Function secrets.';
+  }
+
+  return firstString(
+    detail,
+    detailMessage,
+    data?.error,
+    data?.message
+  ) || 'AI voice provider request failed.';
+};
+
 Deno.serve(async (request) => {
   const origin = request.headers.get('origin') || '';
 
@@ -190,6 +229,21 @@ Deno.serve(async (request) => {
     return jsonResponse({ success: false, message: 'Please enter a valid mobile number with country code.' }, 422, origin);
   }
 
+  if (!isTruthyConsent((body as Record<string, unknown>).consent_accepted)) {
+    return jsonResponse({
+      success: false,
+      message: 'Please confirm consent before requesting an AI voice call.'
+    }, 422, origin);
+  }
+
+  const requestContext = {
+    serviceInterest: cleanText((body as Record<string, unknown>).service_interest, 120) || 'General enquiry',
+    intentSignals: cleanText((body as Record<string, unknown>).intent_signals, 200),
+    pageUrl: cleanText((body as Record<string, unknown>).page_url, 500),
+    consentText: cleanText((body as Record<string, unknown>).consent_text, 240)
+      || 'User requested an AI voice call from the website chatbot.'
+  };
+
   const apiKey = Deno.env.get('ELEVENLABS_API_KEY') || '';
   const agentId = Deno.env.get('ELEVENLABS_AGENT_ID') || '';
 
@@ -201,17 +255,14 @@ Deno.serve(async (request) => {
   }
 
   const provider = selectedProvider();
-  const { payload: providerPayload, error: payloadError } = buildProviderPayload(provider, agentId, toNumber);
+  const { payload: providerPayload, error: payloadError } = buildProviderPayload(provider, agentId, toNumber, requestContext);
   if (!providerPayload || payloadError) {
     return jsonResponse({ success: false, message: payloadError || 'AI voice provider is not configured.' }, 503, origin);
   }
 
   const providerResponse = await postToElevenLabs(provider, providerPayload, apiKey);
   if (!providerResponse.ok) {
-    const detail = providerResponse.data?.detail;
-    const message = typeof detail === 'string'
-      ? detail
-      : providerResponse.data?.error || providerResponse.data?.message || 'AI voice provider request failed.';
+    const message = providerErrorMessage(providerResponse.status, providerResponse.data);
 
     return jsonResponse({ success: false, message }, providerResponse.status || 502, origin);
   }

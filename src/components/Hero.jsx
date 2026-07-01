@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowDown, MessageSquare, Sparkles } from 'lucide-react';
 import './Hero.css';
 
-const words = ["Design", "Develop", "Promote", "Optimize"];
+const words = ['Design', 'Develop', 'Promote', 'Optimize'];
 
 export default function Hero() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -17,17 +17,17 @@ export default function Hero() {
     const currentWord = words[currentWordIndex];
 
     if (isDeleting) {
-      timer = setTimeout(() => {
+      timer = window.setTimeout(() => {
         setCurrentText(currentWord.substring(0, currentText.length - 1));
       }, deletingSpeed);
     } else {
-      timer = setTimeout(() => {
+      timer = window.setTimeout(() => {
         setCurrentText(currentWord.substring(0, currentText.length + 1));
       }, typingSpeed);
     }
 
     if (!isDeleting && currentText === currentWord) {
-      timer = setTimeout(() => setIsDeleting(true), delayBetweenWords);
+      timer = window.setTimeout(() => setIsDeleting(true), delayBetweenWords);
     } else if (isDeleting && currentText === '') {
       setIsDeleting(false);
       setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
@@ -57,7 +57,7 @@ export default function Hero() {
         {/* Centered Headline & Action */}
         <div className="hero-left-content">
           <span className="hero-tag">
-            <Sparkles size={13} className="hero-tag-sparkle" /> Elevating Digital Presence
+            <Sparkles size={13} className="hero-tag-sparkle" /> Digital growth partner for serious businesses
           </span>
           
           <h1 className="hero-title">
@@ -71,15 +71,15 @@ export default function Hero() {
           </h1>
 
           <p className="hero-description">
-            A progressive digital growth agency using AI, analytics, performance marketing, and conversion-focused website development to help brands improve visibility, leads, and measurable results.
+            URD helps businesses turn website traffic, search, paid campaigns, content, analytics, and automation into measurable enquiries and stronger digital growth.
           </p>
 
           <div className="hero-ctas">
             <a href="#contact" className="btn btn-primary" onClick={handleScrollToContact}>
-              Contact Us <MessageSquare size={18} />
+              Get Growth Plan <MessageSquare size={18} />
             </a>
             <a href="#services" className="btn btn-secondary" onClick={handleScrollToServices}>
-              Explore Services <ArrowDown size={18} className="arrow-bounce" />
+              View Services <ArrowDown size={18} className="arrow-bounce" />
             </a>
           </div>
         </div>
