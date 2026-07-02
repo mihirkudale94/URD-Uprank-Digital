@@ -43,7 +43,6 @@ VITE_SUPABASE_LEAD_FUNCTION=submit-lead
 
 ```bash
 supabase functions deploy submit-lead
-supabase functions deploy request-voice-call
 ```
 
 5. Set Edge Function secrets in Supabase:
@@ -53,33 +52,9 @@ supabase secrets set CONTACT_ALLOWED_ORIGINS=https://uprankdigital.com,https://w
 supabase secrets set CONTACT_RECIPIENT=sachin@uprankdigital.com
 supabase secrets set RESEND_API_KEY=...
 supabase secrets set RESEND_FROM_EMAIL="Up Rank Digital <leads@uprankdigital.com>"
-supabase secrets set VOICE_ALLOWED_ORIGINS=https://uprankdigital.com,https://www.uprankdigital.com
-supabase secrets set ELEVENLABS_API_KEY=...
-supabase secrets set ELEVENLABS_AGENT_ID=...
-supabase secrets set ELEVENLABS_CALL_PROVIDER=exotel
-supabase secrets set ELEVENLABS_AGENT_PHONE_NUMBER_ID=...
-supabase secrets set ELEVENLABS_WHATSAPP_PHONE_NUMBER_ID=...
-supabase secrets set ELEVENLABS_WHATSAPP_TEMPLATE_NAME=...
-supabase secrets set ELEVENLABS_WHATSAPP_TEMPLATE_LANGUAGE_CODE=en
 ```
 
 Do not put service role keys or email API keys in React/Vite env variables.
-
-## AI Voice Backend
-
-Outbound AI voice requests use Supabase Edge Functions only:
-
-```text
-React chatbot -> Supabase Edge Function -> ElevenLabs mobile outbound call
-```
-
-No PHP or Twilio endpoint is used. The browser only sends the lead's mobile number to `request-voice-call`; ElevenLabs API credentials and telephony provider details stay in Supabase secrets.
-
-Set `ELEVENLABS_CALL_PROVIDER=exotel` for India-friendly mobile calling through an ElevenLabs-connected Exotel number. Use `sip_trunk` only if you already have your own SIP trunk. Use `whatsapp` only when you intentionally want WhatsApp permission-request calling instead of a normal mobile call.
-
-Chatbot callback and AI voice handoff records are stored in `public.chatbot_leads`. The table is insert-only for public users through RLS and requires explicit consent for AI voice callback records.
-
-See `docs/ai-agent-production-guide.md` for the voice-agent script, analytics events, launch checklist, and handoff rules.
 
 ## BigRock Deployment
 
@@ -107,5 +82,4 @@ The deploy script builds the Vite app and uploads the contents of `dist/`.
 - The public Supabase key is safe for the browser only when RLS policies are enabled.
 - The migration enables RLS and allows public insert-only access to valid leads.
 - Email notification should run from the Supabase Edge Function or an automation, never directly from React.
-- AI voice requests run through Supabase Edge Functions, so BigRock does not need PHP for this site.
 - Connect chatbot analytics events to GTM/GA after launch to measure assistant-driven leads.

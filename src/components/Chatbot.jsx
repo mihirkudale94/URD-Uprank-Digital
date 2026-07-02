@@ -25,7 +25,7 @@ import { trackWebsiteEvent } from '../utils/analytics';
 import './Chatbot.css';
 
 const ADMIN_WHATSAPP_NUMBER = '919371116165';
-const ADMIN_EMAIL = 'sachin@uprankdigital.com';
+
 const DEFAULT_WHATSAPP_MESSAGE = 'Hi URD team, I visited your website and would like guidance.';
 
 const ICON_MAP = {
@@ -110,29 +110,19 @@ const formatQualificationDetails = (details = {}) => [
   details.budget ? `Budget: ${details.budget}` : ''
 ].filter(Boolean).join('\n');
 
-const buildAdminLeadMessage = ({ phone, serviceInterest, details, signals }) => [
-  'New qualified lead from URD website',
-  '',
-  `Phone/WhatsApp: ${phone}`,
-  `Service interest: ${serviceInterest}`,
-  details,
-  signals ? `Intent signals: ${signals}` : '',
-  `Submitted: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`,
-  `Page: ${window.location.href}`
-].filter(Boolean).join('\n');
+
 
 const buildWhatsAppLink = (message = DEFAULT_WHATSAPP_MESSAGE) =>
   `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
-const buildEmailLink = (message) =>
-  `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent('New qualified lead from URD website')}&body=${encodeURIComponent(message)}`;
+
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(true);
   const [messages, setMessages] = useState([
     createBotMessage(
-      'Hi, I am URD Growth Copilot. I can help you choose the right service and send a clear requirement to the URD team.',
+      'Hi, I am URD Copilot. I can help you choose the right service and send a clear requirement to the URD team.',
       [
         { label: 'Find my service', action: 'start-service-match' },
         { label: 'WhatsApp team', action: 'whatsapp' },
@@ -153,7 +143,7 @@ export default function Chatbot() {
     timeline: '',
     budget: ''
   });
-  const [latestLeadMessage, setLatestLeadMessage] = useState('');
+
   const [selectedServiceId, setSelectedServiceId] = useState(null);
   const [leadSignals, setLeadSignals] = useState([]);
   const [officeStatus, setOfficeStatus] = useState(() => getOfficeStatus());
@@ -206,14 +196,19 @@ export default function Chatbot() {
     }));
   };
 
-  const buildVisitorHandoffMessage = () => [
-    DEFAULT_WHATSAPP_MESSAGE,
-    '',
-    `Service interest: ${selectedService?.title || callbackNeed || 'General enquiry'}`,
-    qualificationSummary,
-    leadSignalSummary ? `Intent signals: ${leadSignalSummary}` : '',
-    `Page: ${window.location.href}`
-  ].filter(Boolean).join('\n');
+  const buildVisitorHandoffMessage = () => {
+    const isLocal = typeof window !== 'undefined' && 
+      (window.location.hostname.includes('localhost') || window.location.hostname === '127.0.0.1');
+
+    return [
+      DEFAULT_WHATSAPP_MESSAGE,
+      '',
+      `Service interest: ${selectedService?.title || callbackNeed || 'General enquiry'}`,
+      qualificationSummary,
+      leadSignalSummary ? `Intent signals: ${leadSignalSummary}` : '',
+      isLocal ? '' : `Page: ${window.location.href.replace(/\/$/, '')}`
+    ].filter(Boolean).join('\n');
+  };
 
   const openWhatsApp = (messageOrEvent) => {
     const message = typeof messageOrEvent === 'string'
@@ -337,6 +332,11 @@ export default function Chatbot() {
       return;
     }
 
+    if (action === 'whatsapp-direct') {
+      openWhatsApp(value);
+      return;
+    }
+
     if (action === 'scroll-services') {
       scrollToSection('#services');
       return;
@@ -413,52 +413,52 @@ export default function Chatbot() {
     });
   };
 
-  const handleCallbackSubmit = (event) => {
+  const handleCallbackSubmit = async (event) => {
     event.preventDefault();
     if (!callbackPhone.trim()) return;
 
-    const leadMessage = buildAdminLeadMessage({
-      phone: callbackPhone.trim(),
-      serviceInterest: callbackNeed,
-      details: qualificationSummary,
-      signals: leadSignalSummary
-    });
+    setCallbackState('submitting');
 
-    setLatestLeadMessage(leadMessage);
-    captureChatbotLead({
-      phone: callbackPhone.trim(),
-      serviceInterest: callbackNeed,
-      intentSignals: leadSignalLabels,
-      source: 'chatbot_callback',
-      preferredChannel: 'human_callback',
-      transcriptSummary: qualificationSummary,
-      notes: qualificationSummary,
-      consentAccepted: false
-    }).catch(err => {
+
+
+
+
+    try {
+      await captureChatbotLead({
+        phone: callbackPhone.trim(),
+        serviceInterest: callbackNeed,
+        intentSignals: leadSignalLabels,
+        source: 'chatbot_callback',
+        preferredChannel: 'human_callback',
+        transcriptSummary: qualificationSummary,
+        notes: qualificationSummary,
+        consentAccepted: false
+      });
+    } catch (err) {
       console.warn('Chatbot lead capture skipped:', err.message || err);
-    });
+    }
+
     trackWebsiteEvent('callback_requested', {
       service_interest: callbackNeed,
       intent_signals: leadSignalSummary
     });
-    window.open(buildWhatsAppLink(leadMessage), '_blank');
 
-    setCallbackState('submitting');
+    // Short delay for UI smoothness
     window.setTimeout(() => {
       setCallbackState('success');
       setMessages(prev => [
         ...prev,
         createBotMessage(
-          `Callback request recorded for ${callbackPhone}.\n\nTopic: ${callbackNeed}\n\n${officeStatus.detail}`,
+          `Got it! I have saved your callback request for ${callbackNeed} at ${callbackPhone.trim()}.\n\nOur strategist will follow up soon. If you prefer instant chat on WhatsApp, feel free to use the button below:`,
           [
-            { label: 'Open WhatsApp', action: 'whatsapp' },
+            { label: 'Chat on WhatsApp', action: 'whatsapp-direct', value: `Hi URD team, I just requested a callback for ${callbackNeed} at ${callbackPhone.trim()}.` },
             { label: 'Back to services', action: 'scroll-services' }
           ],
           'Callback requested'
         )
       ]);
       resetCallbackForm();
-    }, 550);
+    }, 1000);
   };
 
   return (
@@ -479,7 +479,7 @@ export default function Chatbot() {
             <div className="avatar-glow"></div>
           </div>
           <div className="chat-header-info">
-            <h4>URD Growth Copilot</h4>
+            <h4>URD Copilot</h4>
             <div className={`online-indicator ${officeStatus.isOpen ? 'is-open' : 'is-closed'}`}>
               <span className="g-dot"></span>
               <span>{officeStatus.label}</span>
@@ -564,18 +564,8 @@ export default function Chatbot() {
             {callbackState === 'success' ? (
               <div className="callback-success-view">
                 <Check size={20} className="chk-circle" />
-                <span>Request saved</span>
-                <p>{officeStatus.detail}</p>
-                {latestLeadMessage && (
-                  <div className="admin-handoff-actions">
-                    <a href={buildWhatsAppLink(latestLeadMessage)} target="_blank" rel="noopener noreferrer">
-                      Send to WhatsApp admin
-                    </a>
-                    <a href={buildEmailLink(latestLeadMessage)}>
-                      Email admin
-                    </a>
-                  </div>
-                )}
+                <span>Request Submitted!</span>
+                <p>We have saved your request. A strategist from our team will contact you shortly.</p>
                 <button className="back-chat-btn" onClick={() => setCallbackState('idle')}>Back to chat</button>
               </div>
             ) : callbackState === 'submitting' ? (

@@ -3,5 +3,4 @@ project_id = "urd-uprank-digital"
 [functions.submit-lead]
 verify_jwt = true
 
-[functions.request-voice-call]
-verify_jwt = true
+

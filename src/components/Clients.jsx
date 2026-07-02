@@ -30,7 +30,7 @@ export default function Clients() {
           <div className="logo-slide-track">
             {doubleLogos.map((logo, idx) => (
               <div key={idx} className="logo-slide-card">
-                <img src={logo} alt={`Client logo ${idx + 1}`} className="client-logo-img" width="170" height="60" loading="lazy" />
+                <img src={logo} alt={`Client logo ${idx + 1}`} className="client-logo-img" width="200" height="75" loading="lazy" />
               </div>
             ))}
           </div>

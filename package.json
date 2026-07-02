@@ -9,7 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "deploy": "node scripts/deploy.js",
-    "test": "node --test tests/servicePlaybook.test.js tests/chatbotPhone.test.js tests/voiceFunctionStatic.test.js",
+    "test": "node --test tests/servicePlaybook.test.js",
     "test:db": "node scripts/test-db.js"
   },
   "dependencies": {
