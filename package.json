@@ -8,13 +8,11 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "deploy": "node scripts/deploy.js",
     "test": "node --test tests/servicePlaybook.test.js",
     "test:db": "node scripts/test-db.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",
-    "basic-ftp": "^6.0.1",
     "lucide-react": "0.469.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"

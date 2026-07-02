@@ -56,25 +56,30 @@ supabase secrets set RESEND_FROM_EMAIL="Up Rank Digital <leads@uprankdigital.com
 
 Do not put service role keys or email API keys in React/Vite env variables.
 
-## BigRock Deployment
+## Vercel / Netlify Deployment
 
-BigRock only needs to serve the built React files.
+This project is optimized for modern web hosting platforms like **Vercel** or **Netlify**, which use native git integrations for automatic deployments.
 
-1. Copy `.env.example` to `.env` locally and fill the real values.
-2. In BigRock/cPanel, confirm the hosting document root. For the main domain it is usually `/public_html`.
-3. Prefer FTPS if BigRock enables it for the account:
-   - `FTP_HOST`: the host shown in BigRock/cPanel FTP details.
-   - `FTP_USER`: the FTP or cPanel username.
-   - `FTP_PASSWORD`: the matching password.
-   - `FTP_REMOTE_PATH=/public_html`
-   - `FTP_SECURE=true`
-4. Run:
+### Setup Instructions
 
-```bash
-npm run deploy
-```
+1. **Connect Repository**:
+   - Log in to your [Vercel](https://vercel.com) or [Netlify](https://netlify.com) dashboard.
+   - Import this GitHub repository.
 
-The deploy script builds the Vite app and uploads the contents of `dist/`.
+2. **Configure Build Settings**:
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+   - **Node.js Version**: `22.x` or `20.x` (standard default is automatically chosen by the platform)
+
+3. **Configure Environment Variables**:
+   - Add the Vite public environment variables in the platform's dashboard:
+     - `VITE_SUPABASE_URL`
+     - `VITE_SUPABASE_PUBLISHABLE_KEY`
+     - `VITE_SUPABASE_LEAD_FUNCTION` (if using the Supabase Edge Function)
+
+4. **Deploy**:
+   - Every time you push to the `main` branch, the site will build and deploy automatically.
+   - Pull Requests will automatically generate Preview Deployments so you can test before merging.
 
 ## Production Notes
 
