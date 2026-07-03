@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ArrowDown, MessageSquare, Sparkles } from 'lucide-react';
 import './Hero.css';
 
-const words = ['Design', 'Develop', 'Promote', 'Optimize'];
+const words = ['Website Development', 'Digital Marketing', 'Performance Marketing', 'AI Powered Solutions', 'Content Design'];
 
 export default function Hero() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -57,26 +57,24 @@ export default function Hero() {
         {/* Centered Headline & Action */}
         <div className="hero-left-content">
           <span className="hero-tag">
-            <Sparkles size={13} className="hero-tag-sparkle" /> Digital growth partner for serious businesses
+            <Sparkles size={13} className="hero-tag-sparkle" /> Digital Growth Partner
           </span>
           
           <h1 className="hero-title">
-            We Help Brands <br />
+            Next-Gen <br />
             <span className="gradient-text hero-typewriter-wrapper">
               {currentText}
               <span className="cursor-blink">|</span>
             </span>
-            <br />
-            Your Business Needs
           </h1>
 
           <p className="hero-description">
-            URD helps businesses turn website traffic, search, paid campaigns, content, analytics, and automation into measurable enquiries and stronger digital growth.
+            Stop spending on marketing that doesn't convert. We engineer AI-powered digital ecosystems — high-performance websites, revenue-driving campaigns, and content built to dominate — so your brand doesn't just grow, it leads.
           </p>
 
           <div className="hero-ctas">
             <a href="#contact" className="btn btn-primary" onClick={handleScrollToContact}>
-              Get Growth Plan <MessageSquare size={18} />
+              Book Free Discovery Call <MessageSquare size={18} />
             </a>
             <a href="#services" className="btn btn-secondary" onClick={handleScrollToServices}>
               View Services <ArrowDown size={18} className="arrow-bounce" />

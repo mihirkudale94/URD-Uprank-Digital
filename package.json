@@ -12,6 +12,7 @@
     "test:db": "node scripts/test-db.js"
   },
   "dependencies": {
+    "@elevenlabs/react": "^0.14.0",
     "@supabase/supabase-js": "^2.108.2",
     "lucide-react": "0.469.0",
     "react": "^19.2.7",

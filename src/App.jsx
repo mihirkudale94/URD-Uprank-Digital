@@ -1,15 +1,17 @@
 import React, { useEffect, Suspense, lazy } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Clients from './components/Clients';
 import Services from './components/Services';
-import WhoWeAre from './components/WhoWeAre';
+import WhyPartner from './components/WhyPartner';
 import Leadership from './components/Leadership';
+import WhoWeAre from './components/WhoWeAre';
 import Process from './components/Process';
+import BrandStatement from './components/BrandStatement';
 import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
 import ContactForm from './components/ContactForm';
-const Chatbot = lazy(() => import('./components/Chatbot'));
+const WebsiteAssistant = lazy(() => import('./components/WebsiteAssistant'));
+const VoiceAgentButton = lazy(() => import('./components/VoiceAgentButton'));
 import Footer from './components/Footer';
 
 function App() {
@@ -40,16 +42,18 @@ function App() {
       <main>
         <Hero />
         <Services />
-        <WhoWeAre />
+        <WhyPartner />
         <Leadership />
+        <WhoWeAre />
+        <BrandStatement />
         <Process />
-        <Clients />
         <Testimonials />
         <FAQ />
         <ContactForm />
       </main>
       <Suspense fallback={null}>
-        <Chatbot />
+        <VoiceAgentButton />
+        <WebsiteAssistant />
       </Suspense>
       <Footer />
     </div>

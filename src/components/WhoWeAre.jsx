@@ -30,47 +30,9 @@ export default function WhoWeAre() {
     }
   };
 
-  const reasons = [
-    {
-      num: '01',
-      title: 'You Talk, We Listen',
-      desc: 'We start by listening and learning your business goals. A beautiful website is useless unless it helps you achieve real results. We collaborate and throw in ideas for continuous improvement.',
-      spanClass: 'bento-large'
-    },
-    {
-      num: '02',
-      title: 'Out of the Box Thinking',
-      desc: 'Our team of designers, developers, and marketers are passion-driven. We brainstorm innovative and creative solutions specific to your business needs.',
-      spanClass: 'bento-small'
-    },
-    {
-      num: '03',
-      title: 'Decades of Global Experience',
-      desc: 'Our competitive advantage is backed by decades of experience working with digital agencies across the US, UK, and Australia. We implement international standards and strategy.',
-      spanClass: 'bento-small'
-    },
-    {
-      num: '04',
-      title: 'High Standards & Work Ethics',
-      desc: 'We focus on quality rather than quantity. You can trust us to work to the highest standards at all times, ensuring transparency, so you don\'t waste your time or budget.',
-      spanClass: 'bento-large'
-    },
-    {
-      num: '05',
-      title: 'Enhanced Performance',
-      desc: 'We optimize every stage of your digital campaign, from customer acquisition to brand retention, connecting powerful ideas with next-gen technologies.',
-      spanClass: 'bento-small'
-    },
-    {
-      num: '06',
-      title: 'Customized Approach',
-      desc: 'We understand that every business is unique. Our workflows and strategies change dynamically to match the specific goals and metrics of your brand.',
-      spanClass: 'bento-small'
-    }
-  ];
 
   return (
-    <section className="section section-bg-alt" id="who">
+    <section className="section section-bg-alt" id="about">
       <div className="glow-bg"></div>
 
       <div className="container">
@@ -78,7 +40,7 @@ export default function WhoWeAre() {
           <span className="section-subtitle">Who Are We</span>
           <h2 className="heading-md">A Digital Growth Partner Focused on Measurable Outcomes</h2>
           <p className="section-description">
-            Up Rank Digital brings website development, marketing, content, analytics, and software execution together so businesses can improve visibility, lead quality, and digital performance.
+            Up Rank Digital brings website development, digital marketing, performance marketing, AI powered solutions, and content design together so businesses can improve visibility, lead quality, and digital performance.
           </p>
         </div>
 
@@ -149,24 +111,6 @@ export default function WhoWeAre() {
           </div>
         </div>
 
-        {/* Why work with us Bento Grid */}
-        <div className="why-us-section">
-          <h3 className="heading-sm text-center why-us-title scroll-animate">
-            Why Partner with Uprank Digital?
-          </h3>
-          
-          <div className="bento-grid-container scroll-animate delay-100">
-            {reasons.map((item, idx) => (
-              <div key={idx} className={`bento-card glass-card ${item.spanClass}`}>
-                <div className="bento-header">
-                  <span className="bento-num">{item.num}</span>
-                  <h4 className="why-us-card-title">{item.title}</h4>
-                </div>
-                <p className="why-us-card-desc">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );

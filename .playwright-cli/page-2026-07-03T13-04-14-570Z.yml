@@ -1,0 +1,533 @@
+- generic [ref=e3]:
+  - navigation "Primary navigation" [ref=e4]:
+    - generic [ref=e5]:
+      - link "Uprank Digital home" [ref=e6] [cursor=pointer]:
+        - /url: "#home"
+        - img "Uprank Digital" [ref=e7]
+      - generic [ref=e8]:
+        - list [ref=e9]:
+          - listitem [ref=e10]:
+            - link "Services" [ref=e11] [cursor=pointer]:
+              - /url: "#services"
+          - listitem [ref=e12]:
+            - link "Process" [ref=e13] [cursor=pointer]:
+              - /url: "#process"
+          - listitem [ref=e14]:
+            - link "Why Us" [ref=e15] [cursor=pointer]:
+              - /url: "#why-us"
+          - listitem [ref=e16]:
+            - link "About" [ref=e17] [cursor=pointer]:
+              - /url: "#about"
+          - listitem [ref=e18]:
+            - link "FAQ" [ref=e19] [cursor=pointer]:
+              - /url: "#faq"
+        - generic [ref=e20]:
+          - button "Toggle theme" [ref=e21] [cursor=pointer]:
+            - img [ref=e22]
+          - link "Book Strategy Call" [ref=e28] [cursor=pointer]:
+            - /url: "#contact"
+            - text: Book Strategy Call
+            - img [ref=e29]
+    - generic [ref=e33]:
+      - generic [ref=e34]:
+        - generic [ref=e35]: Navigate Uprank Digital
+        - generic [ref=e36]: Services, process, credibility, and booking.
+      - list [ref=e37]:
+        - listitem [ref=e38]:
+          - link "Services Web, ads, content, AI" [ref=e39] [cursor=pointer]:
+            - /url: "#services"
+            - generic [ref=e40]: Services
+            - generic [ref=e41]: Web, ads, content, AI
+        - listitem [ref=e42]:
+          - link "Process Structured delivery model" [ref=e43] [cursor=pointer]:
+            - /url: "#process"
+            - generic [ref=e44]: Process
+            - generic [ref=e45]: Structured delivery model
+        - listitem [ref=e46]:
+          - link "Why Us What makes us different" [ref=e47] [cursor=pointer]:
+            - /url: "#why-us"
+            - generic [ref=e48]: Why Us
+            - generic [ref=e49]: What makes us different
+        - listitem [ref=e50]:
+          - link "About About Uprank Digital" [ref=e51] [cursor=pointer]:
+            - /url: "#about"
+            - generic [ref=e52]: About
+            - generic [ref=e53]: About Uprank Digital
+        - listitem [ref=e54]:
+          - link "FAQ Answers before you book" [ref=e55] [cursor=pointer]:
+            - /url: "#faq"
+            - generic [ref=e56]: FAQ
+            - generic [ref=e57]: Answers before you book
+      - generic [ref=e58]:
+        - button "Toggle theme" [ref=e59] [cursor=pointer]:
+          - img [ref=e60]
+          - generic [ref=e66]: Light Mode
+        - link "Book Strategy Call" [ref=e67] [cursor=pointer]:
+          - /url: "#contact"
+          - text: Book Strategy Call
+          - img [ref=e68]
+  - main [ref=e71]:
+    - generic [ref=e74]:
+      - generic [ref=e75]:
+        - img [ref=e76]
+        - text: Digital Growth Partner
+      - heading "Next-Gen We |" [level=1] [ref=e78]:
+        - text: Next-Gen
+        - generic [ref=e79]:
+          - text: We
+          - generic [ref=e80]: "|"
+      - paragraph [ref=e81]: Stop spending on marketing that doesn't convert. We engineer AI-powered digital ecosystems — high-performance websites, revenue-driving campaigns, and content built to dominate — so your brand doesn't just grow, it leads.
+      - generic [ref=e82]:
+        - link "Book Free Discovery Call" [ref=e83] [cursor=pointer]:
+          - /url: "#contact"
+          - text: Book Free Discovery Call
+          - img [ref=e84]
+        - link "View Services" [ref=e86] [cursor=pointer]:
+          - /url: "#services"
+          - text: View Services
+          - img [ref=e87]
+    - generic [ref=e90]:
+      - generic [ref=e91]:
+        - generic [ref=e92]: What We Offer
+        - heading "Digital Growth Services Built Around Leads" [level=2] [ref=e93]
+        - paragraph [ref=e94]: We connect website experience, search, ads, content, analytics, and automation so your digital presence turns into measurable enquiries.
+      - generic [ref=e95]:
+        - generic [ref=e96]:
+          - button "Website Development Custom Web Apps & SaaS Platforms & More" [ref=e97] [cursor=pointer]:
+            - img [ref=e99]
+            - generic [ref=e102]:
+              - heading "Website Development" [level=3] [ref=e103]
+              - paragraph [ref=e104]: Custom Web Apps & SaaS Platforms & More
+          - button "Digital Marketing Technical SEO & Core Web Vitals Audits & More" [ref=e105] [cursor=pointer]:
+            - img [ref=e107]
+            - generic [ref=e110]:
+              - heading "Digital Marketing" [level=3] [ref=e111]
+              - paragraph [ref=e112]: Technical SEO & Core Web Vitals Audits & More
+          - button "Performance Marketing Google Search, Display & Shopping Ads & More" [ref=e113] [cursor=pointer]:
+            - img [ref=e115]
+            - generic [ref=e118]:
+              - heading "Performance Marketing" [level=3] [ref=e119]
+              - paragraph [ref=e120]: Google Search, Display & Shopping Ads & More
+          - button "AI Powered Solutions LLM-Powered Lead Qualification Agents & More" [ref=e121] [cursor=pointer]:
+            - img [ref=e123]
+            - generic [ref=e126]:
+              - heading "AI Powered Solutions" [level=3] [ref=e127]
+              - paragraph [ref=e128]: LLM-Powered Lead Qualification Agents & More
+          - button "Content Design & Management Direct-Response Brand Copywriting & More" [ref=e129] [cursor=pointer]:
+            - img [ref=e131]
+            - generic [ref=e133]:
+              - heading "Content Design & Management" [level=3] [ref=e134]
+              - paragraph [ref=e135]: Direct-Response Brand Copywriting & More
+        - generic [ref=e137]:
+          - generic [ref=e138]:
+            - generic [ref=e139]: Service Overview
+            - heading "Website Development Solutions" [level=3] [ref=e140]
+            - paragraph [ref=e141]: Your website is your highest-leverage sales asset. We architect custom, performance-engineered web solutions built for Core Web Vitals excellence, search dominance, and frictionless conversion — not just aesthetics.
+            - heading "Core Competencies:" [level=4] [ref=e142]
+            - generic [ref=e143]:
+              - generic [ref=e146]: Custom Web Apps & SaaS Platforms
+              - generic [ref=e149]: E-Commerce & Headless Shopify Architecture
+              - generic [ref=e152]: Conversion-Optimised Landing Pages
+              - generic [ref=e155]: UI/UX Systems Built for Revenue
+            - link "Enquire About Website Development" [ref=e156] [cursor=pointer]:
+              - /url: "#contact"
+              - text: Enquire About Website Development
+              - img [ref=e157]
+          - generic [ref=e161]:
+            - generic [ref=e162]:
+              - button "Preview desktop layout" [ref=e163] [cursor=pointer]:
+                - img [ref=e164]
+              - button "Preview tablet layout" [ref=e166] [cursor=pointer]:
+                - img [ref=e167]
+              - button "Preview mobile layout" [ref=e169] [cursor=pointer]:
+                - img [ref=e170]
+            - generic [ref=e172]:
+              - generic [ref=e178]: uprankdigital.com
+              - generic [ref=e179]:
+                - generic [ref=e181]: URD
+                - generic [ref=e185]:
+                  - heading "Custom Web Dev" [level=4] [ref=e186]
+                  - paragraph [ref=e187]: Optimized for search indexing and user conversion.
+                  - generic [ref=e188]: Start Project
+    - generic [ref=e193]:
+      - generic [ref=e194]:
+        - generic [ref=e195]: Our Edge
+        - heading "Why Partner with Uprank Digital?" [level=2] [ref=e196]
+        - paragraph [ref=e197]: We don't just run campaigns — we build growth systems engineered around your goals, your data, and your market.
+      - generic [ref=e198]:
+        - generic [ref=e199]:
+          - img [ref=e201]
+          - heading "Result Driven Strategies" [level=3] [ref=e205]
+        - generic [ref=e206]:
+          - img [ref=e208]
+          - heading "Data Backed Decisions" [level=3] [ref=e209]
+        - generic [ref=e210]:
+          - img [ref=e212]
+          - heading "Transparent Communication" [level=3] [ref=e214]
+        - generic [ref=e215]:
+          - img [ref=e217]
+          - heading "Measurable Results" [level=3] [ref=e223]
+      - generic [ref=e224]:
+        - heading "Area of Expertise" [level=3] [ref=e225]
+        - generic [ref=e226]:
+          - generic [ref=e227]:
+            - img [ref=e228]
+            - generic [ref=e231]: Website Development
+          - generic [ref=e232]:
+            - img [ref=e233]
+            - generic [ref=e236]: Digital Performance Marketing
+          - generic [ref=e237]:
+            - img [ref=e238]
+            - generic [ref=e241]: AI Powered Marketing Solutions
+          - generic [ref=e242]:
+            - img [ref=e243]
+            - generic [ref=e246]: Conversion Optimization
+          - generic [ref=e247]:
+            - img [ref=e248]
+            - generic [ref=e251]: Analytics & Growth Strategy
+          - generic [ref=e252]:
+            - img [ref=e253]
+            - generic [ref=e256]: Content Design & Management
+          - generic [ref=e257]:
+            - img [ref=e258]
+            - generic [ref=e261]: Social Media Strategy
+          - generic [ref=e262]:
+            - img [ref=e263]
+            - generic [ref=e266]: Campaign Planning & Execution
+    - generic [ref=e268]:
+      - generic [ref=e269]:
+        - generic [ref=e270]: Leadership Spotlight
+        - heading "Meet Our Managing Director" [level=2] [ref=e271]
+        - paragraph [ref=e272]: Driving digital transformation and leading URD with a commitment to measurable performance.
+      - generic [ref=e273]:
+        - generic [ref=e275]:
+          - img "Sachin Raje - Managing Director" [ref=e276]
+          - generic [ref=e277]:
+            - img [ref=e278]
+            - generic [ref=e281]:
+              - heading "10+ Years" [level=4] [ref=e282]
+              - paragraph [ref=e283]: Of Driving Growth
+        - generic [ref=e285]:
+          - generic [ref=e286]:
+            - generic [ref=e287]: Digital Growth Partner
+            - heading "Sachin Raje" [level=3] [ref=e288]
+            - paragraph [ref=e289]: Managing Director, URD Solutions
+          - generic [ref=e290]:
+            - heading "Website development and Digital performance marketing using AI" [level=4] [ref=e291]
+            - paragraph [ref=e292]: "\"We help sports clubs, brands, and businesses grow their digital presence with data-driven marketing, engaging content, and AI-powered strategies that deliver real results.\""
+          - generic [ref=e293]:
+            - heading "Let's Connect" [level=3] [ref=e294]
+            - list [ref=e295]:
+              - listitem [ref=e296]:
+                - img [ref=e297]
+                - generic [ref=e299]: +91 93711 16165
+              - listitem [ref=e300]:
+                - img [ref=e301]
+                - link "sachin@uprankdigital.com" [ref=e304] [cursor=pointer]:
+                  - /url: mailto:sachin@uprankdigital.com
+              - listitem [ref=e305]:
+                - img [ref=e306]
+                - generic [ref=e309]: Pune, Maharashtra, India
+    - generic [ref=e311]:
+      - generic [ref=e312]:
+        - generic [ref=e313]: Who Are We
+        - heading "A Digital Growth Partner Focused on Measurable Outcomes" [level=2] [ref=e314]
+        - paragraph [ref=e315]: Up Rank Digital brings website development, digital marketing, performance marketing, AI powered solutions, and content design together so businesses can improve visibility, lead quality, and digital performance.
+      - generic [ref=e316]:
+        - generic [ref=e318]:
+          - generic [ref=e320]:
+            - img [ref=e321]
+            - heading "Pioneering Digital Horizons" [level=4] [ref=e324]
+            - paragraph [ref=e325]: Advocating progressive web techniques.
+          - generic [ref=e326]:
+            - img [ref=e327]
+            - generic [ref=e329]:
+              - heading "10+ Years Experience" [level=4] [ref=e330]
+              - paragraph [ref=e331]: Global standards in marketing & development.
+        - generic [ref=e332]:
+          - heading "Our Purpose & Values" [level=3] [ref=e333]
+          - paragraph [ref=e334]: "We focus on the work that moves a business forward: clearer positioning, better digital experiences, stronger campaigns, cleaner tracking, and practical next steps."
+          - generic [ref=e335]:
+            - button "Vision" [ref=e336] [cursor=pointer]:
+              - img [ref=e337]
+              - generic [ref=e340]: Vision
+            - button "Mission" [ref=e341] [cursor=pointer]:
+              - img [ref=e342]
+              - generic [ref=e346]: Mission
+            - button "Values" [ref=e347] [cursor=pointer]:
+              - img [ref=e348]
+              - generic [ref=e350]: Values
+          - generic [ref=e351]:
+            - heading "Practical Digital Growth" [level=4] [ref=e352]
+            - paragraph [ref=e353]: To help businesses use websites, marketing, content, analytics, and automation in a practical way that creates measurable growth, not digital noise.
+    - generic [ref=e357]:
+      - paragraph [ref=e358]: Creating impact online. Winning results together.
+      - generic [ref=e359]: URD — The Upward Move
+    - generic [ref=e362]:
+      - generic [ref=e363]:
+        - generic [ref=e364]: Our Methodology
+        - heading "How We Drive Results" [level=2] [ref=e365]
+        - paragraph [ref=e366]: A repeatable, structured creative process designed to ensure your digital project is delivered on strategy and on budget.
+      - generic [ref=e368]:
+        - generic [ref=e369]:
+          - generic [ref=e371]:
+            - img [ref=e373]
+            - generic [ref=e375]: "01"
+          - heading "Ask" [level=3] [ref=e376]
+          - paragraph [ref=e377]: We start with the business goal, current website or campaign, audience, budget comfort, timeline, and the challenge that needs solving.
+        - generic [ref=e380]:
+          - generic [ref=e382]:
+            - img [ref=e384]
+            - generic [ref=e386]: "02"
+          - heading "Think" [level=3] [ref=e387]
+          - paragraph [ref=e388]: We map the right service mix, prioritize the highest-impact work, and define what should be measured before execution starts.
+        - generic [ref=e391]:
+          - generic [ref=e393]:
+            - img [ref=e395]
+            - generic [ref=e400]: "03"
+          - heading "Create" [level=3] [ref=e401]
+          - paragraph [ref=e402]: We build the website, campaign, content, tracking, or automation workflow with clear ownership and conversion-focused execution.
+        - generic [ref=e405]:
+          - generic [ref=e407]:
+            - img [ref=e409]
+            - generic [ref=e412]: "04"
+          - heading "Repeat" [level=3] [ref=e413]
+          - paragraph [ref=e414]: We review performance, learn from the data, and improve the next cycle so the digital system keeps getting sharper.
+    - generic [ref=e418]:
+      - generic [ref=e419]:
+        - generic [ref=e420]: Testimonials
+        - heading "What Our Clients Say" [level=2] [ref=e421]
+        - paragraph [ref=e422]: Read stories of how we have helped business owners establish reliable websites and drive growth.
+      - generic [ref=e423]:
+        - generic [ref=e424]:
+          - img [ref=e425]
+          - generic [ref=e428]:
+            - paragraph [ref=e429]: "\"We developed a great bonding with Up Rank Digital and their dedication to our website is evident in all aspects of the site. We appreciate their attention to detail and creative approach to bringing our new exhibit to life online.\""
+            - generic [ref=e430]:
+              - generic [ref=e431]:
+                - img "Mr. Achyut Chitale" [ref=e432]
+                - generic [ref=e433]: M
+              - generic [ref=e434]:
+                - heading "Mr. Achyut Chitale" [level=4] [ref=e435]
+                - paragraph [ref=e436]: Founder & Managing Director, Candid Confectioneries Pvt Ltd. (Flipper)
+        - generic [ref=e437]:
+          - button "Previous Testimonial" [ref=e438] [cursor=pointer]:
+            - img [ref=e439]
+          - generic [ref=e441]:
+            - button "Go to slide 1" [ref=e442] [cursor=pointer]
+            - button "Go to slide 2" [ref=e443] [cursor=pointer]
+            - button "Go to slide 3" [ref=e444] [cursor=pointer]
+            - button "Go to slide 4" [ref=e445] [cursor=pointer]
+          - button "Next Testimonial" [ref=e446] [cursor=pointer]:
+            - img [ref=e447]
+    - region "Clear answers before you book a call" [ref=e449]:
+      - generic [ref=e450]:
+        - generic [ref=e451]:
+          - generic [ref=e452]: FAQ
+          - heading "Clear answers before you book a call" [level=2] [ref=e453]
+          - paragraph [ref=e454]: The questions serious buyers ask before choosing a digital growth partner, answered with clarity instead of generic marketing noise.
+          - generic "Client assurance points" [ref=e455]:
+            - generic [ref=e456]:
+              - img [ref=e457]
+              - generic [ref=e460]: Transparent ownership
+            - generic [ref=e461]:
+              - img [ref=e462]
+              - generic [ref=e464]: Measured outcomes
+            - generic [ref=e465]:
+              - img [ref=e466]
+              - generic [ref=e469]: Scope-first pricing
+          - link "Ask a specific question" [ref=e470] [cursor=pointer]:
+            - /url: "#contact"
+            - text: Ask a specific question
+            - img [ref=e471]
+        - generic [ref=e473]:
+          - article [ref=e474]:
+            - button "What does Uprank Digital help with?" [expanded] [ref=e475] [cursor=pointer]:
+              - img [ref=e477]
+              - generic [ref=e480]: What does Uprank Digital help with?
+              - img [ref=e481]
+            - region "What does Uprank Digital help with?" [ref=e483]:
+              - paragraph [ref=e484]: URD helps businesses improve their digital presence through website development, digital marketing, performance marketing, AI powered solutions, and content design & management.
+          - article [ref=e485]:
+            - button "How do we know which service is right for us?" [ref=e486] [cursor=pointer]:
+              - img [ref=e488]
+              - generic [ref=e491]: How do we know which service is right for us?
+              - img [ref=e492]
+            - region "How do we know which service is right for us?":
+              - paragraph [ref=e494]: We begin with your business goal, current website or social presence, audience, budget comfort, and timeline. Then we recommend a practical starting scope, so you do not pay for channels, tools, or features that are not needed yet.
+          - article [ref=e495]:
+            - button "How much does a website or marketing project cost?" [ref=e496] [cursor=pointer]:
+              - img [ref=e498]
+              - generic [ref=e501]: How much does a website or marketing project cost?
+              - img [ref=e502]
+            - region "How much does a website or marketing project cost?":
+              - paragraph [ref=e504]: Pricing depends on scope, page count, creative requirements, ad channels, content needs, tracking setup, and timeline. After a short discovery call, URD can suggest the right starting plan instead of forcing every business into one fixed package.
+          - article [ref=e505]:
+            - button "How long does a website project usually take?" [ref=e506] [cursor=pointer]:
+              - img [ref=e508]
+              - generic [ref=e511]: How long does a website project usually take?
+              - img [ref=e512]
+            - region "How long does a website project usually take?":
+              - paragraph [ref=e514]: A focused landing page can move faster, while a full website, e-commerce build, or custom software project needs deeper planning, content, design, development, testing, and launch support. URD confirms a realistic timeline after understanding the project size.
+          - article [ref=e515]:
+            - button "Can URD manage website, SEO, ads, content, and analytics together?" [ref=e516] [cursor=pointer]:
+              - img [ref=e518]
+              - generic [ref=e521]: Can URD manage website, SEO, ads, content, and analytics together?
+              - img [ref=e522]
+            - region "Can URD manage website, SEO, ads, content, and analytics together?":
+              - paragraph [ref=e524]: Yes. Many businesses get better results when website experience, search visibility, campaign traffic, content, conversion tracking, and reporting are connected instead of being handled separately by different teams.
+          - article [ref=e525]:
+            - button "How does URD use AI in marketing and growth work?" [ref=e526] [cursor=pointer]:
+              - img [ref=e528]
+              - generic [ref=e531]: How does URD use AI in marketing and growth work?
+              - img [ref=e532]
+            - region "How does URD use AI in marketing and growth work?":
+              - paragraph [ref=e534]: AI supports research, planning, audience insights, content workflows, campaign analysis, automation ideas, and conversion optimization. Human strategy, review, brand judgment, and implementation remain central.
+          - article [ref=e535]:
+            - button "Will we own our website, content, and accounts?" [ref=e536] [cursor=pointer]:
+              - img [ref=e538]
+              - generic [ref=e541]: Will we own our website, content, and accounts?
+              - img [ref=e542]
+            - region "Will we own our website, content, and accounts?":
+              - paragraph [ref=e544]: Yes. URD believes in transparent ownership. Your website, brand assets, analytics, ad accounts, content, and business data should stay under your control unless a different arrangement is clearly agreed in advance.
+          - article [ref=e545]:
+            - button "Do you guarantee SEO rankings, leads, or ad results?" [ref=e546] [cursor=pointer]:
+              - img [ref=e548]
+              - generic [ref=e551]: Do you guarantee SEO rankings, leads, or ad results?
+              - img [ref=e552]
+            - region "Do you guarantee SEO rankings, leads, or ad results?":
+              - paragraph [ref=e554]: "No serious agency should promise fixed rankings, guaranteed leads, or guaranteed revenue. URD focuses on the parts that can be controlled: strategy, technical quality, content, targeting, landing-page experience, tracking, testing, and ongoing optimization."
+          - article [ref=e555]:
+            - button "How do you measure success and report progress?" [ref=e556] [cursor=pointer]:
+              - img [ref=e558]
+              - generic [ref=e561]: How do you measure success and report progress?
+              - img [ref=e562]
+            - region "How do you measure success and report progress?":
+              - paragraph [ref=e564]: "Success is tied to the business goal: qualified leads, traffic quality, conversion rate, campaign performance, search visibility, engagement, revenue signals, or operational efficiency. Reports focus on what changed, what it means, and what to do next."
+          - article [ref=e565]:
+            - button "Can you improve an existing website or campaign?" [ref=e566] [cursor=pointer]:
+              - img [ref=e568]
+              - generic [ref=e571]: Can you improve an existing website or campaign?
+              - img [ref=e572]
+            - region "Can you improve an existing website or campaign?":
+              - paragraph [ref=e574]: Yes. URD can audit an existing website, landing page, ad account, SEO setup, analytics, or content workflow, then recommend improvements before suggesting a larger rebuild or campaign plan.
+          - article [ref=e575]:
+            - button "Do you work with startups, local businesses, and established brands?" [ref=e576] [cursor=pointer]:
+              - img [ref=e578]
+              - generic [ref=e581]: Do you work with startups, local businesses, and established brands?
+              - img [ref=e582]
+            - region "Do you work with startups, local businesses, and established brands?":
+              - paragraph [ref=e584]: Yes. URD works with service-led businesses, e-commerce brands, B2B companies, SaaS teams, sports clubs, and growing brands that need a practical digital partner for strategy and execution.
+          - article [ref=e585]:
+            - button "What is the best way to start?" [ref=e586] [cursor=pointer]:
+              - img [ref=e588]
+              - generic [ref=e591]: What is the best way to start?
+              - img [ref=e592]
+            - region "What is the best way to start?":
+              - paragraph [ref=e594]: Share your business name, website or social link, current goal, timeline, and the challenge you want to solve. URD will review the context and suggest the most useful next step.
+    - generic [ref=e596]:
+      - generic [ref=e597]:
+        - generic [ref=e598]: Get in Touch
+        - heading "Let's Build Your Next Growth System" [level=2] [ref=e599]
+        - paragraph [ref=e600]: Share your business goal, website, timeline, and budget comfort. The URD team will review the context and suggest the most useful next step.
+        - generic [ref=e601]:
+          - generic [ref=e602]:
+            - heading "Direct Support" [level=4] [ref=e603]
+            - paragraph [ref=e604]: sachin@uprankdigital.com
+            - paragraph [ref=e605]: +91 93711 16165
+          - generic [ref=e606]:
+            - heading "Headquarters" [level=4] [ref=e607]
+            - paragraph [ref=e608]: Shyamal CHS
+            - paragraph [ref=e609]: Pune 411048, India
+      - generic [ref=e611]:
+        - heading "Intake Questionnaire" [level=3] [ref=e612]
+        - paragraph [ref=e613]: Help us understand your business requirements.
+        - generic [ref=e614]:
+          - text: Website confirmation
+          - textbox [ref=e615]
+        - generic [ref=e616]:
+          - textbox "Your Name" [ref=e618]:
+            - /placeholder: Your Name *
+          - textbox "Email Address" [ref=e620]:
+            - /placeholder: Email Address *
+          - textbox "Phone Number" [ref=e622]:
+            - /placeholder: Phone Number *
+          - textbox "Business Name" [ref=e624]
+          - textbox "Website URL" [ref=e626]:
+            - /placeholder: Website URL (e.g. www.mycompany.com)
+        - generic [ref=e627]:
+          - heading "I'm interested in:" [level=4] [ref=e628]
+          - generic [ref=e629]:
+            - button "Website Development" [ref=e630] [cursor=pointer]
+            - button "Digital Marketing" [ref=e631] [cursor=pointer]
+            - button "Performance Marketing" [ref=e632] [cursor=pointer]
+            - button "AI Powered Solutions" [ref=e633] [cursor=pointer]
+            - button "Content Design & Management" [ref=e634] [cursor=pointer]
+        - textbox "Project Goals Message" [ref=e636]:
+          - /placeholder: Tell us more about your project goals (Optional)...
+        - button "Submit Inquiry" [ref=e637] [cursor=pointer]:
+          - text: Submit Inquiry
+          - img [ref=e638]
+  - button "Talk to Us" [ref=e641] [cursor=pointer]:
+    - generic [ref=e642]:
+      - img [ref=e643]
+      - generic [ref=e646]: Talk to Us
+  - button "Open AI Assistant" [ref=e647] [cursor=pointer]:
+    - img [ref=e648]
+  - contentinfo [ref=e650]:
+    - generic [ref=e651]:
+      - generic [ref=e652]:
+        - img "Uprank Digital" [ref=e653]
+        - paragraph [ref=e654]: Websites, campaigns, content, analytics, and automation built to generate qualified business enquiries.
+        - generic [ref=e655]:
+          - link "LinkedIn" [ref=e656] [cursor=pointer]:
+            - /url: https://in.linkedin.com/company/uprankdigital
+            - img [ref=e657]
+          - link "Facebook" [ref=e661] [cursor=pointer]:
+            - /url: https://www.facebook.com/UpRankDigital/
+            - img [ref=e662]
+      - generic [ref=e664]:
+        - heading "Get in Touch" [level=3] [ref=e665]
+        - list [ref=e666]:
+          - listitem [ref=e667]:
+            - img [ref=e668]
+            - generic [ref=e671]:
+              - heading "Email" [level=4] [ref=e672]
+              - paragraph [ref=e673]:
+                - link "sachin@uprankdigital.com" [ref=e674] [cursor=pointer]:
+                  - /url: mailto:sachin@uprankdigital.com
+          - listitem [ref=e675]:
+            - img [ref=e676]
+            - generic [ref=e678]:
+              - heading "Call Us" [level=4] [ref=e679]
+              - paragraph [ref=e680]: +91 93711 16165
+      - generic [ref=e681]:
+        - heading "Our Office" [level=3] [ref=e682]
+        - list [ref=e683]:
+          - listitem [ref=e684]:
+            - img [ref=e685]
+            - generic [ref=e688]:
+              - heading "India Office" [level=4] [ref=e689]
+              - paragraph [ref=e690]: Shyamal CHS
+              - paragraph [ref=e691]: Pune 411048, India
+      - generic [ref=e692]:
+        - heading "Quick Links" [level=3] [ref=e693]
+        - list [ref=e694]:
+          - listitem [ref=e695]:
+            - link "Services" [ref=e696] [cursor=pointer]:
+              - /url: /#services
+          - listitem [ref=e697]:
+            - link "Process" [ref=e698] [cursor=pointer]:
+              - /url: /#process
+          - listitem [ref=e699]:
+            - link "Why Us" [ref=e700] [cursor=pointer]:
+              - /url: /#why-us
+          - listitem [ref=e701]:
+            - link "About" [ref=e702] [cursor=pointer]:
+              - /url: /#about
+          - listitem [ref=e703]:
+            - link "FAQ" [ref=e704] [cursor=pointer]:
+              - /url: /#faq
+    - paragraph [ref=e707]: URD SOLUTIONS PVT. LTD. © 2017. All Rights Reserved.
+    - button "Scroll back to top":
+      - img

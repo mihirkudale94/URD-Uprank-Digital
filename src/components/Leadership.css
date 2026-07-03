@@ -177,10 +177,35 @@
   font-style: italic;
 }
 
+.why-partner-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .why-work-leader {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+}
+
+.expertise-sublabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  margin-bottom: 0.25rem;
+}
+
+.why-work-label {
+  width: 100%;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
 }
 
 .leader-highlight-tag {

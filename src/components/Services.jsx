@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Camera, Code, Smartphone, Tablet, Target, Terminal, Monitor, Megaphone } from 'lucide-react';
+import { ArrowRight, Camera, Code, Smartphone, Tablet, Monitor, Megaphone, TrendingUp, Cpu, PenLine } from 'lucide-react';
 import './Services.css';
 
 export default function Services() {
@@ -8,41 +8,41 @@ export default function Services() {
 
   const servicesData = [
     {
-      title: 'Digital',
-      desc: 'We transform your brand into a dynamic digital medium designed to drive conversions, increase traffic, and skyrocket sales.',
+      title: 'Website Development',
+      desc: 'Your website is your highest-leverage sales asset. We architect custom, performance-engineered web solutions built for Core Web Vitals excellence, search dominance, and frictionless conversion — not just aesthetics.',
       icon: <Code size={24} />,
-      bullets: ['Graphic & UI/UX Design', 'Custom Website Development', 'E-commerce Solutions', 'Cross-Platform App Dev']
+      bullets: ['Custom Web Apps & SaaS Platforms', 'E-Commerce & Headless Shopify Architecture', 'Conversion-Optimised Landing Pages', 'UI/UX Systems Built for Revenue']
     },
     {
-      title: 'Marketing',
-      desc: 'Result-oriented marketing strategies focused on search engine visibility, organic growth, social engagement, and customer acquisition.',
-      icon: <Target size={24} />,
-      bullets: ['Search Engine Optimization (SEO)', 'Social Media Strategy & Marketing', 'Content Strategy & Marketing', 'Growth Funnels & Analytics']
-    },
-    {
-      title: 'Advertising',
-      desc: 'High-performing, ROI-driven paid advertising campaigns targeting right audiences across search engines, social networks, and premium networks.',
+      title: 'Digital Marketing',
+      desc: 'Visibility without intent is noise. We deploy data-led organic growth systems — technical SEO, content architecture, and local authority strategies — engineered to place your brand where buyers are already searching.',
       icon: <Megaphone size={24} />,
-      bullets: ['Paid Search (Google PPC & SEM)', 'Paid Social (Meta, LinkedIn Ads)', 'Programmatic & PR Distribution', 'ROI Optimization & Ad Management']
+      bullets: ['Technical SEO & Core Web Vitals Audits', 'Intent-Mapped Content & Keyword Strategy', 'Google Business & Map Pack Dominance', 'Social Organic Growth & Community Strategy']
     },
     {
-      title: 'Content',
-      desc: 'Premium content design, storytelling, and professional asset production that sends the right message to your target audience.',
-      icon: <Camera size={24} />,
-      bullets: ['Copywriting & Storytelling', 'Premium Product Photoshoots', 'High-Impact Video Production', '2D/3D Motion Graphics & Animation']
+      title: 'Performance Marketing',
+      desc: 'Every rupee of ad spend is accountable. We build full-funnel, attribution-backed paid acquisition systems across Google and Meta — engineered to compress CAC, maximise ROAS, and scale what is already working.',
+      icon: <TrendingUp size={24} />,
+      bullets: ['Google Search, Display & Shopping Ads', 'Meta & LinkedIn Performance Campaigns', 'Landing Page CRO & A/B Testing', 'Multi-Touch Attribution & Budget Optimisation']
     },
     {
-      title: 'Software',
-      desc: 'Custom, scalable, and enterprise-grade software development integrating modern APIs, CMS, LMS, and business systems.',
-      icon: <Terminal size={24} />,
-      bullets: ['Custom Web Applications (SaaS)', 'Native Android & iOS Apps', 'Headless CMS & LMS Integrations', 'API & Business System Integrations']
+      title: 'AI Powered Solutions',
+      desc: 'AI is no longer optional — it is competitive infrastructure. We deploy custom LLM-powered agents, intelligent lead qualifiers, and workflow automation that operate 24/7, reduce overheads, and accelerate your revenue pipeline.',
+      icon: <Cpu size={24} />,
+      bullets: ['LLM-Powered Lead Qualification Agents', 'Conversational AI & Voice Automation', 'CRM Integration & Workflow Orchestration', 'AI Retargeting & Personalisation Engines']
+    },
+    {
+      title: 'Content Design & Management',
+      desc: 'Content is the compounding asset most brands undervalue. We create high-impact visual identities, direct-response copy, and social media systems that build category authority and convert attention into measurable pipeline.',
+      icon: <PenLine size={24} style={{ color: 'var(--primary)', flexShrink: 0 }} />,
+      bullets: ['Direct-Response Brand Copywriting', 'Product Photography & Video Production', 'Social Media Feed Management & Reels', 'Visual Identity & Brand Design Systems']
     }
   ];
 
   // Helper to render interactive mockup based on active tab
   const renderInteractiveMockup = () => {
     switch(activeCategory) {
-      case 0: // Digital
+      case 0: // Website Development
         return (
           <div className="mockup-frame digital-mock">
             <div className="mockup-controls">
@@ -82,7 +82,7 @@ export default function Services() {
                   <div className="mock-nav-dots"><span className="nav-dot"></span><span className="nav-dot"></span></div>
                 </div>
                 <div className="mock-hero-section">
-                  <h4 className="mock-web-title">Premium Web Design</h4>
+                  <h4 className="mock-web-title">Custom Web Dev</h4>
                   <p className="mock-web-para">Optimized for search indexing and user conversion.</p>
                   <div className="mock-web-btn">Start Project</div>
                 </div>
@@ -94,43 +94,43 @@ export default function Services() {
             </div>
           </div>
         );
-      case 1: // Marketing
+      case 1: // Digital Marketing
         return (
           <div className="mockup-frame marketing-mock">
             <div className="marketing-dashboard-header">
-              <span>Performance Analytics</span>
+              <span>Organic Traffic Dashboard</span>
               <span className="live-pill">LIVE</span>
             </div>
             <div className="marketing-chart-wrapper">
               <div className="stat-row">
                 <div className="mini-stat">
-                  <span className="stat-lbl">Impressions</span>
-                  <span className="stat-val">682.4K</span>
+                  <span className="stat-lbl">SEO Impressions</span>
+                  <span className="stat-val">840.2K</span>
                 </div>
                 <div className="mini-stat">
-                  <span className="stat-lbl">Conversion Rate</span>
-                  <span className="stat-val text-green">+4.2%</span>
+                  <span className="stat-lbl">Organic Traffic</span>
+                  <span className="stat-val text-green">+18.4%</span>
                 </div>
               </div>
               <div className="bar-chart-container">
                 <div className="chart-bar bar-1"><span className="tooltip">Jun: 140k</span></div>
-                <div className="chart-bar bar-2"><span className="tooltip">Jul: 220k</span></div>
-                <div className="chart-bar bar-3"><span className="tooltip">Aug: 390k</span></div>
-                <div className="chart-bar bar-4"><span className="tooltip">Sept: 682k</span></div>
+                <div className="chart-bar bar-2"><span className="tooltip">Jul: 320k</span></div>
+                <div className="chart-bar bar-3"><span className="tooltip">Aug: 590k</span></div>
+                <div className="chart-bar bar-4"><span className="tooltip">Sept: 840k</span></div>
               </div>
             </div>
             <div className="channel-breakdown">
-              <span>Google PPC: <strong>4.8x ROI</strong></span>
-              <span>Meta Ads: <strong>3.6x ROI</strong></span>
+              <span>Google SEO: <strong>+34% Growth</strong></span>
+              <span>Social Referrals: <strong>+12% Growth</strong></span>
             </div>
           </div>
         );
-      case 2: // Advertising
+      case 2: // Performance Marketing
         return (
           <div className="mockup-frame advertising-mock">
             <div className="ad-preview-header">
               <Megaphone size={14} />
-              <span>Ad Campaign Preview</span>
+              <span>Paid Campaign Preview</span>
               <span className="ad-status-pill">Active</span>
             </div>
             <div className="ad-google-search">
@@ -141,17 +141,45 @@ export default function Services() {
               <div className="google-ad-result">
                 <span className="ad-label">Sponsored</span>
                 <span className="ad-url">https://www.uprankdigital.com</span>
-                <h4 className="ad-title">URD - #1 Digital Growth & Marketing Agency</h4>
-                <p className="ad-description">We help brands scale with result-oriented PPC ads, SEO strategies, and custom software. Get a free proposal today!</p>
+                <h4 className="ad-title">URD - #1 Performance Marketing Agency</h4>
+                <p className="ad-description">Scale your business with high-ROI Google Ads, Meta Campaigns, and Conversion Rate Optimization. Get a free audit today!</p>
                 <div className="ad-sitelinks">
-                  <span>Contact Us</span>
-                  <span>Our Services</span>
+                  <span>Google Ads ROI: 4.8x</span>
+                  <span>Meta Ads ROI: 3.6x</span>
                 </div>
               </div>
             </div>
           </div>
         );
-      case 3: // Content
+      case 3: // AI Powered Solutions
+        return (
+          <div className="mockup-frame software-mock" style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="terminal-header">
+              <div className="terminal-dots"><span className="dot red"></span><span className="dot yellow"></span><span className="dot green"></span></div>
+              <span>AI Lead Qualifier Bot - Live Chat</span>
+            </div>
+            <div className="mock-chat-body" style={{ padding: '16px', fontSize: '11px', display: 'flex', flexDirection: 'column', gap: '10px', background: 'rgba(0,0,0,0.2)', flexGrow: '1' }}>
+              <div className="chat-msg bot" style={{ display: 'flex', gap: '8px' }}>
+                <div style={{ background: 'var(--color-primary)', color: '#fff', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 'bold' }}>AI</div>
+                <div style={{ background: 'rgba(255,255,255,0.08)', padding: '8px 10px', borderRadius: '0 10px 10px 10px', maxWidth: '80%' }}>
+                  Hi there! Ready to scale? Tell me about your main business goal.
+                </div>
+              </div>
+              <div className="chat-msg user" style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                <div style={{ background: '#10b981', color: '#fff', padding: '8px 10px', borderRadius: '10px 0 10px 10px', maxWidth: '80%' }}>
+                  Need to generate more qualified leads through advertising.
+                </div>
+              </div>
+              <div className="chat-msg bot" style={{ display: 'flex', gap: '8px' }}>
+                <div style={{ background: 'var(--color-primary)', color: '#fff', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 'bold' }}>AI</div>
+                <div style={{ background: 'rgba(255,255,255,0.08)', padding: '8px 10px', borderRadius: '0 10px 10px 10px', maxWidth: '80%' }}>
+                  Got it! I can book a strategy session with Sachin Raje. What is your WhatsApp number?
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      case 4: // Content Design & Management
         return (
           <div className="mockup-frame content-mock">
             <div className="instagram-preview-header">
@@ -164,28 +192,12 @@ export default function Services() {
             <div className="instagram-image-box">
               <div className="insta-image-gradient">
                 <Camera size={32} className="content-camera-icon" />
-                <span className="img-badge">Interactive Product Shoot</span>
+                <span className="img-badge">Creative Brand Shoot</span>
               </div>
             </div>
             <div className="instagram-footer">
-              <div className="insta-actions"><span>1,284 likes</span></div>
-              <p className="insta-caption"><strong>uprankdigital</strong> Telling authentic brand stories that resonate globally. Creative shoots done right.</p>
-            </div>
-          </div>
-        );
-      case 4: // Software
-        return (
-          <div className="mockup-frame software-mock">
-            <div className="terminal-header">
-              <div className="terminal-dots"><span className="dot red"></span><span className="dot yellow"></span><span className="dot green"></span></div>
-              <span>bash - active_endpoints.js</span>
-            </div>
-            <div className="terminal-body">
-              <p className="term-line"><span className="green-txt">client-apps@urd-sys:~$</span> npm run build</p>
-              <p className="term-line-dim">vite v8.1.0 building for production...</p>
-              <p className="term-line-dim">42 modules transformed.</p>
-              <p className="term-line"><span className="cyan-txt">info</span> deployment pipeline synced successfully.</p>
-              <p className="term-line"><span className="green-txt">client-apps@urd-sys:~$</span> <span className="cursor-blink">|</span></p>
+              <div className="insta-actions"><span>2,482 likes</span></div>
+              <p className="insta-caption"><strong>uprankdigital</strong> Premium storytelling, copywriting, and visual assets designed to capture customer attention. #Branding</p>
             </div>
           </div>
         );

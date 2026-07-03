@@ -1,27 +1,9 @@
 import React from 'react';
-import { Mail, Phone, MapPin, CheckCircle2, Award, Quote } from 'lucide-react';
+import { Mail, Phone, MapPin, Award } from 'lucide-react';
 import { publicAsset } from '../utils/publicAsset';
 import './Leadership.css';
 
 export default function Leadership() {
-  const expertise = [
-    'Website Development',
-    'Digital Performance Marketing',
-    'AI Powered Marketing Solutions',
-    'Search & Paid Media Strategy',
-    'Conversion Optimization',
-    'Analytics & Growth Strategy',
-    'Content Design & Management',
-    'Social Media Strategy',
-    'Campaign Planning & Execution'
-  ];
-
-  const highlights = [
-    { title: 'Result-Driven Strategies' },
-    { title: 'Data-Backed Decisions' },
-    { title: 'Transparent Communication' },
-    { title: 'Measurable Results' }
-  ];
 
   return (
     <section className="section leadership-section" id="leadership">
@@ -62,7 +44,26 @@ export default function Leadership() {
               <div className="image-glow-ring"></div>
             </div>
 
-            {/* Let's Connect Mini Card */}
+          </div>
+
+          {/* Right Column: Bio, Expertise & Focus */}
+          <div className="leader-info-box">
+            <div className="leader-title-wrap">
+              <span className="leader-badge">
+                Digital Growth Partner
+              </span>
+              <h3 className="leader-name">Sachin Raje</h3>
+              <p className="leader-role">Managing Director, URD Solutions</p>
+            </div>
+
+            <div className="leader-pitch">
+              <h4>Website development and Digital performance marketing using AI</h4>
+              <p>
+                "We help sports clubs, brands, and businesses grow their digital presence with data-driven marketing, engaging content, and AI-powered strategies that deliver real results."
+              </p>
+            </div>
+
+            {/* Let's Connect — moved to right column */}
             <div className="leader-connect-card glass-card">
               <h3>Let's Connect</h3>
               <ul className="connect-details-list">
@@ -81,54 +82,6 @@ export default function Leadership() {
               </ul>
             </div>
           </div>
-
-          {/* Right Column: Bio, Expertise & Focus */}
-          <div className="leader-info-box">
-            <div className="leader-title-wrap">
-              <span className="leader-badge">
-                Digital Growth Partner
-              </span>
-              <h3 className="leader-name">Sachin Raje</h3>
-              <p className="leader-role">Managing Director, URD Solutions</p>
-            </div>
-
-            <div className="leader-pitch">
-              <h4>Website development and digital performance marketing using AI</h4>
-              <p>
-                "We help sports clubs, brands, and businesses grow their digital presence with AI-supported planning, data-driven marketing, engaging content, conversion optimization, and practical strategies that deliver real results."
-              </p>
-            </div>
-
-            {/* Core Pillars */}
-            <div className="why-work-leader">
-              {highlights.map((h, i) => (
-                <div key={i} className="leader-highlight-tag">
-                  <span className="tag-bullet"></span>
-                  <span>{h.title}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Expertise Checklist */}
-            <div className="leader-expertise-wrap">
-              <h3>Area of Expertise</h3>
-              <div className="expertise-checkbox-grid">
-                {expertise.map((item, index) => (
-                  <div key={index} className="expertise-check-item">
-                    <CheckCircle2 size={16} className="check-icon" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Quote Block */}
-        <div className="leader-quote-block glass-card scroll-animate">
-          <Quote className="quote-icon" size={32} />
-          <p>Creating impact online. Winning results together.</p>
-          <span className="quote-author">URD - The Upward Move</span>
         </div>
       </div>
     </section>

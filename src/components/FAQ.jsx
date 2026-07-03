@@ -5,7 +5,7 @@ import './FAQ.css';
 const faqItems = [
   {
     question: 'What does Uprank Digital help with?',
-    answer: 'URD helps businesses improve their digital presence through website development, UI/UX, SEO, performance marketing, paid advertising, AI-supported growth planning, conversion optimization, analytics, content design, and custom software solutions.'
+    answer: 'URD helps businesses improve their digital presence through website development, digital marketing, performance marketing, AI powered solutions, and content design & management.'
   },
   {
     question: 'How do we know which service is right for us?',

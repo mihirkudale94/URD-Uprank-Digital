@@ -20,11 +20,11 @@ export default function ContactForm() {
   const [websiteConfirmation, setWebsiteConfirmation] = useState('');
 
   const servicesList = [
-    { id: 'digital', label: 'Digital Services' },
-    { id: 'marketing', label: 'Marketing Services' },
-    { id: 'advertise', label: 'Advertising Services' },
-    { id: 'content', label: 'Content Services' },
-    { id: 'software', label: 'Software Services' }
+    { id: 'website-development', label: 'Website Development' },
+    { id: 'digital-marketing', label: 'Digital Marketing' },
+    { id: 'performance-marketing', label: 'Performance Marketing' },
+    { id: 'ai-solutions', label: 'AI Powered Solutions' },
+    { id: 'content-management', label: 'Content Design & Management' }
   ];
 
   const handleInputChange = (e) => {
