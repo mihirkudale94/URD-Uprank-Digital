@@ -1,6 +1,7 @@
 import React, { useEffect, Suspense, lazy } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import Clients from './components/Clients';
 import Services from './components/Services';
 import WhyPartner from './components/WhyPartner';
 import Leadership from './components/Leadership';
@@ -47,6 +48,7 @@ function App() {
         <WhoWeAre />
         <BrandStatement />
         <Process />
+        <Clients />
         <Testimonials />
         <FAQ />
         <ContactForm />
