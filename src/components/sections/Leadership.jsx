@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Award } from 'lucide-react';
-import { publicAsset } from '../utils/publicAsset';
+import { publicAsset } from '@/utils/publicAsset';
 import './Leadership.css';
 
 export default function Leadership() {

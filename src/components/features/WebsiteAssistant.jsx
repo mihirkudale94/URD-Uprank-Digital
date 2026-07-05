@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CheckCircle2, Mail, MessageCircle, PhoneCall, RotateCcw, Send, Sparkles, User, X } from 'lucide-react';
-import { isSupabaseConfigured } from '../utils/supabaseClient';
-import { SERVICE_PLAYBOOK, getServiceMatch } from '../utils/servicePlaybook';
-import { captureChatbotLead } from '../utils/chatbotLeadCapture';
-import { trackWebsiteEvent } from '../utils/analytics';
+import { isSupabaseConfigured } from '@/utils/supabaseClient';
+import { SERVICE_PLAYBOOK, getServiceMatch } from '@/utils/servicePlaybook';
+import { captureChatbotLead } from '@/utils/chatbotLeadCapture';
+import { trackWebsiteEvent } from '@/utils/analytics';
 import './WebsiteAssistant.css';
 
 const CHAT_FUNCTION_NAME = import.meta.env.VITE_SUPABASE_CHAT_FUNCTION || 'chat';

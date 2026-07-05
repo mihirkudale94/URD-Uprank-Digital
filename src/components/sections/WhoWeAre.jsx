@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, Target, Heart, Sparkles, Compass, Award } from 'lucide-react';
-import { publicAsset } from '../utils/publicAsset';
+import { publicAsset } from '@/utils/publicAsset';
 import './WhoWeAre.css';
 
 export default function WhoWeAre() {

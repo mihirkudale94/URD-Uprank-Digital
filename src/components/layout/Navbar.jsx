@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowUpRight, Sun, Moon } from 'lucide-react';
-import { publicAsset } from '../utils/publicAsset';
+import { publicAsset } from '@/utils/publicAsset';
 import './Navbar.css';
 
 const navLinks = [

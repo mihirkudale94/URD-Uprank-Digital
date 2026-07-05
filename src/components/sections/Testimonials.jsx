@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
-import { publicAsset } from '../utils/publicAsset';
+import { publicAsset } from '@/utils/publicAsset';
 import './Testimonials.css';
 
 const testimonials = [

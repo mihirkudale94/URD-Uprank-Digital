@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Linkedin, Facebook, ArrowUp } from 'lucide-react';
-import { publicAsset } from '../utils/publicAsset';
+import { publicAsset } from '@/utils/publicAsset';
 import './Footer.css';
 
 export default function Footer() {

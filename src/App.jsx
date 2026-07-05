@@ -1,41 +1,26 @@
-import React, { useEffect, Suspense, lazy } from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Clients from './components/Clients';
-import Services from './components/Services';
-import WhyPartner from './components/WhyPartner';
-import Leadership from './components/Leadership';
-import WhoWeAre from './components/WhoWeAre';
-import Process from './components/Process';
-import BrandStatement from './components/BrandStatement';
-import Testimonials from './components/Testimonials';
-import FAQ from './components/FAQ';
-import ContactForm from './components/ContactForm';
-const WebsiteAssistant = lazy(() => import('./components/WebsiteAssistant'));
-const VoiceAgentButton = lazy(() => import('./components/VoiceAgentButton'));
-import Footer from './components/Footer';
+import React, { Suspense, lazy } from 'react';
+import Navbar from '@/components/layout/Navbar';
+import Hero from '@/components/layout/Hero';
+import Footer from '@/components/layout/Footer';
+
+import Clients from '@/components/sections/Clients';
+import Services from '@/components/sections/Services';
+import WhyPartner from '@/components/sections/WhyPartner';
+import Leadership from '@/components/sections/Leadership';
+import WhoWeAre from '@/components/sections/WhoWeAre';
+import Process from '@/components/sections/Process';
+import BrandStatement from '@/components/sections/BrandStatement';
+import Testimonials from '@/components/sections/Testimonials';
+import FAQ from '@/components/sections/FAQ';
+import ContactForm from '@/components/sections/ContactForm';
+
+const WebsiteAssistant = lazy(() => import('@/components/features/WebsiteAssistant'));
+const VoiceAgentButton = lazy(() => import('@/components/features/VoiceAgentButton'));
+
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 function App() {
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target); // Stop observing once animated
-        }
-      });
-    }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -40px 0px'
-    });
-
-    const elements = document.querySelectorAll('.scroll-animate');
-    elements.forEach(el => observer.observe(el));
-
-    return () => {
-      elements.forEach(el => observer.unobserve(el));
-    };
-  }, []);
+  useScrollAnimation();
 
   return (
     <div className="app-root">

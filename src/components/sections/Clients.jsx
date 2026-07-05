@@ -1,5 +1,5 @@
 import React from 'react';
-import { publicAsset } from '../utils/publicAsset';
+import { publicAsset } from '@/utils/publicAsset';
 import './Clients.css';
 
 export default function Clients() {

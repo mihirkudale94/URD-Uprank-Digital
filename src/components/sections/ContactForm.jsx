@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Send, CheckCircle2, ArrowRight } from 'lucide-react';
-import { buildLeadPayload, submitLead } from '../utils/leadSubmission';
+import { buildLeadPayload, submitLead } from '@/utils/leadSubmission';
 import './ContactForm.css';
 
 export default function ContactForm() {
