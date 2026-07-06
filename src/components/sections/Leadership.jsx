@@ -69,7 +69,7 @@ export default function Leadership() {
               <ul className="connect-details-list">
                 <li>
                   <Phone size={14} className="connect-icon" />
-                  <span>+91 93711 16165</span>
+                  <span>+91 93711 16165 / +91 73910 96690</span>
                 </li>
                 <li>
                   <Mail size={14} className="connect-icon" />
