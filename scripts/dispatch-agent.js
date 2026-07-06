@@ -13,7 +13,7 @@ async function dispatchAgent() {
 
   const roomService = new RoomServiceClient(host, apiKey, apiSecret);
   
-  const roomName = 'support-room-8400';
+  const roomName = 'support-room-8006';
   const agentName = 'up-rank-digitial-customer-support'; // the exact name from the dashboard screenshot
 
   try {
