@@ -72,7 +72,7 @@ export default function Hero() {
           </h1>
 
           <p className="hero-description">
-            Stop spending on marketing that doesn't convert. We engineer AI-powered digital ecosystems — high-performance websites, revenue-driving campaigns, and content built to dominate — so your brand doesn't just grow, it leads.
+            Website development and digital performance marketing using AI. We help sports clubs, brands, and businesses grow their digital presence with data-driven marketing, engaging content, and AI-powered strategies that deliver real results.
           </p>
 
           <div className="hero-ctas">

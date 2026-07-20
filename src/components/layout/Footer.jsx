@@ -79,7 +79,6 @@ export default function Footer() {
           <h3>Quick Links</h3>
           <ul className="footer-text-links">
             <li><a href="/#services">Services</a></li>
-            <li><a href="/#process">Process</a></li>
             <li><a href="/#why-us">Why Us</a></li>
             <li><a href="/#leadership">About</a></li>
             <li><a href="/#faq">FAQ</a></li>

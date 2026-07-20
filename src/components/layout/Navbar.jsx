@@ -10,11 +10,6 @@ const navLinks = [
     kicker: 'Web, ads, content, AI'
   },
   {
-    label: 'Process',
-    href: '#process',
-    kicker: 'Structured delivery model'
-  },
-  {
     label: 'Why Us',
     href: '#why-us',
     kicker: 'What makes us different'

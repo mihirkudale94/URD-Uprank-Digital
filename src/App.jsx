@@ -8,7 +8,6 @@ import Services from '@/components/sections/Services';
 import SportsClubs from '@/components/sections/SportsClubs';
 import WhyPartner from '@/components/sections/WhyPartner';
 import Leadership from '@/components/sections/Leadership';
-import Process from '@/components/sections/Process';
 import BrandStatement from '@/components/sections/BrandStatement';
 import Testimonials from '@/components/sections/Testimonials';
 import FAQ from '@/components/sections/FAQ';
@@ -31,7 +30,6 @@ function App() {
         <SportsClubs />
         <Leadership />
         <BrandStatement />
-        <Process />
         <Clients />
         <Testimonials />
         <FAQ />
