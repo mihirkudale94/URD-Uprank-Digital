@@ -212,10 +212,10 @@ export default function Services() {
 
       <div className="container">
         <div className="section-header scroll-animate">
-          <span className="section-subtitle">What We Offer</span>
-          <h2 className="heading-md">Digital Growth Services Built Around Leads</h2>
+          <span className="section-subtitle">What We Do</span>
+          <h2 className="heading-md">Website Development &amp; Digital Performance Marketing Using AI</h2>
           <p className="section-description">
-            We connect website experience, search, ads, content, analytics, and automation so your digital presence turns into measurable enquiries.
+            Five connected service lines — websites, search, ads, AI, and content — that grow your digital presence and deliver real, measurable results.
           </p>
         </div>
 
