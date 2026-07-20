@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CheckCircle2, Mail, MessageCircle, PhoneCall, RotateCcw, Send, Sparkles, User, X } from 'lucide-react';
+import { CheckCircle2, Mail, MessageCircle, RotateCcw, Send, Sparkles, User, X } from 'lucide-react';
 import { isSupabaseConfigured } from '@/utils/supabaseClient';
 import { SERVICE_PLAYBOOK, getServiceMatch } from '@/utils/servicePlaybook';
-import { captureChatbotLead } from '@/utils/chatbotLeadCapture';
 import { trackWebsiteEvent } from '@/utils/analytics';
 import './WebsiteAssistant.css';
 
@@ -247,81 +246,7 @@ export default function WebsiteAssistant() {
   const [latency, setLatency] = useState(0);
   const scrollRef = useRef(null);
 
-  const [callbackState, setCallbackState] = useState('idle');
   const [dynamicSuggestions, setDynamicSuggestions] = useState([]);
-  const [callbackPhone, setCallbackPhone] = useState('');
-  const [callbackNeed, setCallbackNeed] = useState('General enquiry');
-  const [callbackDetails, setCallbackDetails] = useState({
-    businessName: '',
-    website: '',
-    goal: '',
-    timeline: '',
-    budget: ''
-  });
-  const [consentAccepted, setConsentAccepted] = useState(false);
-
-  const updateCallbackDetail = (field, value) => {
-    setCallbackDetails(prev => ({
-      ...prev,
-      [field]: String(value || '').slice(0, 160)
-    }));
-  };
-
-  const handleCallbackSubmit = async (event) => {
-    event.preventDefault();
-    const cleanedPhone = callbackPhone.trim().replace(/\s+/g, '');
-    if (cleanedPhone.length < 7 || cleanedPhone.length > 40) {
-      alert('Please enter a valid phone or WhatsApp number (between 7 and 40 characters).');
-      return;
-    }
-    if (!consentAccepted) {
-      alert('Please accept the privacy policy consent checkbox to submit your request.');
-      return;
-    }
-
-    setCallbackState('submitting');
-
-    try {
-      await captureChatbotLead({
-        phone: callbackPhone.trim(),
-        serviceInterest: callbackNeed,
-        intentSignals: [callbackNeed],
-        source: 'chatbot_callback',
-        preferredChannel: 'human_callback',
-        transcriptSummary: [
-          callbackDetails.businessName ? `Business Name: ${callbackDetails.businessName}` : '',
-          callbackDetails.website ? `Website: ${callbackDetails.website}` : '',
-          callbackDetails.goal ? `Goal: ${callbackDetails.goal}` : '',
-          callbackDetails.timeline ? `Timeline: ${callbackDetails.timeline}` : '',
-          callbackDetails.budget ? `Budget: ${callbackDetails.budget}` : ''
-        ].filter(Boolean).join('\n'),
-        notes: `Timeline: ${callbackDetails.timeline}, Budget: ${callbackDetails.budget}`,
-        consentAccepted: true
-      });
-    } catch (err) {
-      console.warn('Chatbot lead capture failed:', err.message || err);
-    }
-
-    setTimeout(() => {
-      setCallbackState('success');
-      setMessages(prev => [
-        ...prev,
-        {
-          role: 'assistant',
-          content: `Got it! I have saved your callback request for ${callbackNeed} at ${callbackPhone.trim()}.\n\nOur strategist will follow up during office hours. If you prefer to chat right away, you can use the WhatsApp link below.`
-        }
-      ]);
-      setCallbackPhone('');
-      setConsentAccepted(false);
-      setCallbackDetails({
-        businessName: '',
-        website: '',
-        goal: '',
-        timeline: '',
-        budget: ''
-      });
-    }, 800);
-  };
 
   useEffect(() => {
     try {
@@ -636,108 +561,11 @@ export default function WebsiteAssistant() {
               <MessageCircle size={14} />
               WhatsApp
             </a>
-            <button type="button" onClick={() => setCallbackState('inputting')} className="callback-trigger-btn">
-              <PhoneCall size={14} />
-              Call Back
-            </button>
             <a href="mailto:sachin@uprankdigital.com">
               <Mail size={14} />
               Email
             </a>
           </div>
-
-          {callbackState !== 'idle' && (
-            <div className="callback-overlay-card">
-              {callbackState === 'success' ? (
-                <div className="callback-success-view">
-                  <CheckCircle2 size={20} className="chk-circle" />
-                  <span>Request Submitted!</span>
-                  <p>We have saved your request. A strategist from our team will contact you shortly.</p>
-                  <button className="back-chat-btn" onClick={() => setCallbackState('idle')}>Back to chat</button>
-                </div>
-              ) : callbackState === 'submitting' ? (
-                <div className="callback-success-view">
-                  <span>Saving request...</span>
-                  <p>Preparing the handoff for the URD team.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleCallbackSubmit} className="callback-form-inner">
-                  <span>Request a strategist callback</span>
-
-                  <select value={callbackNeed} onChange={(e) => setCallbackNeed(e.target.value)}>
-                    <option value="General enquiry">General enquiry</option>
-                    {SERVICE_PLAYBOOK.map(service => (
-                      <option key={service.id} value={service.title}>{service.title}</option>
-                    ))}
-                  </select>
-
-                  <div className="callback-qualification-grid">
-                    <input
-                      type="text"
-                      placeholder="Business name"
-                      value={callbackDetails.businessName}
-                      onChange={(e) => updateCallbackDetail('businessName', e.target.value)}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Website or social link"
-                      value={callbackDetails.website}
-                      onChange={(e) => updateCallbackDetail('website', e.target.value)}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Main goal, e.g. more leads"
-                      value={callbackDetails.goal}
-                      onChange={(e) => updateCallbackDetail('goal', e.target.value)}
-                    />
-                    <select value={callbackDetails.timeline} onChange={(e) => updateCallbackDetail('timeline', e.target.value)}>
-                      <option value="">Timeline</option>
-                      <option value="Immediately">Immediately</option>
-                      <option value="This month">This month</option>
-                      <option value="1-3 months">1-3 months</option>
-                      <option value="Exploring">Exploring</option>
-                    </select>
-                    <select value={callbackDetails.budget} onChange={(e) => updateCallbackDetail('budget', e.target.value)}>
-                      <option value="">Budget range</option>
-                      <option value="Need guidance">Need guidance</option>
-                      <option value="Under INR 50k">Under INR 50k</option>
-                      <option value="INR 50k-1L">INR 50k-1L</option>
-                      <option value="INR 1L-3L">INR 1L-3L</option>
-                      <option value="INR 3L+">INR 3L+</option>
-                    </select>
-                  </div>
-
-                  <div className="callback-privacy-note">
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={consentAccepted}
-                        onChange={(e) => setConsentAccepted(e.target.checked)}
-                        required
-                      />
-                      <span>I consent to be contacted for digital proposals at this number.</span>
-                    </label>
-                  </div>
-
-                  <div className="callback-input-wrap">
-                    <input
-                      type="tel"
-                      placeholder="Phone or WhatsApp number"
-                      value={callbackPhone}
-                      onChange={(e) => setCallbackPhone(e.target.value)}
-                      required
-                      autoFocus
-                    />
-                    <button type="submit" className="callback-send-btn" aria-label="Submit callback request">
-                      <PhoneCall size={14} />
-                    </button>
-                  </div>
-
-                  <button type="button" className="cancel-callback-btn" onClick={() => setCallbackState('idle')}>Cancel</button>
-                </form>
-              )}
-            </div>
-          )}
 
           <form className="website-assistant-form" onSubmit={handleSubmit}>
             <input
@@ -746,9 +574,9 @@ export default function WebsiteAssistant() {
               onChange={(event) => setInputValue(event.target.value)}
               placeholder="Ask about websites, SEO, ads, or AI..."
               aria-label="Message"
-              disabled={isLoading || callbackState !== 'idle'}
+              disabled={isLoading}
             />
-            <button type="submit" disabled={!inputValue.trim() || isLoading || callbackState !== 'idle'} aria-label="Send message">
+            <button type="submit" disabled={!inputValue.trim() || isLoading} aria-label="Send message">
               <Send size={16} />
             </button>
           </form>
