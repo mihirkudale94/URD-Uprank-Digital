@@ -23,25 +23,6 @@
   z-index: 1;
 }
 
-.website-assistant-toggle-ping,
-.website-assistant-toggle-shine {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--gradient-accent);
-  pointer-events: none;
-}
-
-.website-assistant-toggle-ping {
-  opacity: 0.36;
-  animation: website-assistant-ping 1.15s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-.website-assistant-toggle-shine {
-  opacity: 0.2;
-  animation: website-assistant-pulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
 .website-assistant-toggle:hover {
   transform: translateY(-2px) scale(1.04);
 }
@@ -365,24 +346,6 @@
 .website-assistant-form button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
-}
-
-@keyframes website-assistant-ping {
-  75%,
-  100% {
-    transform: scale(1.85);
-    opacity: 0;
-  }
-}
-
-@keyframes website-assistant-pulse {
-  0%,
-  100% {
-    opacity: 0.18;
-  }
-  50% {
-    opacity: 0.44;
-  }
 }
 
 @keyframes website-assistant-dot {

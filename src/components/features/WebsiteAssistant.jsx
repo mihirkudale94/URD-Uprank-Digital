@@ -471,8 +471,6 @@ export default function WebsiteAssistant() {
           aria-label="Open AI Assistant"
           title="AI Assistant"
         >
-          <span className="website-assistant-toggle-ping"></span>
-          <span className="website-assistant-toggle-shine"></span>
           <MessageCircle size={24} />
         </button>
       )}

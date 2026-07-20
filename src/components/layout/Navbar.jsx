@@ -39,7 +39,7 @@ export default function Navbar() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('home');
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'dark';
+    return localStorage.getItem('theme') || 'light';
   });
 
   useEffect(() => {
@@ -154,7 +154,7 @@ export default function Navbar() {
               {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
             </button>
             <a href="#contact" className="btn btn-primary btn-sm-nav" onClick={(e) => handleLinkClick(e, '#contact')}>
-              Book Strategy Call <ArrowUpRight size={16} />
+              Book Discovery Call <ArrowUpRight size={16} />
             </a>
           </div>
         </div>
@@ -205,7 +205,7 @@ export default function Navbar() {
               <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
             </button>
             <a href="#contact" className="btn btn-primary" onClick={(e) => handleLinkClick(e, '#contact')}>
-              Book Strategy Call <ArrowUpRight size={18} />
+              Book Discovery Call <ArrowUpRight size={18} />
             </a>
           </div>
         </div>

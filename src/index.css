@@ -463,17 +463,27 @@ button, input, select, textarea {
   }
 }
 
-/* Scroll entrance animations */
-.scroll-animate {
+/* Scroll entrance animations. The hidden state only applies once
+   useScrollAnimation arms `scroll-anim-ready` on <html>, so content is
+   always visible when JS or IntersectionObserver is unavailable. */
+.scroll-anim-ready .scroll-animate {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
 }
 
-.scroll-animate.is-visible {
+.scroll-anim-ready .scroll-animate.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-anim-ready .scroll-animate {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 .delay-100 { transition-delay: 100ms; }
