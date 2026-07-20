@@ -25,5 +25,7 @@ jobs:
         with:
           version: latest
 
-      - name: Deploy LiveKit Token Edge Function
-        run: supabase functions deploy livekit-token --project-ref $PROJECT_ID
+      - name: Deploy Edge Functions
+        run: |
+          supabase functions deploy chat --project-ref $PROJECT_ID
+          supabase functions deploy submit-lead --project-ref $PROJECT_ID

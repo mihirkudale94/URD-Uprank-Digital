@@ -15,7 +15,6 @@ import FAQ from '@/components/sections/FAQ';
 import ContactForm from '@/components/sections/ContactForm';
 
 const WebsiteAssistant = lazy(() => import('@/components/features/WebsiteAssistant'));
-const VoiceAgentButton = lazy(() => import('@/components/features/VoiceAgentButton'));
 
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
@@ -39,7 +38,6 @@ function App() {
         <ContactForm />
       </main>
       <Suspense fallback={null}>
-        <VoiceAgentButton />
         <WebsiteAssistant />
       </Suspense>
       <Footer />
