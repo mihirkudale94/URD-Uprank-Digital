@@ -21,7 +21,7 @@ const navLinks = [
   },
   {
     label: 'About',
-    href: '#about',
+    href: '#leadership',
     kicker: 'About Up Rank Digital'
   },
   {
