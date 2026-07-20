@@ -24,8 +24,27 @@ export default function Clients() {
   return (
     <section className="section clients-section" id="clients">
       <div className="container">
-        <h3 className="clients-title">Trusted By Leading Brands Globally</h3>
-        
+        <h3 className="clients-title">Brands That Trust Us</h3>
+
+        <div className="clients-stats-strip">
+          <div className="clients-stat">
+            <strong>10+</strong>
+            <span>Years Driving Growth</span>
+          </div>
+          <div className="clients-stat">
+            <strong>12+</strong>
+            <span>Brands Served</span>
+          </div>
+          <div className="clients-stat">
+            <strong>8</strong>
+            <span>Areas of Expertise</span>
+          </div>
+          <div className="clients-stat">
+            <strong>5</strong>
+            <span>Service Lines</span>
+          </div>
+        </div>
+
         <div className="logo-slider-container">
           <div className="logo-slide-track">
             {doubleLogos.map((logo, idx) => (

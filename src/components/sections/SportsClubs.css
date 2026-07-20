@@ -1,0 +1,43 @@
+.sports-clubs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.sports-club-card {
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.sports-club-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0.9rem 0 0.5rem;
+  line-height: 1.35;
+}
+
+.sports-club-card p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.sports-clubs-cta {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 1024px) {
+  .sports-clubs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .sports-clubs-grid {
+    grid-template-columns: 1fr;
+  }
+}

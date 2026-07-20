@@ -62,7 +62,10 @@ export default function Hero() {
           
           <h1 className="hero-title">
             Next-Gen <br />
-            <span className="gradient-text hero-typewriter-wrapper">
+            <span className="sr-only">
+              Website Development, Digital Marketing, Performance Marketing, AI Powered Solutions &amp; Content Design
+            </span>
+            <span className="gradient-text hero-typewriter-wrapper" aria-hidden="true">
               {currentText}
               <span className="cursor-blink">|</span>
             </span>

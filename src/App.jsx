@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer';
 
 import Clients from '@/components/sections/Clients';
 import Services from '@/components/sections/Services';
+import SportsClubs from '@/components/sections/SportsClubs';
 import WhyPartner from '@/components/sections/WhyPartner';
 import Leadership from '@/components/sections/Leadership';
 import WhoWeAre from '@/components/sections/WhoWeAre';
@@ -28,6 +29,7 @@ function App() {
         <Hero />
         <Services />
         <WhyPartner />
+        <SportsClubs />
         <Leadership />
         <WhoWeAre />
         <BrandStatement />
