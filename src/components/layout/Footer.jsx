@@ -23,7 +23,7 @@ export default function Footer() {
       <div className="container footer-wrap">
         {/* Brand Block */}
         <div className="footer-brand-col">
-          <img src={publicAsset('/img/logo-footer.png')} alt="Uprank Digital" className="footer-logo" width="168" height="42" loading="lazy" />
+          <img src={publicAsset('/img/logo-footer.png')} alt="Up Rank Digital" className="footer-logo" width="168" height="42" loading="lazy" />
           <p className="footer-slogan">
             Websites, campaigns, content, analytics, and automation built to generate qualified business enquiries.
           </p>

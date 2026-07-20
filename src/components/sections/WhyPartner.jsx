@@ -29,7 +29,7 @@ export default function WhyPartner() {
       <div className="container">
         <div className="section-header scroll-animate">
           <span className="section-subtitle">Our Edge</span>
-          <h2 className="heading-md">Why Partner with Uprank Digital?</h2>
+          <h2 className="heading-md">Why Partner with Up Rank Digital?</h2>
           <p className="section-description">
             We don't just run campaigns — we build growth systems engineered around your goals, your data, and your market.
           </p>

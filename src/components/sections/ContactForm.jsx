@@ -119,7 +119,7 @@ export default function ContactForm() {
             <div className="success-state animate-fade-in-up">
               <CheckCircle2 className="success-icon" size={64} />
               <h3>Thank You!</h3>
-              <p>Your details have been successfully received. A digital growth specialist from Uprank Digital will reach out to you shortly.</p>
+              <p>Your details have been successfully received. A digital growth specialist from Up Rank Digital will reach out to you shortly.</p>
               <button className="btn btn-secondary" onClick={() => setIsSubmitted(false)}>
                 Send Another Message <ArrowRight size={16} />
               </button>

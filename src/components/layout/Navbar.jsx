@@ -22,7 +22,7 @@ const navLinks = [
   {
     label: 'About',
     href: '#about',
-    kicker: 'About Uprank Digital'
+    kicker: 'About Up Rank Digital'
   },
   {
     label: 'FAQ',
@@ -129,8 +129,8 @@ export default function Navbar() {
   return (
     <nav className={`nav-container ${isScrolled ? 'nav-scrolled' : ''}`} aria-label="Primary navigation">
       <div className="container nav-wrap">
-        <a href="#home" className="nav-logo" onClick={(e) => handleLinkClick(e, '#home')} aria-label="Uprank Digital home">
-          <img src={publicAsset('/img/logo-header.png')} alt="Uprank Digital" className="logo-header-img" width="160" height="40" />
+        <a href="#home" className="nav-logo" onClick={(e) => handleLinkClick(e, '#home')} aria-label="Up Rank Digital home">
+          <img src={publicAsset('/img/logo-header.png')} alt="Up Rank Digital" className="logo-header-img" width="160" height="40" />
         </a>
 
         <div className="nav-desktop-panel">
@@ -180,7 +180,7 @@ export default function Navbar() {
       <div className={`nav-mobile-drawer ${isMobileMenuOpen ? 'open' : ''}`} id="mobile-navigation">
         <div className="nav-mobile-drawer-wrap">
           <div className="mobile-drawer-header">
-            <span>Navigate Uprank Digital</span>
+            <span>Navigate Up Rank Digital</span>
             <small>Services, process, credibility, and booking.</small>
           </div>
 

@@ -4,7 +4,7 @@ import './FAQ.css';
 
 const faqItems = [
   {
-    question: 'What does Uprank Digital help with?',
+    question: 'What does Up Rank Digital help with?',
     answer: 'URD helps businesses improve their digital presence through website development, digital marketing, performance marketing, AI powered solutions, and content design & management.'
   },
   {

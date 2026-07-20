@@ -53,7 +53,7 @@ export default function Leadership() {
                 Digital Growth Partner
               </span>
               <h3 className="leader-name">Sachin Raje</h3>
-              <p className="leader-role">Managing Director, URD Solutions</p>
+              <p className="leader-role">Managing Director, Up Rank Digital</p>
             </div>
 
             <div className="leader-pitch">
