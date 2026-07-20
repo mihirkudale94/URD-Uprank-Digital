@@ -584,9 +584,6 @@ export default function WebsiteAssistant() {
           </header>
 
           <div className="website-assistant-messages">
-            <div className="website-assistant-notice">
-              AI assistant for service guidance. Avoid sharing passwords or sensitive data.
-            </div>
             {messages.map((message, index) => (
               <div
                 key={`${message.role}-${index}`}

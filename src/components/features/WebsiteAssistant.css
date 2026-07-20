@@ -149,17 +149,6 @@
   padding: 1rem;
 }
 
-.website-assistant-notice {
-  margin-bottom: 0.9rem;
-  padding: 0.55rem 0.7rem;
-  border: 1px solid rgba(var(--primary-rgb), 0.2);
-  border-radius: 10px;
-  color: var(--text-muted);
-  background: rgba(var(--primary-rgb), 0.08);
-  font-size: 0.72rem;
-  line-height: 1.4;
-}
-
 .website-assistant-row {
   display: flex;
   gap: 0.5rem;
