@@ -25,13 +25,13 @@ function App() {
       <Navbar />
       <main>
         <Hero />
+        <Clients />
         <Services />
         <WhyPartner />
         <SportsClubs />
         <Leadership />
-        <BrandStatement />
-        <Clients />
         <Testimonials />
+        <BrandStatement />
         <FAQ />
         <ContactForm />
       </main>
