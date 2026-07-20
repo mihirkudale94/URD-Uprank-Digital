@@ -104,8 +104,19 @@
   word-break: break-word;
 }
 
-.hero-title-accent {
+.hero-typewriter-wrapper {
+  position: relative;
+  display: inline-block;
+  min-height: 5.2rem;
+  font-weight: 800;
+}
+
+.cursor-blink {
+  display: inline-block;
+  font-weight: 300;
   color: var(--primary);
+  animation: blink 0.8s infinite;
+  margin-left: 4px;
 }
 
 .hero-description {
@@ -172,6 +183,10 @@
   100% { transform: rotate(360deg); }
 }
 
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
 
 @keyframes status-pulse {
   0% { opacity: 0.5; }
@@ -190,6 +205,9 @@
   }
   .hero-title {
     font-size: 3.5rem;
+  }
+  .hero-typewriter-wrapper {
+    min-height: 4.2rem;
   }
   .hero-description {
     margin: 0 auto 2.5rem auto;
@@ -221,6 +239,9 @@
     font-size: 2.5rem;
     line-height: 1.18;
   }
+  .hero-typewriter-wrapper {
+    min-height: 3rem;
+  }
   .hero-description {
     font-size: 1.05rem;
   }
@@ -243,6 +264,9 @@
   }
   .hero-title {
     font-size: 2.05rem;
+  }
+  .hero-typewriter-wrapper {
+    min-height: 2.5rem;
   }
   .hero-description {
     font-size: 0.98rem;
