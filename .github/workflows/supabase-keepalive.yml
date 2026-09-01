@@ -1,0 +1,53 @@
+name: Supabase Keepalive
+
+# Free-plan Supabase projects are paused after ~1 week of low activity, which takes the chat
+# assistant and the lead form down with them. This job issues a small database read on a schedule
+# so the project keeps registering activity.
+#
+# Caveats worth knowing:
+#  - Supabase does not publish what counts as "low activity", so this is a workaround, not a
+#    guarantee. The Pro plan is the only supported way to prevent pausing.
+#  - GitHub disables scheduled workflows on repositories with no commits for 60 days. If the repo
+#    goes quiet, re-enable this from the Actions tab.
+#  - This cannot wake a project that is already paused. Restore it from the dashboard first.
+
+on:
+  schedule:
+    # 06:12 UTC every third day. Offset from the hour because scheduled jobs queue on the hour.
+    - cron: '12 6 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: Ping database
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Read one row from the knowledge base
+        env:
+          PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+          ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$PROJECT_ID" ] || [ -z "$ANON_KEY" ]; then
+            echo "::error::SUPABASE_PROJECT_ID and SUPABASE_ANON_KEY must both be set as repository secrets."
+            exit 1
+          fi
+
+          url="https://${PROJECT_ID}.supabase.co/rest/v1/knowledge_base?select=id&limit=1"
+
+          status=$(curl -sS -o response.txt -w '%{http_code}' \
+            -H "apikey: ${ANON_KEY}" \
+            -H "Authorization: Bearer ${ANON_KEY}" \
+            "$url")
+
+          echo "HTTP $status"
+          cat response.txt
+
+          # A paused or unreachable project must fail the run loudly, otherwise the keepalive
+          # silently stops working and nobody notices until the chatbot is dead.
+          if [ "$status" != "200" ]; then
+            echo "::error::Supabase did not return 200. The project may be paused - check the dashboard."
+            exit 1
+          fi
+
+          echo "Project responded normally."

@@ -1,0 +1,64 @@
+.experience-banner {
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 0;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.experience-banner-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 900px;
+  height: 900px;
+  max-width: 140vw;
+  transform: translate(-50%, -50%);
+  background: var(--gradient-hero-glow);
+  pointer-events: none;
+}
+
+.experience-banner-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.experience-years {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--primary-rgb), 0.28);
+  background: rgba(var(--primary-rgb), 0.08);
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.experience-headline {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(2.4rem, 6vw, 4.25rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--text-main);
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .experience-banner {
+    padding: 4rem 0;
+  }
+
+  .experience-banner-inner {
+    gap: 1.25rem;
+  }
+}

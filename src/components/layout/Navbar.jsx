@@ -5,28 +5,33 @@ import './Navbar.css';
 
 const navLinks = [
   {
-    label: 'Services',
+    label: 'Expertise',
+    href: '#expertise',
+    kicker: 'Eight core capabilities'
+  },
+  {
+    label: 'What We Do',
     href: '#services',
-    kicker: 'Web, ads, content, AI'
+    kicker: 'Five service lines'
   },
   {
     label: 'Why Us',
     href: '#why-us',
-    kicker: 'What makes us different'
+    kicker: 'Why work with us'
+  },
+  {
+    label: 'Clients',
+    href: '#testimonials',
+    kicker: 'Brands that trust us'
   },
   {
     label: 'About',
     href: '#leadership',
     kicker: 'About Up Rank Digital'
-  },
-  {
-    label: 'FAQ',
-    href: '#faq',
-    kicker: 'Answers before you book'
   }
 ];
 
-const sectionIds = ['home', 'services', 'why-us', 'leadership', 'about', 'process', 'testimonials', 'faq', 'contact'];
+const sectionIds = ['home', 'clients', 'expertise', 'services', 'experience', 'why-us', 'testimonials', 'leadership', 'faq', 'contact'];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

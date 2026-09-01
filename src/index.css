@@ -40,6 +40,8 @@
   --gradient-card-border: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
   --gradient-card-border-hover: linear-gradient(180deg, rgba(247, 151, 31, 0.6) 0%, rgba(56, 189, 248, 0.4) 100%);
   --gradient-hero-glow: radial-gradient(circle, rgba(247, 151, 31, 0.07) 0%, transparent 60%);
+  /* Headline emphasis: kept blue so orange stays reserved for calls to action */
+  --gradient-emphasis: linear-gradient(120deg, #60a5fa 0%, #38bdf8 100%);
 
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
@@ -74,6 +76,8 @@
   --logo-opacity-hover: 0.75;
   --footer-logo-filter: brightness(0) opacity(0.85);
   
+  --gradient-emphasis: linear-gradient(120deg, #1d4ed8 0%, #3b82f6 100%);
+
   --gradient-card-border: linear-gradient(180deg, rgba(9, 13, 22, 0.05) 0%, rgba(9, 13, 22, 0.01) 100%);
   --gradient-card-border-hover: linear-gradient(180deg, rgba(247, 151, 31, 0.5) 0%, rgba(255, 210, 0, 0.3) 100%);
   
@@ -235,7 +239,7 @@ button, input, select, textarea {
 
 /* Typography Utilities */
 .gradient-text {
-  background: var(--gradient-accent);
+  background: var(--gradient-emphasis);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -274,6 +278,21 @@ button, input, select, textarea {
   margin: 0 auto 5rem auto;
   position: relative;
   z-index: 10;
+}
+
+/* Left-aligned variant, used to break the run of centred bands */
+.section-header-left {
+  text-align: left;
+  max-width: 460px;
+  margin: 0 0 2.5rem 0;
+}
+
+.section-header-left .section-subtitle {
+  justify-content: flex-start;
+}
+
+.section-header-left .section-subtitle::after {
+  display: none;
 }
 
 .section-subtitle {

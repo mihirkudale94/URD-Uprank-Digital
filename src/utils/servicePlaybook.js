@@ -1,38 +1,41 @@
+// `aliases` route a visitor's wording to a service and are deliberately broad.
+// `fit` and `bullets` are spoken back to the visitor, so they stay limited to the five service
+// lines and eight areas of expertise published on the site.
 export const SERVICE_PLAYBOOK = [
   {
     id: 'website-development',
     title: 'Website Development',
-    aliases: ['website', 'web', 'ui', 'ux', 'design', 'landing page', 'landing', 'conversion page', 'ecommerce', 'shopify', 'redesign', 'custom website'],
-    fit: 'Best for custom website designs, Shopify e-commerce, landing page optimization, and UI/UX systems.',
-    bullets: ['Custom website design & dev', 'E-commerce & Shopify builds', 'Landing page optimization', 'UI/UX interface systems']
+    aliases: ['website', 'web', 'ui', 'ux', 'design', 'landing page', 'landing', 'conversion page', 'ecommerce', 'e-commerce', 'shopify', 'redesign', 'custom website'],
+    fit: 'Websites built to perform, designed around conversion optimization rather than decoration.',
+    bullets: ['Website Development', 'Conversion Optimization']
   },
   {
     id: 'digital-marketing',
     title: 'Digital Marketing',
-    aliases: ['marketing', 'digital marketing', 'seo', 'search engine optimization', 'local search', 'email marketing', 'newsletter', 'organic growth', 'traffic', 'search presence', 'organic'],
-    fit: 'Best for brands that want to grow their organic presence, improve search visibility, and increase social media engagement.',
-    bullets: ['Search Engine Optimization (SEO)', 'Social Media Strategy & Marketing', 'Local Search Presence', 'Organic Traffic Growth']
+    aliases: ['marketing', 'digital marketing', 'seo', 'search engine optimization', 'local search', 'email marketing', 'newsletter', 'organic growth', 'traffic', 'search presence', 'organic', 'social media', 'social'],
+    fit: 'Grow your digital presence with social media strategy and engaging content.',
+    bullets: ['Social Media Strategy', 'Content Design & Management']
   },
   {
     id: 'performance-marketing',
     title: 'Performance Marketing',
-    aliases: ['performance marketing', 'ads', 'advertising', 'google ads', 'meta ads', 'facebook ads', 'instagram ads', 'linkedin ads', 'ppc', 'paid search', 'paid social', 'paid media', 'remarketing', 'campaign planning'],
-    fit: 'Best for businesses ready to scale with data-driven paid advertising campaigns, paid social, and campaign planning.',
-    bullets: ['Google PPC & Paid Search', 'Meta & LinkedIn Advertising', 'Conversion Rate Optimization (CRO)', 'ROI Analytics & Campaign Strategy']
+    aliases: ['performance marketing', 'ads', 'advertising', 'google ads', 'meta ads', 'facebook ads', 'instagram ads', 'linkedin ads', 'ppc', 'paid search', 'paid social', 'paid media', 'campaign planning', 'campaign'],
+    fit: 'Campaign planning and execution backed by analytics and growth strategy.',
+    bullets: ['Campaign Planning & Execution', 'Analytics & Growth Strategy', 'Digital Performance Marketing']
   },
   {
     id: 'ai-solutions',
     title: 'AI Powered Solutions',
-    aliases: ['ai', 'artificial intelligence', 'automation', 'chatbot', 'chat bot', 'voice agent', 'voice bot', 'ai agent', 'copilot', 'rag', 'smart solutions', 'workflow automation', 'agent integration'],
-    fit: 'Best for teams wanting to integrate AI lead-qualification chatbots, conversational AI voice agents, and custom workflow automation.',
-    bullets: ['AI Lead Gen Chatbots', 'Conversational AI & Voice Agents', 'Workflow & Business Automation', 'Smart Customer Support Integration']
+    aliases: ['ai', 'artificial intelligence', 'automation', 'chatbot', 'chat bot', 'voice agent', 'voice bot', 'ai agent', 'copilot', 'workflow automation', 'ai marketing'],
+    fit: 'AI-powered strategies applied to marketing, so decisions move faster.',
+    bullets: ['AI Powered Marketing Solutions']
   },
   {
     id: 'content-management',
     title: 'Content Design & Management',
-    aliases: ['content', 'content design', 'content management', 'copy', 'copywriting', 'graphics', 'visuals', 'storytelling', 'reels', 'photoshoot', 'video production', 'social media management', 'shoot', 'brand creative'],
-    fit: 'Best for brands needing high-impact storytelling, premium visuals, copy, and complete social channel management.',
-    bullets: ['Professional Copywriting', 'Graphic Design & Brand Collateral', 'High-Impact Photo & Video Shoots', 'Social Feed Design & Management']
+    aliases: ['content', 'content design', 'content management', 'copy', 'copywriting', 'graphics', 'visuals', 'storytelling', 'reels', 'photoshoot', 'photo shoot', 'video', 'video production', 'shoot', 'social media management', 'creative', 'brand creative'],
+    fit: 'Engaging content, designed and managed end to end.',
+    bullets: ['Content Design & Management', 'Social Media Strategy']
   }
 ];
 

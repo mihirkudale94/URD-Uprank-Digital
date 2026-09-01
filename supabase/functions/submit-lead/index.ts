@@ -5,7 +5,15 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS'
 };
 
+// Must stay in sync with the servicesList in ContactForm.jsx and the leads_allowed_services
+// constraint. Anything not in this set is dropped from the lead before it is saved.
 const allowedServices = new Set([
+  'Website Development',
+  'Digital Marketing',
+  'Performance Marketing',
+  'AI Powered Solutions',
+  'Content Design & Management',
+  // retained so older clients that still post the previous labels keep working
   'Digital Services',
   'Marketing Services',
   'Advertising Services',

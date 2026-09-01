@@ -17,7 +17,7 @@ const faqItems = [
   },
   {
     question: 'How long does a website project usually take?',
-    answer: 'A focused landing page can move faster, while a full website, e-commerce build, or custom software project needs deeper planning, content, design, development, testing, and launch support. URD confirms a realistic timeline after understanding the project size.'
+    answer: 'A focused landing page can move faster, while a full website or e-commerce build needs deeper planning, content, design, development, testing, and launch support. URD confirms a realistic timeline after understanding the project size.'
   },
   {
     question: 'Can URD manage website, SEO, ads, content, and analytics together?',
@@ -33,7 +33,7 @@ const faqItems = [
   },
   {
     question: 'Do you guarantee SEO rankings, leads, or ad results?',
-    answer: 'No serious agency should promise fixed rankings, guaranteed leads, or guaranteed revenue. URD focuses on the parts that can be controlled: strategy, technical quality, content, targeting, landing-page experience, tracking, testing, and ongoing optimization.'
+    answer: 'No credible partner should promise fixed rankings, guaranteed leads, or guaranteed revenue. URD focuses on the parts that can be controlled: strategy, technical quality, content, targeting, landing-page experience, tracking, testing, and ongoing optimization.'
   },
   {
     question: 'How do you measure success and report progress?',
@@ -45,7 +45,7 @@ const faqItems = [
   },
   {
     question: 'Do you work with startups, local businesses, and established brands?',
-    answer: 'Yes. URD works with service-led businesses, e-commerce brands, B2B companies, SaaS teams, sports clubs, and growing brands that need a practical digital partner for strategy and execution.'
+    answer: 'Yes. URD works with service-led businesses, e-commerce brands, B2B companies, SaaS teams, and growing brands that need a practical digital growth partner for strategy and execution.'
   },
   {
     question: 'What is the best way to start?',

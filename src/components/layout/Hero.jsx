@@ -2,19 +2,32 @@ import React, { useEffect, useState } from 'react';
 import { ArrowDown, MessageSquare, Sparkles } from 'lucide-react';
 import './Hero.css';
 
-const words = ['Website Development', 'Digital Marketing', 'Performance Marketing', 'AI Powered Solutions', 'Content Design'];
+const capabilities = [
+  'Website Development',
+  'Digital Marketing',
+  'Performance Marketing',
+  'AI Powered Solutions',
+  'Content Design & Management'
+];
+
+const heroProof = [
+  { value: '10+', label: 'Years of experience' },
+  { value: '12+', label: 'Brands served' },
+  { value: '5', label: 'Service lines' },
+  { value: '8', label: 'Areas of expertise' }
+];
 
 export default function Hero() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentText, setCurrentText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const typingSpeed = 120;
-  const deletingSpeed = 60;
-  const delayBetweenWords = 2200;
+  const typingSpeed = 90;
+  const deletingSpeed = 45;
+  const delayBetweenWords = 2000;
 
   useEffect(() => {
     let timer;
-    const currentWord = words[currentWordIndex];
+    const currentWord = capabilities[currentWordIndex];
 
     if (isDeleting) {
       timer = window.setTimeout(() => {
@@ -30,7 +43,7 @@ export default function Hero() {
       timer = window.setTimeout(() => setIsDeleting(true), delayBetweenWords);
     } else if (isDeleting && currentText === '') {
       setIsDeleting(false);
-      setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
+      setCurrentWordIndex((prevIndex) => (prevIndex + 1) % capabilities.length);
     }
 
     return () => clearTimeout(timer);
@@ -54,25 +67,27 @@ export default function Hero() {
       <div className="hero-grid"></div>
 
       <div className="container hero-grid-split animate-fade-in-up">
-        {/* Centered Headline & Action */}
         <div className="hero-left-content">
           <span className="hero-tag">
             <Sparkles size={13} className="hero-tag-sparkle" /> Digital Growth Partner
           </span>
-          
+
           <h1 className="hero-title">
-            Next-Gen <br />
-            <span className="sr-only">
-              Website Development, Digital Marketing, Performance Marketing, AI Powered Solutions &amp; Content Design
-            </span>
-            <span className="gradient-text hero-typewriter-wrapper" aria-hidden="true">
+            Website development and digital performance marketing{' '}
+            <span className="gradient-text">using AI</span>
+          </h1>
+
+          <p className="hero-ticker" aria-hidden="true">
+            <span className="hero-ticker-label">Built for you:</span>
+            <span className="hero-ticker-word">
               {currentText}
               <span className="cursor-blink">|</span>
             </span>
-          </h1>
+          </p>
 
           <p className="hero-description">
-            Website development and digital performance marketing using AI. We help sports clubs, brands, and businesses grow their digital presence with data-driven marketing, engaging content, and AI-powered strategies that deliver real results.
+            We help brands and businesses grow their digital presence with data-driven marketing,
+            engaging content, and AI-powered strategies that deliver real results.
           </p>
 
           <div className="hero-ctas">
@@ -80,8 +95,17 @@ export default function Hero() {
               Book Free Discovery Call <MessageSquare size={18} />
             </a>
             <a href="#services" className="btn btn-secondary" onClick={handleScrollToServices}>
-              View Services <ArrowDown size={18} className="arrow-bounce" />
+              What We Do <ArrowDown size={18} className="arrow-bounce" />
             </a>
+          </div>
+
+          <div className="hero-proof">
+            {heroProof.map((item) => (
+              <div key={item.label} className="hero-proof-item">
+                <strong>{item.value}</strong>
+                <span>{item.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

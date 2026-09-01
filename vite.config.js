@@ -6,6 +6,10 @@ import path from 'path'
 export default defineConfig({
   base: './',
   plugins: [react()],
+  server: {
+    // Honour a PORT assigned by the environment so preview tooling can find the server
+    port: Number(process.env.PORT) || 5173,
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

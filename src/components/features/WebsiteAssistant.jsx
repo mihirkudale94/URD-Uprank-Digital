@@ -18,7 +18,7 @@ const initialMessages = [
   {
     role: 'assistant',
     content:
-      "Hi! I'm Up Rank Digital's AI assistant. I can help you choose the right service, estimate scope, and connect you with the team. What are you trying to grow or fix?"
+      "Hi! I'm Up Rank Digital's AI assistant. I can help you find the right service and connect you with the team. What are you trying to grow or fix?"
   }
 ];
 
@@ -26,7 +26,7 @@ const suggestedPrompts = [
   'I need a website for my business',
   'Help me improve leads with ads',
   'Can AI automation help my team?',
-  'What package should I start with?'
+  'How do you price projects?'
 ];
 
 const contactPrompt =
@@ -49,7 +49,7 @@ const buildLocalAssistantReply = (input) => {
   if (/(price|pricing|cost|budget|package|quote)/i.test(lowerInput)) {
     return [
       'Pricing depends on scope, timeline, channels, content, integrations, and complexity.',
-      'For a useful estimate, share your website, goal, preferred timeline, and budget range. The team can then suggest the right package instead of guessing.'
+      'Share your website, goal, preferred timeline, and budget range, and the team can advise on the right scope instead of guessing.'
     ].join('\n\n');
   }
 
@@ -58,8 +58,8 @@ const buildLocalAssistantReply = (input) => {
   }
 
   return [
-    'I can help you narrow this down across websites, SEO, ads, AI automation, content, analytics, or custom software.',
-    'What is the main outcome you want right now: more leads, a better website, more sales, automation, or stronger tracking?'
+    'I can help you narrow this down across website development, digital marketing, performance marketing, AI powered solutions, and content design & management.',
+    'What is the main outcome you want right now: more leads, a better website, more sales, or stronger tracking?'
   ].join('\n\n');
 };
 

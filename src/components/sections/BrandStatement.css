@@ -36,14 +36,6 @@
   line-height: 1.2;
 }
 
-.brand-statement-sub {
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--primary);
-}
-
 @media (max-width: 600px) {
   .brand-statement-tagline {
     font-size: 1.2rem;

@@ -10,7 +10,6 @@ export default function BrandStatement() {
           <p className="brand-statement-tagline">
             Creating impact online. Winning results together.
           </p>
-          <span className="brand-statement-sub">URD — The Upward Move</span>
         </div>
         <span className="brand-statement-line"></span>
       </div>

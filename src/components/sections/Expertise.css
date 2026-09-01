@@ -1,0 +1,139 @@
+.expertise-section {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-secondary);
+}
+
+.expertise-split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.35fr);
+  gap: 4rem;
+  align-items: start;
+  position: relative;
+  z-index: 2;
+}
+
+.expertise-lead {
+  position: sticky;
+  top: 130px;
+}
+
+.expertise-matrix {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.expertise-tile {
+  position: relative;
+  padding: 2rem 1.5rem 1.75rem;
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  transition: background var(--transition-fast), transform var(--transition-fast);
+  isolation: isolate;
+}
+
+/* Two-up grid: strip the outer edges so it reads as one block */
+.expertise-tile:nth-child(2n) {
+  border-right: none;
+}
+
+.expertise-tile:nth-child(n + 7) {
+  border-bottom: none;
+}
+
+.expertise-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(var(--primary-rgb), 0.1) 0%, transparent 65%);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  z-index: -1;
+}
+
+.expertise-tile:hover::before {
+  opacity: 1;
+}
+
+.expertise-tile-index {
+  display: block;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+  margin-bottom: 1.5rem;
+}
+
+.expertise-tile-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  color: var(--primary);
+  background: rgba(var(--primary-rgb), 0.1);
+  border: 1px solid rgba(var(--primary-rgb), 0.18);
+  margin-bottom: 1rem;
+  transition: transform var(--transition-fast);
+}
+
+.expertise-tile:hover .expertise-tile-icon {
+  transform: translateY(-3px);
+}
+
+.expertise-tile-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-main);
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .expertise-split {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .expertise-lead {
+    position: static;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .expertise-matrix {
+    grid-template-columns: 1fr;
+  }
+
+  .expertise-tile {
+    padding: 1.5rem 1.25rem;
+    border-right: none;
+  }
+
+  .expertise-tile:nth-child(n + 7) {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .expertise-tile:last-child {
+    border-bottom: none;
+  }
+
+  .expertise-tile-index {
+    margin-bottom: 1rem;
+  }
+
+  .expertise-tile-title {
+    font-size: 0.95rem;
+  }
+}

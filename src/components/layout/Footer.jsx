@@ -25,7 +25,7 @@ export default function Footer() {
         <div className="footer-brand-col">
           <img src={publicAsset('/img/logo-footer.png')} alt="Up Rank Digital" className="footer-logo" width="168" height="42" loading="lazy" />
           <p className="footer-slogan">
-            Websites, campaigns, content, analytics, and automation built to generate qualified business enquiries.
+            Website development and digital performance marketing using AI. Creating impact online. Winning results together.
           </p>
           <div className="footer-socials">
             <a href="https://in.linkedin.com/company/uprankdigital" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
@@ -78,7 +78,8 @@ export default function Footer() {
         <div className="footer-links-col">
           <h3>Quick Links</h3>
           <ul className="footer-text-links">
-            <li><a href="/#services">Services</a></li>
+            <li><a href="/#expertise">Expertise</a></li>
+            <li><a href="/#services">What We Do</a></li>
             <li><a href="/#why-us">Why Us</a></li>
             <li><a href="/#leadership">About</a></li>
             <li><a href="/#faq">FAQ</a></li>
