@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 import { publicAsset } from '@/utils/publicAsset';
+import { prefersReducedMotion } from '@/utils/scrollToSection';
 import './Testimonials.css';
 
 const testimonials = [
@@ -53,7 +54,7 @@ export default function Testimonials() {
   }, [stopAutoPlay]);
 
   useEffect(() => {
-    if (isPlaying) {
+    if (isPlaying && !prefersReducedMotion()) {
       startAutoPlay();
     } else {
       stopAutoPlay();
@@ -86,12 +87,16 @@ export default function Testimonials() {
           className="testimonials-carousel scroll-animate delay-100"
           onMouseEnter={() => setIsPlaying(false)}
           onMouseLeave={() => setIsPlaying(true)}
+          onFocusCapture={() => setIsPlaying(false)}
+          onBlurCapture={() => setIsPlaying(true)}
+          aria-roledescription="carousel"
+          aria-label="Client testimonials"
         >
           {/* Main Active Testimonial Card */}
           <div className="testimonial-active-card glass-card">
             <Quote className="quote-mark" size={48} />
             
-            <div className="testimonial-content">
+            <div className="testimonial-content" aria-live="polite" aria-atomic="true">
               <p className="testimonial-text">
                 "{testimonials[activeIndex].quote}"
               </p>
@@ -100,6 +105,7 @@ export default function Testimonials() {
                 {/* Visual Avatar frame. If image fails, fallback to nice styled character representation */}
                 <div className="avatar-frame-box">
                   <img 
+                    key={testimonials[activeIndex].image}
                     src={testimonials[activeIndex].image} 
                     alt={testimonials[activeIndex].name} 
                     className="author-avatar"
@@ -107,8 +113,8 @@ export default function Testimonials() {
                     height="60"
                     loading="lazy"
                     onError={(e) => {
-                      // Fallback placeholder
-                      e.target.style.display = 'none';
+                      // Reveals the lettered fallback sitting behind the portrait.
+                      e.currentTarget.style.display = 'none';
                     }}
                   />
                   <div className="fallback-avatar-icon">

@@ -117,11 +117,16 @@
 .faq-answer {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.36s cubic-bezier(0.16, 1, 0.3, 1);
+  /* visibility keeps collapsed answers out of the accessibility tree without
+     losing the height transition. */
+  visibility: hidden;
+  transition: max-height 0.36s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.36s;
 }
 
 .faq-item.active .faq-answer {
-  max-height: 520px;
+  max-height: 640px;
+  visibility: visible;
+  transition: max-height 0.36s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s;
 }
 
 .faq-answer p {

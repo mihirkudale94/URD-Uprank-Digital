@@ -23,8 +23,9 @@ function App() {
 
   return (
     <div className="app-root">
+      <a className="skip-to-content" href="#main-content">Skip to main content</a>
       <Navbar />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <Hero />
         <Clients />
         <Expertise />

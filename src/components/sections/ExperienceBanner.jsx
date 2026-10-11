@@ -1,12 +1,10 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
+import { handleAnchorClick } from '@/utils/scrollToSection';
 import './ExperienceBanner.css';
 
 export default function ExperienceBanner() {
-  const handleScrollToContact = (e) => {
-    e.preventDefault();
-    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const handleScrollToContact = (e) => handleAnchorClick(e, '#contact');
 
   return (
     <section className="experience-banner" id="experience" aria-label="Ten plus years of experience">

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowDown, MessageSquare, Sparkles } from 'lucide-react';
+import { handleAnchorClick } from '@/utils/scrollToSection';
 import './Hero.css';
 
 const capabilities = [
@@ -26,38 +27,32 @@ export default function Hero() {
   const delayBetweenWords = 2000;
 
   useEffect(() => {
-    let timer;
     const currentWord = capabilities[currentWordIndex];
 
-    if (isDeleting) {
-      timer = window.setTimeout(() => {
-        setCurrentText(currentWord.substring(0, currentText.length - 1));
-      }, deletingSpeed);
-    } else {
-      timer = window.setTimeout(() => {
-        setCurrentText(currentWord.substring(0, currentText.length + 1));
-      }, typingSpeed);
+    if (isDeleting && currentText === '') {
+      setIsDeleting(false);
+      setCurrentWordIndex((prevIndex) => (prevIndex + 1) % capabilities.length);
+      return undefined;
     }
 
     if (!isDeleting && currentText === currentWord) {
-      timer = window.setTimeout(() => setIsDeleting(true), delayBetweenWords);
-    } else if (isDeleting && currentText === '') {
-      setIsDeleting(false);
-      setCurrentWordIndex((prevIndex) => (prevIndex + 1) % capabilities.length);
+      const holdTimer = window.setTimeout(() => setIsDeleting(true), delayBetweenWords);
+      return () => clearTimeout(holdTimer);
     }
+
+    const timer = window.setTimeout(
+      () =>
+        setCurrentText(
+          currentWord.substring(0, currentText.length + (isDeleting ? -1 : 1))
+        ),
+      isDeleting ? deletingSpeed : typingSpeed
+    );
 
     return () => clearTimeout(timer);
   }, [currentText, isDeleting, currentWordIndex]);
 
-  const handleScrollToContact = (e) => {
-    e.preventDefault();
-    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleScrollToServices = (e) => {
-    e.preventDefault();
-    document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const handleScrollToContact = (e) => handleAnchorClick(e, '#contact');
+  const handleScrollToServices = (e) => handleAnchorClick(e, '#services');
 
   return (
     <header className="hero" id="home">
@@ -110,10 +105,15 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="hero-scroll-indicator" onClick={handleScrollToServices}>
+      <button
+        type="button"
+        className="hero-scroll-indicator"
+        onClick={handleScrollToServices}
+        aria-label="Scroll to what we do"
+      >
         <span>Scroll Down</span>
         <ArrowDown size={16} />
-      </div>
+      </button>
     </header>
   );
 }

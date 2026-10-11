@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowUpRight, Sun, Moon } from 'lucide-react';
 import { publicAsset } from '@/utils/publicAsset';
+import { scrollToSection } from '@/utils/scrollToSection';
 import './Navbar.css';
 
 const navLinks = [
@@ -22,7 +23,10 @@ const navLinks = [
   {
     label: 'Clients',
     href: '#testimonials',
-    kicker: 'Brands that trust us'
+    kicker: 'Brands that trust us',
+    // The logo wall (#clients) and the quotes (#testimonials) are one idea
+    // split across two sections; both should highlight this item.
+    matches: ['testimonials', 'clients']
   },
   {
     label: 'About',
@@ -33,13 +37,20 @@ const navLinks = [
 
 const sectionIds = ['home', 'clients', 'expertise', 'services', 'experience', 'why-us', 'testimonials', 'leadership', 'faq', 'contact'];
 
+const isLinkActive = (link, activeSection) =>
+  (link.matches || [link.href.slice(1)]).includes(activeSection);
+
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('home');
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'light';
+    try {
+      return localStorage.getItem('theme') || 'light';
+    } catch {
+      return 'light';
+    }
   });
 
   useEffect(() => {
@@ -56,17 +67,30 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      const visibleEntry = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    const inBand = new Set();
 
-      if (visibleEntry?.target?.id) {
-        setActiveSection(visibleEntry.target.id);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          inBand.add(entry.target.id);
+        } else {
+          inBand.delete(entry.target.id);
+        }
+      });
+
+      // Two sections share the band while one scrolls into the other. Take the
+      // later one in document order: that is the section being scrolled into,
+      // so the highlight advances with the reader rather than lagging behind
+      // the section being left.
+      for (let index = sectionIds.length - 1; index >= 0; index -= 1) {
+        if (inBand.has(sectionIds[index])) {
+          setActiveSection(sectionIds[index]);
+          break;
+        }
       }
     }, {
       rootMargin: '-35% 0px -55% 0px',
-      threshold: [0.15, 0.35, 0.6]
+      threshold: 0
     });
 
     sectionIds.forEach((id) => {
@@ -85,7 +109,11 @@ export default function Navbar() {
     } else {
       document.body.classList.remove('light-theme');
     }
-    localStorage.setItem('theme', theme);
+    try {
+      localStorage.setItem('theme', theme);
+    } catch {
+      // Storage unavailable; the theme still applies for this page view.
+    }
   }, [theme]);
 
   useEffect(() => {
@@ -113,17 +141,7 @@ export default function Navbar() {
   const handleLinkClick = (e, href) => {
     e.preventDefault();
     setIsMobileMenuOpen(false);
-
-    const target = document.querySelector(href);
-    if (target) {
-      const offset = window.innerWidth <= 768 ? 76 : 92;
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = target.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-      window.history.replaceState(null, '', href);
-    }
+    scrollToSection(href);
   };
 
   return (
@@ -140,8 +158,8 @@ export default function Navbar() {
                 <a
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
-                  className={`nav-item-link ${activeSection === link.href.slice(1) ? 'active' : ''}`}
-                  aria-current={activeSection === link.href.slice(1) ? 'page' : undefined}
+                  className={`nav-item-link ${isLinkActive(link, activeSection) ? 'active' : ''}`}
+                  aria-current={isLinkActive(link, activeSection) ? 'page' : undefined}
                 >
                   {link.label}
                 </a>
@@ -190,7 +208,7 @@ export default function Navbar() {
                 <a
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
-                  className={activeSection === link.href.slice(1) ? 'active' : ''}
+                  className={isLinkActive(link, activeSection) ? 'active' : ''}
                 >
                   <span>{link.label}</span>
                   <small>{link.kicker}</small>

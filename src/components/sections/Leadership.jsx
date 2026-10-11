@@ -1,6 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Award } from 'lucide-react';
-import { publicAsset } from '@/utils/publicAsset';
+import { Mail, Phone, MapPin } from 'lucide-react';
 import './Leadership.css';
 
 export default function Leadership() {
@@ -16,32 +15,6 @@ export default function Leadership() {
         </div>
 
         <div className="leader-profile-grid scroll-animate delay-100">
-          {/* Left Column: Portrait */}
-          <div className="leader-visual-box">
-            <div className="leader-image-wrapper">
-              <img
-                src={publicAsset('/img/sachin-raje.jpg')}
-                alt="Sachin Raje - Managing Director"
-                className="leader-img"
-                width="400"
-                height="470"
-                loading="lazy"
-                onError={(e) => {
-                  e.target.src = publicAsset('/img/Boy.png'); // Fallback to legacy avatar if file not yet uploaded
-                }}
-              />
-              <div className="leader-experience-tag">
-                <Award size={20} className="tag-icon" />
-                <div>
-                  <h4>10+ Years</h4>
-                  <p>Of Experience</p>
-                </div>
-              </div>
-              <div className="image-glow-ring"></div>
-            </div>
-          </div>
-
-          {/* Right Column: Positioning & Contact */}
           <div className="leader-info-box">
             <div className="leader-title-wrap">
               <span className="leader-badge">Digital Growth Partner</span>

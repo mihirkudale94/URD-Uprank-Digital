@@ -69,11 +69,22 @@ const isRateLimited = (ip: string): boolean => {
   const validTimestamps = timestamps.filter(ts => now - ts < RATE_LIMIT_WINDOW_MS);
   
   if (validTimestamps.length >= MAX_REQUESTS_PER_WINDOW) {
+    rateLimitMap.set(ip, validTimestamps);
     return true;
   }
-  
+
   validTimestamps.push(now);
   rateLimitMap.set(ip, validTimestamps);
+
+  // Without this the map keeps one entry per caller for the life of the isolate.
+  if (rateLimitMap.size > 5000) {
+    for (const [key, stamps] of rateLimitMap) {
+      if (!stamps.some((ts) => now - ts < RATE_LIMIT_WINDOW_MS)) {
+        rateLimitMap.delete(key);
+      }
+    }
+  }
+
   return false;
 };
 
@@ -229,7 +240,11 @@ Deno.serve(async (request) => {
 
   // Connect to Supabase to fetch context from knowledge base (RAG)
   const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
-  const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY') || Deno.env.get('SUPABASE_ANON_KEY') || Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
+  const supabaseAnonKey =
+    Deno.env.get('SUPABASE_ANON_KEY') ||
+    Deno.env.get('SUPABASE_PUBLISHABLE_KEY') ||
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ||
+    '';
   let contextText = '';
 
   if (supabaseUrl && supabaseAnonKey && visitorMessages.length > 0) {
@@ -273,7 +288,7 @@ Deno.serve(async (request) => {
 
   const apiUrl = 'https://api.cerebras.ai/v1/chat/completions';
   const authHeader = `Bearer ${cerebrasApiKey}`;
-  const modelName = Deno.env.get('CEREBRAS_MODEL') || 'gemma-4-31b';
+  const modelName = Deno.env.get('CEREBRAS_MODEL') || 'llama3.1-8b';
   console.log(`[Cerebras] Routing query to Cerebras API with model: ${modelName}`);
 
   let upstreamResponse: Response | null = null;
@@ -331,6 +346,7 @@ Deno.serve(async (request) => {
         controller.enqueue(
           encoder.encode(
             `data: ${JSON.stringify({
+              urd_fallback: true,
               choices: [
                 {
                   delta: {

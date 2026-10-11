@@ -1,7 +1,16 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Linkedin, Facebook, ArrowUp } from 'lucide-react';
 import { publicAsset } from '@/utils/publicAsset';
+import { handleAnchorClick, prefersReducedMotion } from '@/utils/scrollToSection';
 import './Footer.css';
+
+const quickLinks = [
+  { href: '#expertise', label: 'Expertise' },
+  { href: '#services', label: 'What We Do' },
+  { href: '#why-us', label: 'Why Us' },
+  { href: '#leadership', label: 'About' },
+  { href: '#faq', label: 'FAQ' }
+];
 
 export default function Footer() {
   const [showBackToTop, setShowBackToTop] = React.useState(false);
@@ -10,12 +19,12 @@ export default function Footer() {
     const handleScroll = () => {
       setShowBackToTop(window.scrollY > 400);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleScrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
   };
 
   return (
@@ -78,11 +87,11 @@ export default function Footer() {
         <div className="footer-links-col">
           <h3>Quick Links</h3>
           <ul className="footer-text-links">
-            <li><a href="/#expertise">Expertise</a></li>
-            <li><a href="/#services">What We Do</a></li>
-            <li><a href="/#why-us">Why Us</a></li>
-            <li><a href="/#leadership">About</a></li>
-            <li><a href="/#faq">FAQ</a></li>
+            {quickLinks.map((link) => (
+              <li key={link.href}>
+                <a href={link.href} onClick={handleAnchorClick}>{link.label}</a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -91,7 +100,10 @@ export default function Footer() {
       {/* Footer Copy & Sticky Top */}
       <div className="container footer-bottom">
         <div className="footer-copyright">
-          <p>URD SOLUTIONS PVT. LTD. &copy; 2017. All Rights Reserved.</p>
+          <p>URD SOLUTIONS PVT. LTD. &copy; 2017&ndash;{new Date().getFullYear()}. All Rights Reserved.</p>
+        </div>
+        <div className="footer-legal-links">
+          <a href="/privacy-policy">Privacy Policy</a>
         </div>
       </div>
 

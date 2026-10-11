@@ -87,7 +87,7 @@ const notifyByEmail = async (lead: Record<string, unknown>) => {
     `Page: ${lead.page_url || 'Not provided'}`
   ].join('\n');
 
-  await fetch('https://api.resend.com/emails', {
+  const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -101,6 +101,11 @@ const notifyByEmail = async (lead: Record<string, unknown>) => {
       reply_to: String(lead.email)
     })
   });
+
+  if (!response.ok) {
+    const detail = await response.text().catch(() => 'unknown error');
+    throw new Error(`Resend returned ${response.status}: ${detail}`);
+  }
 };
 
 Deno.serve(async (request) => {
@@ -169,7 +174,12 @@ Deno.serve(async (request) => {
     .single();
 
   if (error) {
-    return jsonResponse({ success: false, message: error.message }, 500, origin);
+    console.error('Lead insert failed', error);
+    return jsonResponse(
+      { success: false, message: 'We could not save your inquiry right now. Please try again or contact us directly.' },
+      500,
+      origin
+    );
   }
 
   await notifyByEmail(lead).catch((error) => {

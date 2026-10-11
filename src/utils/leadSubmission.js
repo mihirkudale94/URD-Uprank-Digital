@@ -32,9 +32,9 @@ export const buildLeadPayload = ({ formData, selectedServices }) => ({
   website_url: normalizeUrl(formData.url),
   message: cleanText(formData.message, 3000),
   services: selectedServices,
-  page_url: window.location.href,
+  page_url: cleanText(window.location.href, 500),
   source: 'website_contact_form',
-  user_agent: navigator.userAgent
+  user_agent: cleanText(navigator.userAgent, 500)
 });
 
 export const submitLead = async (leadPayload) => {
@@ -58,7 +58,7 @@ export const submitLead = async (leadPayload) => {
     return data;
   }
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('leads')
     .insert([leadPayload]);
 
@@ -66,5 +66,5 @@ export const submitLead = async (leadPayload) => {
     throw new Error(error.message || 'Lead submission failed.');
   }
 
-  return { success: true, leadId: data?.[0]?.id };
+  return { success: true };
 };

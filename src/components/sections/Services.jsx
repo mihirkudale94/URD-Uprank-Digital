@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, Code2, Megaphone, TrendingUp, Cpu, PenLine } from 'lucide-react';
+import { handleAnchorClick } from '@/utils/scrollToSection';
 import './Services.css';
 
 const services = [
@@ -31,10 +32,7 @@ const services = [
 ];
 
 export default function Services() {
-  const handleScrollToContact = (e) => {
-    e.preventDefault();
-    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const handleScrollToContact = (e) => handleAnchorClick(e, '#contact');
 
   return (
     <section className="section services-section" id="services">

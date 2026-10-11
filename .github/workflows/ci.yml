@@ -32,3 +32,6 @@ jobs:
 
       - name: Run Tests
         run: npm test
+
+      - name: Build production bundle
+        run: npm run build

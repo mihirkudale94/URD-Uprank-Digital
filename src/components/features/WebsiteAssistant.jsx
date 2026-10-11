@@ -213,7 +213,9 @@ const renderMessageContentAndActions = (message) => {
 };
 
 const isBackendFallback = (text) =>
-  /having trouble connecting|WhatsApp the (URD|Up Rank Digital) team|WhatsApp Up Rank Digital/i.test(text);
+  /higher than normal traffic|having trouble connecting|WhatsApp (the (URD|Up Rank Digital) team|Up Rank Digital|us at)/i.test(
+    text
+  );
 
 const cleanMessages = (messages) =>
   messages
@@ -245,6 +247,7 @@ export default function WebsiteAssistant() {
   const [activeModel, setActiveModel] = useState('');
   const [latency, setLatency] = useState(0);
   const scrollRef = useRef(null);
+  const inputRef = useRef(null);
 
   const [dynamicSuggestions, setDynamicSuggestions] = useState([]);
 
@@ -262,14 +265,26 @@ export default function WebsiteAssistant() {
     } catch (err) {
       console.warn('Failed to save open state:', err);
     }
-    if (isOpen) {
-      trackWebsiteEvent('chatbot_opened');
-    }
   }, [isOpen]);
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const anchor = scrollRef.current;
+    const list = anchor?.parentElement;
+    if (!list) return;
+    list.scrollTop = list.scrollHeight;
   }, [messages, isLoading, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setIsOpen(false);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    inputRef.current?.focus();
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
 
   const appendAssistantText = (text) => {
     setMessages((current) => {
@@ -323,13 +338,24 @@ export default function WebsiteAssistant() {
     });
 
     if (!isSupabaseConfigured || !chatEndpoint || !SUPABASE_ANON_KEY) {
+      const localReply = buildLocalAssistantReply(trimmedInput);
       setMessages((current) => [
         ...current,
         {
           role: 'assistant',
-          content: buildLocalAssistantReply(trimmedInput)
+          content: localReply
         }
       ]);
+      // The visitor did get an answer, so this still counts as a reply. Without
+      // it, message_sent and reply_received drift apart silently whenever the
+      // backend is unavailable, which is exactly when you need to notice.
+      trackWebsiteEvent('reply_received', {
+        role: 'assistant',
+        replyLength: localReply.length,
+        model: '',
+        reply_source: 'local_unconfigured',
+        isQualifiedHandoff: false
+      });
       setIsLoading(false);
       return;
     }
@@ -352,6 +378,8 @@ export default function WebsiteAssistant() {
       const decoder = new TextDecoder();
       let buffer = '';
       let assistantText = '';
+      let streamedModel = '';
+      let servedFallback = false;
 
       for (;;) {
         const { done, value } = await reader.read();
@@ -380,8 +408,12 @@ export default function WebsiteAssistant() {
             const chunk = JSON.parse(data);
             const content = chunk.choices?.[0]?.delta?.content || '';
             const model = chunk.model;
-            if (model && !activeModel) {
-              setActiveModel(model);
+            if (chunk.urd_fallback) {
+              servedFallback = true;
+            }
+            if (model) {
+              streamedModel = streamedModel || model;
+              setActiveModel((current) => current || model);
             }
             if (content) {
               assistantText += content;
@@ -423,11 +455,12 @@ export default function WebsiteAssistant() {
       trackWebsiteEvent('reply_received', {
         role: 'assistant',
         replyLength: assistantText.length,
-        model: activeModel,
+        model: streamedModel,
+        reply_source: servedFallback ? 'backend_fallback' : 'model',
         isQualifiedHandoff: isQualified
       });
 
-      if (isBackendFallback(assistantText)) {
+      if (servedFallback || isBackendFallback(assistantText)) {
         setMessages((current) =>
           current.map((message, index) =>
             index === current.length - 1 && message.role === 'assistant'
@@ -438,16 +471,29 @@ export default function WebsiteAssistant() {
       }
     } catch (error) {
       console.error(error);
+      const localReply = buildLocalAssistantReply(trimmedInput);
       setMessages((current) => [
         ...current,
         {
           role: 'assistant',
-          content: buildLocalAssistantReply(trimmedInput)
+          content: localReply
         }
       ]);
+      trackWebsiteEvent('reply_received', {
+        role: 'assistant',
+        replyLength: localReply.length,
+        model: '',
+        reply_source: 'local_error',
+        isQualifiedHandoff: false
+      });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const openAssistant = () => {
+    setIsOpen(true);
+    trackWebsiteEvent('chatbot_opened');
   };
 
   const handleSubmit = (event) => {
@@ -467,7 +513,7 @@ export default function WebsiteAssistant() {
         <button
           className="website-assistant-toggle"
           type="button"
-          onClick={() => setIsOpen(true)}
+          onClick={openAssistant}
           aria-label="Open AI Assistant"
           title="AI Assistant"
         >
@@ -476,7 +522,12 @@ export default function WebsiteAssistant() {
       )}
 
       {isOpen && (
-        <section className="website-assistant-panel" aria-label="AI Assistant">
+        <section
+          className="website-assistant-panel"
+          role="dialog"
+          aria-modal="false"
+          aria-label="Up Rank Digital AI Assistant"
+        >
           <header className="website-assistant-header">
             <div className="website-assistant-title">
               <span className="website-assistant-avatar">
@@ -506,7 +557,7 @@ export default function WebsiteAssistant() {
             </div>
           </header>
 
-          <div className="website-assistant-messages">
+          <div className="website-assistant-messages" aria-live="polite" aria-atomic="false">
             {messages.map((message, index) => (
               <div
                 key={`${message.role}-${index}`}
@@ -567,7 +618,9 @@ export default function WebsiteAssistant() {
 
           <form className="website-assistant-form" onSubmit={handleSubmit}>
             <input
+              ref={inputRef}
               type="text"
+              maxLength={2000}
               value={inputValue}
               onChange={(event) => setInputValue(event.target.value)}
               placeholder="Ask about websites, SEO, ads, or AI..."

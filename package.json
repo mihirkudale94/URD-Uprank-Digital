@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "node --test tests/servicePlaybook.test.js",
+    "test": "node --test tests/servicePlaybook.test.js tests/faqSchema.test.js tests/analyticsConfig.test.js",
     "test:db": "node scripts/test-db.js"
   },
   "dependencies": {

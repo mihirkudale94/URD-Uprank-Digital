@@ -16,7 +16,7 @@ const systemPrompt = promptMatch[1].trim();
 // Retrieve API key from local environment configuration
 const envPath = path.resolve('supabase/functions/chat/.env');
 let cerebrasApiKey = process.env.CEREBRAS_API_KEY;
-let modelName = process.env.CEREBRAS_MODEL || 'gemma-4-31b';
+let modelName = process.env.CEREBRAS_MODEL || 'llama3.1-8b';
 
 if (fs.existsSync(envPath)) {
   const envContent = fs.readFileSync(envPath, 'utf8');
