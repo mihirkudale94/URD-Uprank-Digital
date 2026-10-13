@@ -3,7 +3,7 @@
   --logo-height: 75px;
   --logo-gap: 4.5rem;
 
-  padding: 4.5rem 0;
+  padding: var(--space-strip) 0;
   background-color: var(--bg-primary);
   border-bottom: 1px solid var(--border-color);
   overflow: hidden;
@@ -17,14 +17,14 @@
   letter-spacing: 0.15em;
   color: var(--text-dim);
   text-align: center;
-  margin-bottom: 3.5rem;
+  margin-bottom: 2.25rem;
 }
 
 .logo-slider-container {
   width: 100%;
   position: relative;
   overflow: hidden;
-  padding: 1.5rem 0;
+  padding: 1rem 0;
 }
 
 /* Gradient mask for smooth fade out at edges */
@@ -99,15 +99,12 @@
     --logo-width: 145px;
     --logo-height: 52px;
     --logo-gap: 2.5rem;
-    padding: 3.5rem 0;
   }
   .clients-title {
     font-size: 0.72rem;
-    margin-bottom: 2.25rem;
+    margin-bottom: 1.75rem;
   }
-  
-  
-  
+
   .logo-slider-container::before,
   .logo-slider-container::after {
     width: 80px;

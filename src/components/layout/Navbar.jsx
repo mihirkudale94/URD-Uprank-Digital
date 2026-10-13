@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, Sun, Moon } from 'lucide-react';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { publicAsset } from '@/utils/publicAsset';
 import { scrollToSection } from '@/utils/scrollToSection';
 import './Navbar.css';
@@ -35,7 +35,7 @@ const navLinks = [
   }
 ];
 
-const sectionIds = ['home', 'clients', 'expertise', 'services', 'experience', 'why-us', 'testimonials', 'leadership', 'faq', 'contact'];
+const sectionIds = ['home', 'clients', 'expertise', 'services', 'why-us', 'testimonials', 'leadership', 'contact'];
 
 const isLinkActive = (link, activeSection) =>
   (link.matches || [link.href.slice(1)]).includes(activeSection);
@@ -45,13 +45,6 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('home');
-  const [theme, setTheme] = useState(() => {
-    try {
-      return localStorage.getItem('theme') || 'light';
-    } catch {
-      return 'light';
-    }
-  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -104,19 +97,6 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (theme === 'light') {
-      document.body.classList.add('light-theme');
-    } else {
-      document.body.classList.remove('light-theme');
-    }
-    try {
-      localStorage.setItem('theme', theme);
-    } catch {
-      // Storage unavailable; the theme still applies for this page view.
-    }
-  }, [theme]);
-
-  useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
@@ -133,10 +113,6 @@ export default function Navbar() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
-  };
 
   const handleLinkClick = (e, href) => {
     e.preventDefault();
@@ -166,15 +142,6 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-
-          <div className="nav-actions">
-            <button onClick={toggleTheme} className="theme-toggle-btn" aria-label="Toggle theme">
-              {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-            </button>
-            <a href="#contact" className="btn btn-primary btn-sm-nav" onClick={(e) => handleLinkClick(e, '#contact')}>
-              Book Discovery Call <ArrowUpRight size={16} />
-            </a>
-          </div>
         </div>
 
         <button
@@ -218,10 +185,6 @@ export default function Navbar() {
           </ul>
 
           <div className="mobile-action-row">
-            <button onClick={toggleTheme} className="theme-toggle-btn mobile-theme-btn" aria-label="Toggle theme">
-              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-              <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
-            </button>
             <a href="#contact" className="btn btn-primary" onClick={(e) => handleLinkClick(e, '#contact')}>
               Book Discovery Call <ArrowUpRight size={18} />
             </a>

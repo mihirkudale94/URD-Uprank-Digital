@@ -2,7 +2,7 @@
   position: fixed;
   right: 1.5rem;
   bottom: 1.5rem;
-  z-index: 50;
+  z-index: 51;
   width: 3.5rem;
   height: 3.5rem;
   border: 0;
@@ -27,13 +27,17 @@
   transform: translateY(-2px) scale(1.04);
 }
 
+.website-assistant-toggle.is-open {
+  box-shadow: 0 10px 24px rgba(59, 130, 246, 0.26);
+}
+
 .website-assistant-panel {
   position: fixed;
   right: 1.5rem;
-  bottom: 1.5rem;
+  bottom: calc(1.5rem + 3.5rem + 0.75rem);
   z-index: 50;
   width: min(380px, calc(100vw - 3rem));
-  height: min(520px, calc(100vh - 3rem));
+  height: min(520px, calc(100vh - 8rem));
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -198,41 +202,6 @@
   animation-delay: 0.3s;
 }
 
-.website-assistant-inline-suggestions {
-  display: flex;
-  gap: 0.45rem;
-  overflow-x: auto;
-  padding: 0.6rem 0.75rem;
-  background: var(--bg-card);
-  border-top: 1px solid var(--border-color);
-  flex-shrink: 0; /* Prevent collapsing in flex containers */
-  scrollbar-width: none; /* Hide scrollbar for Firefox */
-}
-
-.website-assistant-inline-suggestions::-webkit-scrollbar {
-  display: none; /* Hide scrollbar for Chrome/Safari/Safari iOS */
-}
-
-.suggestion-chip {
-  flex: 0 0 auto;
-  border: 1px solid rgba(var(--primary-rgb), 0.28);
-  border-radius: 999px;
-  padding: 0.45rem 0.7rem;
-  color: var(--text-main);
-  background: rgba(var(--primary-rgb), 0.06);
-  font-size: 0.72rem;
-  line-height: 1.2;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-}
-
-.suggestion-chip:hover {
-  transform: translateY(-1px);
-  border-color: rgba(var(--primary-rgb), 0.55);
-  background: rgba(var(--primary-rgb), 0.14);
-}
-
 /* Inline Action CTA Cards inside messages */
 .message-inline-ctas {
   display: flex;
@@ -277,42 +246,11 @@
   transform: translateY(-1px);
 }
 
-.website-assistant-actions {
-  display: flex;
-  gap: 0.5rem;
-  padding: 0.65rem 0.75rem 0;
-  border-top: 1px solid var(--border-color);
-  background: var(--bg-card);
-  flex-shrink: 0; /* Prevent collapsing in flex containers */
-}
-
-.website-assistant-actions a {
-  flex: 1 1 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  min-height: 2.1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  color: var(--text-main);
-  background: rgba(255, 255, 255, 0.04);
-  font-size: 0.76rem;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-  box-sizing: border-box;
-  transition: transform 0.15s ease, border-color 0.15s ease;
-}
-
-.website-assistant-actions a:hover {
-  transform: translateY(-1px);
-  border-color: rgba(var(--primary-rgb), 0.45);
-}
-
 .website-assistant-form {
   display: flex;
   gap: 0.5rem;
+  /* Carries the divider that used to sit on the contact shortcuts row above it. */
+  border-top: 1px solid var(--border-color);
   padding: 0.65rem 0.75rem 0.75rem;
   background: var(--bg-card);
   flex-shrink: 0; /* Prevent collapsing in flex containers */
@@ -368,9 +306,9 @@
 
   .website-assistant-panel {
     right: 1rem;
-    bottom: 1rem;
+    bottom: calc(1rem + 3.5rem + 0.625rem);
     width: calc(100vw - 2rem);
-    height: min(520px, calc(100dvh - 2rem));
+    height: min(520px, calc(100dvh - 7rem));
   }
 
   /* Mobile optimizations */

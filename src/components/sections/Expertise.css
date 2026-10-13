@@ -4,24 +4,19 @@
   background-color: var(--bg-secondary);
 }
 
-.expertise-split {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.35fr);
-  gap: 4rem;
-  align-items: start;
+.expertise-lead {
   position: relative;
   z-index: 2;
 }
 
-.expertise-lead {
-  position: sticky;
-  top: 130px;
-}
-
+/* Four across, two down, over the full container. The tiles used to sit in the
+   right-hand column of a split, which cost them a third of their width and left
+   the column beside them mostly empty. */
 .expertise-matrix {
   position: relative;
+  z-index: 2;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   border: 1px solid var(--border-color);
   border-radius: 20px;
   overflow: hidden;
@@ -39,12 +34,12 @@
   isolation: isolate;
 }
 
-/* Two-up grid: strip the outer edges so it reads as one block */
-.expertise-tile:nth-child(2n) {
+/* Four-up grid: strip the outer edges so it reads as one block */
+.expertise-tile:nth-child(4n) {
   border-right: none;
 }
 
-.expertise-tile:nth-child(n + 7) {
+.expertise-tile:nth-child(n + 5) {
   border-bottom: none;
 }
 
@@ -69,7 +64,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--text-dim);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .expertise-tile-icon {
@@ -99,15 +94,27 @@
   margin: 0;
 }
 
+/* Two-up: every tile gets its edges back, then the new outer column and last
+   row are stripped for the two-column shape.
+   The reset is written as :nth-child(n) rather than a bare .expertise-tile so
+   it matches the specificity of the nth-child rules it has to override — a
+   plain class selector loses to them whatever the source order. */
 @media (max-width: 1024px) {
-  .expertise-split {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
+  .expertise-matrix {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .expertise-lead {
-    position: static;
-    max-width: 100%;
+  .expertise-tile:nth-child(n) {
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .expertise-tile:nth-child(2n) {
+    border-right: none;
+  }
+
+  .expertise-tile:nth-child(n + 7) {
+    border-bottom: none;
   }
 }
 
@@ -118,10 +125,12 @@
 
   .expertise-tile {
     padding: 1.5rem 1.25rem;
-    border-right: none;
   }
 
-  .expertise-tile:nth-child(n + 7) {
+  /* Single column: one rule down the stack, last tile open. Same specificity
+     note as the two-up block above. */
+  .expertise-tile:nth-child(n) {
+    border-right: none;
     border-bottom: 1px solid var(--border-color);
   }
 

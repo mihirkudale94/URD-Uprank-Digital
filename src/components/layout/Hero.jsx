@@ -1,56 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ArrowDown, MessageSquare, Sparkles } from 'lucide-react';
 import { handleAnchorClick } from '@/utils/scrollToSection';
 import './Hero.css';
 
-const capabilities = [
-  'Website Development',
-  'Digital Marketing',
-  'Performance Marketing',
-  'AI Powered Solutions',
-  'Content Design & Management'
-];
-
-const heroProof = [
-  { value: '10+', label: 'Years of experience' },
-  { value: '12+', label: 'Brands served' },
-  { value: '5', label: 'Service lines' },
-  { value: '8', label: 'Areas of expertise' }
-];
-
 export default function Hero() {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [currentText, setCurrentText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const typingSpeed = 90;
-  const deletingSpeed = 45;
-  const delayBetweenWords = 2000;
-
-  useEffect(() => {
-    const currentWord = capabilities[currentWordIndex];
-
-    if (isDeleting && currentText === '') {
-      setIsDeleting(false);
-      setCurrentWordIndex((prevIndex) => (prevIndex + 1) % capabilities.length);
-      return undefined;
-    }
-
-    if (!isDeleting && currentText === currentWord) {
-      const holdTimer = window.setTimeout(() => setIsDeleting(true), delayBetweenWords);
-      return () => clearTimeout(holdTimer);
-    }
-
-    const timer = window.setTimeout(
-      () =>
-        setCurrentText(
-          currentWord.substring(0, currentText.length + (isDeleting ? -1 : 1))
-        ),
-      isDeleting ? deletingSpeed : typingSpeed
-    );
-
-    return () => clearTimeout(timer);
-  }, [currentText, isDeleting, currentWordIndex]);
-
   const handleScrollToContact = (e) => handleAnchorClick(e, '#contact');
   const handleScrollToServices = (e) => handleAnchorClick(e, '#services');
 
@@ -72,22 +25,14 @@ export default function Hero() {
             <span className="gradient-text">using AI</span>
           </h1>
 
-          <p className="hero-ticker" aria-hidden="true">
-            <span className="hero-ticker-label">Built for you:</span>
-            <span className="hero-ticker-word">
-              {currentText}
-              <span className="cursor-blink">|</span>
-            </span>
-          </p>
-
           <p className="hero-description">
-            We help brands and businesses grow their digital presence with data-driven marketing,
-            engaging content, and AI-powered strategies that deliver real results.
+            Pune-based, 10+ years in. We build your site, run your campaigns, and report what
+            actually moved — one team accountable for the whole thing, start to finish.
           </p>
 
           <div className="hero-ctas">
             <a href="#contact" className="btn btn-primary" onClick={handleScrollToContact}>
-              Book Free Discovery Call <MessageSquare size={18} />
+              Book a Call <MessageSquare size={18} />
             </a>
             <a href="#services" className="btn btn-secondary" onClick={handleScrollToServices}>
               What We Do <ArrowDown size={18} className="arrow-bounce" />
@@ -95,25 +40,14 @@ export default function Hero() {
           </div>
 
           <div className="hero-proof">
-            {heroProof.map((item) => (
-              <div key={item.label} className="hero-proof-item">
-                <strong>{item.value}</strong>
-                <span>{item.label}</span>
-              </div>
-            ))}
+            <strong className="hero-proof-value">10+</strong>
+            <span className="hero-proof-label">
+              Years of experience
+              <em>Driving growth. Delivering results.</em>
+            </span>
           </div>
         </div>
       </div>
-
-      <button
-        type="button"
-        className="hero-scroll-indicator"
-        onClick={handleScrollToServices}
-        aria-label="Scroll to what we do"
-      >
-        <span>Scroll Down</span>
-        <ArrowDown size={16} />
-      </button>
     </header>
   );
 }

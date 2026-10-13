@@ -8,8 +8,7 @@ const quickLinks = [
   { href: '#expertise', label: 'Expertise' },
   { href: '#services', label: 'What We Do' },
   { href: '#why-us', label: 'Why Us' },
-  { href: '#leadership', label: 'About' },
-  { href: '#faq', label: 'FAQ' }
+  { href: '#leadership', label: 'About' }
 ];
 
 export default function Footer() {
@@ -34,7 +33,7 @@ export default function Footer() {
         <div className="footer-brand-col">
           <img src={publicAsset('/img/logo-footer.png')} alt="Up Rank Digital" className="footer-logo" width="168" height="42" loading="lazy" />
           <p className="footer-slogan">
-            Website development and digital performance marketing using AI. Creating impact online. Winning results together.
+            Creating impact online. Winning results together.
           </p>
           <div className="footer-socials">
             <a href="https://in.linkedin.com/company/uprankdigital" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
@@ -73,7 +72,7 @@ export default function Footer() {
           <h3>Our Office</h3>
           <ul className="footer-contact-list">
             <li>
-              <MapPin size={18} className="footer-contact-icon" />
+              <MapPin size={16} className="footer-contact-icon" />
               <div>
                 <h4>India Office</h4>
                 <p>Shyamal CHS</p>
@@ -100,10 +99,7 @@ export default function Footer() {
       {/* Footer Copy & Sticky Top */}
       <div className="container footer-bottom">
         <div className="footer-copyright">
-          <p>URD SOLUTIONS PVT. LTD. &copy; 2017&ndash;{new Date().getFullYear()}. All Rights Reserved.</p>
-        </div>
-        <div className="footer-legal-links">
-          <a href="/privacy-policy">Privacy Policy</a>
+          <p>URD SOLUTIONS PVT. LTD. &copy; 2017. All Rights Reserved.</p>
         </div>
       </div>
 

@@ -8,36 +8,16 @@ export default function ContactForm() {
     name: '',
     email: '',
     phone: '',
-    businessName: '',
-    url: '',
     message: ''
   });
-  
-  const [selectedServices, setSelectedServices] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [websiteConfirmation, setWebsiteConfirmation] = useState('');
 
-  const servicesList = [
-    { id: 'website-development', label: 'Website Development' },
-    { id: 'digital-marketing', label: 'Digital Marketing' },
-    { id: 'performance-marketing', label: 'Performance Marketing' },
-    { id: 'ai-solutions', label: 'AI Powered Solutions' },
-    { id: 'content-management', label: 'Content Design & Management' }
-  ];
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  };
-
-  const toggleService = (label) => {
-    if (selectedServices.includes(label)) {
-      setSelectedServices(selectedServices.filter(s => s !== label));
-    } else {
-      setSelectedServices([...selectedServices, label]);
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -65,21 +45,15 @@ export default function ContactForm() {
     setLoading(true);
 
     try {
-      await submitLead(buildLeadPayload({
-        formData,
-        selectedServices
-      }));
+      await submitLead(buildLeadPayload({ formData, websiteConfirmation }));
 
       setIsSubmitted(true);
       setFormData({
         name: '',
         email: '',
         phone: '',
-        businessName: '',
-        url: '',
         message: ''
       });
-      setSelectedServices([]);
     } catch (error) {
       setErrorMsg(error.message || 'We could not submit your inquiry right now. Please call or WhatsApp us directly.');
     } finally {
@@ -93,24 +67,13 @@ export default function ContactForm() {
 
       <div className="container contact-container">
         <div className="contact-info-panel scroll-animate">
-          <span className="section-subtitle">Get in Touch</span>
-          <h2 className="heading-md">Let's Build Your Next Growth System</h2>
-          <p className="contact-info-desc">
-            Share your business goal, website, timeline, and budget comfort. The URD team will review the context and suggest the most useful next step.
-          </p>
-
-          <div className="contact-methods">
-            <div className="contact-method-card glass-card">
-              <h4>Direct Support</h4>
-              <p className="highlight-contact">sachin@uprankdigital.com</p>
-              <p>+91 93711 16165</p>
-            </div>
-            
-            <div className="contact-method-card glass-card">
-              <h4>Headquarters</h4>
-              <p>Shyamal CHS</p>
-              <p>Pune 411048, India</p>
-            </div>
+          <div className="section-header section-header-left">
+            <span className="section-subtitle">Get in Touch</span>
+            <h2 className="heading-md">Get a straight answer on your website and ads</h2>
+            <p className="section-description">
+              Tell us the goal, the site, and roughly what you can spend. We&rsquo;ll come back with
+              an honest view of whether we can help &mdash; and what we&rsquo;d do first.
+            </p>
           </div>
         </div>
 
@@ -118,17 +81,14 @@ export default function ContactForm() {
           {isSubmitted ? (
             <div className="success-state animate-fade-in-up">
               <CheckCircle2 className="success-icon" size={64} />
-              <h3>Thank You!</h3>
-              <p>Your details have been successfully received. A digital growth specialist from Up Rank Digital will reach out to you shortly.</p>
+              <h3>Got it &mdash; thanks.</h3>
+              <p>Sachin will call or WhatsApp you within one business day.</p>
               <button className="btn btn-secondary" onClick={() => setIsSubmitted(false)}>
                 Send Another Message <ArrowRight size={16} />
               </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="contact-form" id="intake-form">
-              <h3>Intake Questionnaire</h3>
-              <p className="form-sub-header">Help us understand your business requirements.</p>
-
               {errorMsg && <div className="form-error-alert">{errorMsg}</div>}
 
               <div className="website-confirmation" aria-hidden="true">
@@ -151,8 +111,8 @@ export default function ContactForm() {
                     type="text" 
                     name="name" 
                     id="contact-name"
-                    aria-label="Your Name"
-                    placeholder="Your Name *" 
+                    aria-label="Full Name"
+                    placeholder="Full Name *" 
                     value={formData.name} 
                     onChange={handleInputChange} 
                     maxLength={120}
@@ -187,63 +147,15 @@ export default function ContactForm() {
                     required 
                   />
                 </div>
-
-                <div className="input-group">
-                  <input 
-                    type="text" 
-                    name="businessName" 
-                    id="contact-business"
-                    aria-label="Business Name"
-                    placeholder="Business Name" 
-                    value={formData.businessName} 
-                    onChange={handleInputChange} 
-                    maxLength={160}
-                  />
-                </div>
-
-                <div className="input-group full-width">
-                  <input 
-                    type="text" 
-                    inputMode="url"
-                    name="url" 
-                    id="contact-url"
-                    aria-label="Website URL"
-                    placeholder="Website URL (e.g. www.mycompany.com)" 
-                    value={formData.url} 
-                    onChange={handleInputChange} 
-                    maxLength={300}
-                  />
-                </div>
-              </div>
-
-              {/* Services Chip Selection */}
-              <div className="services-selector-wrap">
-                <h4>I'm interested in:</h4>
-                <div className="chips-container">
-                  {servicesList.map(service => {
-                    const isSelected = selectedServices.includes(service.label);
-                    return (
-                      <button
-                        type="button"
-                        key={service.id}
-                        id={`contact-chip-${service.id}`}
-                        className={`service-chip ${isSelected ? 'active' : ''}`}
-                        onClick={() => toggleService(service.label)}
-                      >
-                        {service.label}
-                      </button>
-                    );
-                  })}
-                </div>
               </div>
 
               {/* Textarea */}
-              <div className="input-group full-width">
+              <div className="input-group">
                 <textarea 
                   name="message" 
                   id="contact-message"
                   aria-label="Project Goals Message"
-                  placeholder="Tell us more about your project goals (Optional)..." 
+                  placeholder="Tell us more about your project goals..." 
                   value={formData.message} 
                   onChange={handleInputChange} 
                   maxLength={3000}

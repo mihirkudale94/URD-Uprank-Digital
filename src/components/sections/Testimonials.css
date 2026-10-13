@@ -6,8 +6,11 @@
 }
 
 .testimonial-active-card {
-  padding: 4rem;
-  min-height: 380px;
+  padding: 3rem;
+  /* Tall enough for the longest quote, so autoplay swaps the text without the
+     card (and everything under it) jumping height. The author row is pinned to
+     the bottom by space-between, so shorter quotes just gain breathing room. */
+  min-height: 420px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -25,7 +28,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
+  /* flex, not height:100%: the card's height comes from min-height, which a
+     percentage height cannot resolve against, so the author row never reached
+     the bottom and left a gap under itself. */
+  flex: 1;
   gap: 2.5rem;
 }
 
@@ -51,7 +57,7 @@
   height: 60px;
   border-radius: 50%;
   border: 2px solid var(--primary);
-  background: rgba(255,255,255,0.05);
+  background: var(--bg-hover-pills);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -97,11 +103,11 @@
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .control-btn {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-hover-pills);
   border: 1px solid var(--border-color);
   color: var(--text-main);
   width: 44px;
@@ -119,7 +125,7 @@
   background: var(--gradient-accent);
   color: #ffffff;
   border-color: var(--primary);
-  box-shadow: 0 4px 15px rgba(229, 46, 113, 0.25);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
   transform: scale(1.05);
 }
 
@@ -133,7 +139,9 @@
   height: 10px;
   border-radius: 50%;
   border: none;
-  background: rgba(255, 255, 255, 0.15);
+  /* Dark on the light theme. This was white, which made every inactive dot
+     invisible and left the carousel looking like it had a single slide. */
+  background: rgba(9, 13, 22, 0.18);
   cursor: pointer;
   transition: var(--transition-fast);
   outline: none;

@@ -1,6 +1,0 @@
-project_id = "urd-uprank-digital"
-
-[functions.submit-lead]
-verify_jwt = true
-
-

@@ -1,32 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CheckCircle2, Mail, MessageCircle, RotateCcw, Send, Sparkles, User, X } from 'lucide-react';
-import { isSupabaseConfigured } from '@/utils/supabaseClient';
 import { SERVICE_PLAYBOOK, getServiceMatch } from '@/utils/servicePlaybook';
 import { trackWebsiteEvent } from '@/utils/analytics';
 import './WebsiteAssistant.css';
 
-const CHAT_FUNCTION_NAME = import.meta.env.VITE_SUPABASE_CHAT_FUNCTION || 'chat';
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY =
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-const chatEndpoint = SUPABASE_URL
-  ? `${SUPABASE_URL.replace(/\/$/, '')}/functions/v1/${CHAT_FUNCTION_NAME}`
-  : '';
+// Same-origin Vercel function, exactly like /api/submit-lead: no key reaches the browser and
+// there is no CORS to configure. It streams Groq's frames straight through, so the parsing
+// below is reading Groq's own SSE shape.
+//
+// When it cannot reach a model it answers with a single `urd_fallback` frame instead, and
+// `vite dev` has no serverless runtime at all. Both land on the local service playbook.
+const CHAT_ENDPOINT = '/api/chat';
 
 const initialMessages = [
   {
     role: 'assistant',
     content:
-      "Hi! I'm Up Rank Digital's AI assistant. I can help you find the right service and connect you with the team. What are you trying to grow or fix?"
+      'Hi, I’m Up Rank Digital’s AI assistant. How can I help you?'
   }
-];
-
-const suggestedPrompts = [
-  'I need a website for my business',
-  'Help me improve leads with ads',
-  'Can AI automation help my team?',
-  'How do you price projects?'
 ];
 
 const contactPrompt =
@@ -249,8 +240,6 @@ export default function WebsiteAssistant() {
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
 
-  const [dynamicSuggestions, setDynamicSuggestions] = useState([]);
-
   useEffect(() => {
     try {
       sessionStorage.setItem('urd_assistant_messages', JSON.stringify(messages));
@@ -327,7 +316,6 @@ export default function WebsiteAssistant() {
     setIsLoading(true);
     setActiveModel('');
     setLatency(0);
-    setDynamicSuggestions([]);
 
     const startTime = Date.now();
 
@@ -337,40 +325,18 @@ export default function WebsiteAssistant() {
       messageLength: trimmedInput.length
     });
 
-    if (!isSupabaseConfigured || !chatEndpoint || !SUPABASE_ANON_KEY) {
-      const localReply = buildLocalAssistantReply(trimmedInput);
-      setMessages((current) => [
-        ...current,
-        {
-          role: 'assistant',
-          content: localReply
-        }
-      ]);
-      // The visitor did get an answer, so this still counts as a reply. Without
-      // it, message_sent and reply_received drift apart silently whenever the
-      // backend is unavailable, which is exactly when you need to notice.
-      trackWebsiteEvent('reply_received', {
-        role: 'assistant',
-        replyLength: localReply.length,
-        model: '',
-        reply_source: 'local_unconfigured',
-        isQualifiedHandoff: false
-      });
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      const response = await fetch(chatEndpoint, {
+      const response = await fetch(CHAT_ENDPOINT, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: cleanMessages(nextMessages) })
       });
 
-      if (!response.ok || !response.body) {
+      // `vite dev` has no serverless runtime: it answers /api/* with the index.html shell and a
+      // 200. Checking the status alone would let that through and stream an empty reply, so the
+      // content type decides whether this is really the chat endpoint.
+      const contentType = response.headers.get('content-type') || '';
+      if (!response.ok || !response.body || contentType.includes('text/html')) {
         throw new Error('Failed to connect to the AI assistant.');
       }
 
@@ -430,15 +396,10 @@ export default function WebsiteAssistant() {
 
       setLatency(Date.now() - startTime);
 
-      let extractedSuggestions = [];
-      const suggestionsMatch = assistantText.match(/\[Suggestions:\s*(.*?)\]/i);
-      if (suggestionsMatch) {
-        const rawOptions = suggestionsMatch[1];
-        extractedSuggestions = rawOptions
-          .split('|')
-          .map(opt => opt.trim())
-          .filter(Boolean);
-        
+      // The backend prompt still tells the model to end with a [Suggestions: a | b | c] tag.
+      // Nothing renders those now, so the tag is stripped from the stored message instead of
+      // parsed; left in place it would reach the visitor as literal text.
+      if (/\[Suggestions:/i.test(assistantText)) {
         const cleanedText = assistantText.replace(/\[Suggestions:\s*.*?\]/gi, '').trim();
         setMessages((current) =>
           current.map((msg, index) =>
@@ -448,7 +409,6 @@ export default function WebsiteAssistant() {
           )
         );
       }
-      setDynamicSuggestions(extractedSuggestions);
 
       // Dispatch reply received event for developer analytics integration
       const isQualified = /sachin@uprankdigital.com|whatsapp/i.test(assistantText);
@@ -501,32 +461,27 @@ export default function WebsiteAssistant() {
     sendMessage(inputValue);
   };
 
-  const handlePromptClick = (prompt) => {
-    sendMessage(prompt);
-  };
-
 
 
   return (
     <>
-      {!isOpen && (
-        <button
-          className="website-assistant-toggle"
-          type="button"
-          onClick={openAssistant}
-          aria-label="Open AI Assistant"
-          title="AI Assistant"
-        >
-          <MessageCircle size={24} />
-        </button>
-      )}
+      <button
+        className={`website-assistant-toggle${isOpen ? ' is-open' : ''}`}
+        type="button"
+        onClick={() => (isOpen ? setIsOpen(false) : openAssistant())}
+        aria-label={isOpen ? 'Close AI Assistant' : 'Open AI Assistant'}
+        aria-expanded={isOpen}
+        title="AI Assistant"
+      >
+        {isOpen ? <X size={24} /> : <MessageCircle size={24} />}
+      </button>
 
       {isOpen && (
         <section
           className="website-assistant-panel"
           role="dialog"
           aria-modal="false"
-          aria-label="Up Rank Digital AI Assistant"
+          aria-label="Up Rank Digital's AI Assistant"
         >
           <header className="website-assistant-header">
             <div className="website-assistant-title">
@@ -534,7 +489,7 @@ export default function WebsiteAssistant() {
                 <Sparkles size={18} />
               </span>
               <span>
-                <strong>Up Rank Digital AI Assistant</strong>
+                <strong>Up Rank Digital&rsquo;s AI Assistant</strong>
                 <small>
                   <CheckCircle2 size={12} /> Online now
                 </small>
@@ -595,27 +550,6 @@ export default function WebsiteAssistant() {
             <div ref={scrollRef} />
           </div>
 
-          {!isLoading && (
-            <div className="website-assistant-inline-suggestions" aria-label="Suggested questions">
-              {(dynamicSuggestions && dynamicSuggestions.length > 0 ? dynamicSuggestions : suggestedPrompts).map((prompt) => (
-                <button key={prompt} type="button" onClick={() => handlePromptClick(prompt)} className="suggestion-chip">
-                  {prompt}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <div className="website-assistant-actions" aria-label="Contact shortcuts">
-            <a href="https://wa.me/919371116165" target="_blank" rel="noreferrer">
-              <MessageCircle size={14} />
-              WhatsApp
-            </a>
-            <a href="mailto:sachin@uprankdigital.com">
-              <Mail size={14} />
-              Email
-            </a>
-          </div>
-
           <form className="website-assistant-form" onSubmit={handleSubmit}>
             <input
               ref={inputRef}
@@ -623,7 +557,7 @@ export default function WebsiteAssistant() {
               maxLength={2000}
               value={inputValue}
               onChange={(event) => setInputValue(event.target.value)}
-              placeholder="Ask about websites, SEO, ads, or AI..."
+              placeholder="Ask me a question"
               aria-label="Message"
               disabled={isLoading}
             />

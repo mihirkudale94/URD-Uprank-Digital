@@ -45,8 +45,8 @@ export default function Services() {
             Five Service Lines. <span className="gradient-text">One Growth Partner.</span>
           </h2>
           <p className="section-description">
-            Data-driven marketing, engaging content, and AI-powered strategies that deliver real
-            results.
+            Start with one. Add the next when the numbers justify it &mdash; not because it came
+            bundled.
           </p>
         </div>
 

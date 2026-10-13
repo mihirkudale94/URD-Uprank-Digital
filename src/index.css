@@ -1,13 +1,13 @@
 :root {
-  /* Premium Dark Theme variables (default) */
-  --bg-primary: #030712;
-  --bg-secondary: #080c16;
-  --bg-card: rgba(17, 24, 39, 0.55);
-  --bg-card-hover: rgba(24, 30, 48, 0.75);
+  /* Premium Corporate Light Theme */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-card-hover: #ffffff;
   
   /* Precision borders */
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-color-hover: rgba(247, 151, 31, 0.5);
+  --border-color: rgba(9, 13, 22, 0.06);
+  --border-color-hover: rgba(247, 151, 31, 0.4);
   
   /* Brand colors */
   --primary: #f7971f;
@@ -17,55 +17,11 @@
   --tech-glow-rgb: 56, 189, 248;
   
   /* Text colors */
-  --text-main: #f9fafb;
-  --text-muted: #9ca3af;
-  --text-dim: #6b7280;
-  
-  /* Scrolled Navbar and element backgrounds */
-  --bg-nav: rgba(3, 7, 18, 0.75);
-  --bg-hover-pills: rgba(255, 255, 255, 0.02);
-  --bg-hover-pills-hover: rgba(255, 255, 255, 0.05);
-  --logo-filter: brightness(0) invert(1);
-  --logo-opacity: 0.45;
-  --logo-opacity-hover: 0.85;
-  --footer-logo-filter: none;
-  
-  /* Gradients */
-  --gradient-accent: linear-gradient(135deg, #2563eb 0%, #f7971f 100%);
-  --gradient-accent-hover: linear-gradient(135deg, #3b82f6 0%, #ffae3c 100%);
-  --gradient-tech: linear-gradient(135deg, #2563eb 0%, #38bdf8 100%);
-  --gradient-cyan-blue: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-  --gradient-card-border: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-  --gradient-card-border-hover: linear-gradient(180deg, rgba(247, 151, 31, 0.6) 0%, rgba(56, 189, 248, 0.4) 100%);
-  --gradient-hero-glow: radial-gradient(circle, rgba(247, 151, 31, 0.07) 0%, transparent 60%);
-  /* Headline emphasis: kept blue so orange stays reserved for calls to action */
-  --gradient-emphasis: linear-gradient(120deg, #60a5fa 0%, #38bdf8 100%);
-
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.4);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-  
-  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-normal: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.light-theme {
-  /* Premium Corporate Light Theme overrides */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --bg-card-hover: #ffffff;
-  
-  --border-color: rgba(9, 13, 22, 0.06);
-  --border-color-hover: rgba(247, 151, 31, 0.4);
-  
   --text-main: #090d16;
   --text-muted: #4b5563;
   --text-dim: #9ca3af;
   
+  /* Scrolled Navbar and element backgrounds */
   --bg-nav: rgba(255, 255, 255, 0.85);
   --bg-hover-pills: rgba(9, 13, 22, 0.02);
   --bg-hover-pills-hover: rgba(9, 13, 22, 0.05);
@@ -74,15 +30,35 @@
   --logo-opacity-hover: 0.75;
   --footer-logo-filter: brightness(0) opacity(0.85);
   
-  --gradient-emphasis: linear-gradient(120deg, #1d4ed8 0%, #3b82f6 100%);
-
+  /* Gradients */
+  --gradient-accent: linear-gradient(135deg, #2563eb 0%, #f7971f 100%);
+  --gradient-accent-hover: linear-gradient(135deg, #3b82f6 0%, #ffae3c 100%);
+  --gradient-tech: linear-gradient(135deg, #2563eb 0%, #38bdf8 100%);
+  --gradient-cyan-blue: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
   --gradient-card-border: linear-gradient(180deg, rgba(9, 13, 22, 0.05) 0%, rgba(9, 13, 22, 0.01) 100%);
   --gradient-card-border-hover: linear-gradient(180deg, rgba(247, 151, 31, 0.5) 0%, rgba(255, 210, 0, 0.3) 100%);
-  
+  --gradient-hero-glow: radial-gradient(circle, rgba(247, 151, 31, 0.07) 0%, transparent 60%);
+  /* Headline emphasis: kept blue so orange stays reserved for calls to action */
+  --gradient-emphasis: linear-gradient(120deg, #1d4ed8 0%, #3b82f6 100%);
+
+  /* Shadows */
   --shadow-sm: 0 2px 8px rgba(9, 13, 22, 0.03);
   --shadow-md: 0 10px 30px rgba(9, 13, 22, 0.04), 0 1px 3px rgba(9, 13, 22, 0.02);
   --shadow-lg: 0 20px 40px rgba(9, 13, 22, 0.06), 0 1px 3px rgba(9, 13, 22, 0.02);
   --glass-shadow: 0 8px 30px 0 rgba(9, 13, 22, 0.03);
+  
+  /* Vertical rhythm. Every band's padding and every section header's gap read
+     from these two, so the page's spacing is tuned here rather than in a dozen
+     component files. The breakpoints below step them down together. */
+  --space-section: 5rem;
+  --space-header: 3rem;
+  /* Thin credibility bands (logo wall, brand line) sit a step below a full
+     section so they read as rules between bands, not bands of their own. */
+  --space-strip: 3rem;
+
+  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -153,13 +129,9 @@ button, input, select, textarea {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(9, 13, 22, 0.12);
   border-radius: 10px;
   border: 2px solid var(--bg-primary);
-}
-
-.light-theme ::-webkit-scrollbar-thumb {
-  background: rgba(9, 13, 22, 0.12);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -176,7 +148,7 @@ button, input, select, textarea {
 }
 
 .section {
-  padding: 8rem 0;
+  padding: var(--space-section) 0;
   position: relative;
   border-bottom: 1px solid var(--border-color);
 }
@@ -195,15 +167,9 @@ button, input, select, textarea {
   background-size: 40px 40px;
   background-image: 
     linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    linear-gradient(to bottom, rgba(9, 13, 22, 0.015) 1px, transparent 1px);
   pointer-events: none;
   z-index: 1;
-}
-
-.light-theme .grid-bg-overlay {
-  background-image: 
-    linear-gradient(to right, rgba(9, 13, 22, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(9, 13, 22, 0.015) 1px, transparent 1px);
 }
 
 /* Ambient glow nodes */
@@ -213,14 +179,10 @@ button, input, select, textarea {
   height: 600px;
   max-width: 100%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(var(--primary-rgb), 0.04) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--primary-rgb), 0.03) 0%, transparent 70%);
   filter: blur(80px);
   pointer-events: none;
   z-index: 0;
-}
-
-.light-theme .glow-bg {
-  background: radial-gradient(circle, rgba(var(--primary-rgb), 0.03) 0%, transparent 70%);
 }
 
 /* Skip link: first tab stop, visible only once focused */
@@ -298,16 +260,18 @@ main:focus {
 .section-header {
   text-align: center;
   max-width: 750px;
-  margin: 0 auto 5rem auto;
+  margin: 0 auto var(--space-header) auto;
   position: relative;
   z-index: 10;
 }
 
-/* Left-aligned variant, used to break the run of centred bands */
+/* Left-aligned variant, used wherever the content below it is left-aligned so
+   the kicker, heading and description share one left edge. Same gap underneath
+   as the centred variant, so both read on the same rhythm. */
 .section-header-left {
   text-align: left;
   max-width: 460px;
-  margin: 0 0 2.5rem 0;
+  margin: 0 0 var(--space-header) 0;
 }
 
 .section-header-left .section-subtitle {
@@ -429,12 +393,8 @@ main:focus {
 
 .btn-secondary:hover {
   background: var(--bg-hover-pills-hover);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-.light-theme .btn-secondary:hover {
   border-color: rgba(9, 13, 22, 0.2);
+  transform: translateY(-2px);
 }
 
 /* Micro-animations */
@@ -454,20 +414,19 @@ main:focus {
 }
 
 @media (max-width: 768px) {
+  :root {
+    --space-section: 3.5rem;
+    --space-strip: 2.5rem;
+    --space-header: 2.25rem;
+  }
   .heading-lg {
     font-size: 2.75rem;
   }
   .heading-md {
     font-size: 2.15rem;
   }
-  .section {
-    padding: 5rem 0;
-  }
   .container {
     padding: 0 1.25rem;
-  }
-  .section-header {
-    margin-bottom: 3rem;
   }
   .section-subtitle {
     font-size: 0.72rem;
@@ -488,14 +447,16 @@ main:focus {
 }
 
 @media (max-width: 480px) {
+  :root {
+    --space-section: 3rem;
+    --space-strip: 2rem;
+    --space-header: 2rem;
+  }
   html {
     font-size: 15px;
   }
   .container {
     padding: 0 1rem;
-  }
-  .section {
-    padding: 4rem 0;
   }
   .heading-lg {
     font-size: 2.35rem;
@@ -505,9 +466,6 @@ main:focus {
   }
   .heading-sm {
     font-size: 1.45rem;
-  }
-  .section-header {
-    margin-bottom: 2.5rem;
   }
   .btn {
     width: 100%;

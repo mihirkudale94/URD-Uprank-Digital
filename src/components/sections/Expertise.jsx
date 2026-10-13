@@ -27,7 +27,7 @@ export default function Expertise() {
     <section className="section expertise-section" id="expertise">
       <div className="grid-bg-overlay"></div>
 
-      <div className="container expertise-split">
+      <div className="container">
         <div className="expertise-lead section-header section-header-left scroll-animate">
           <span className="section-subtitle">Expertise</span>
           <h2 className="heading-md">

@@ -8,7 +8,7 @@ export default function BrandStatement() {
         <span className="brand-statement-line"></span>
         <div className="brand-statement-content">
           <p className="brand-statement-tagline">
-            Creating impact online. Winning results together.
+            One partner for your website, your campaigns, and your numbers.
           </p>
         </div>
         <span className="brand-statement-line"></span>

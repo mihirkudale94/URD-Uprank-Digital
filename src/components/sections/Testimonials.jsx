@@ -31,7 +31,7 @@ const testimonials = [
     role: 'Owner',
     company: 'Gangdhar Mithaiwale',
     image: publicAsset('/img/Testimonial/p4.png'),
-    quote: 'Up Rank Digital listened to what we wanted in a new website and built it! Our site views, service inquiries, and ease of maintenance have all improved dramatically. I\'ve gone through several website redesigns, and this was by far the smoothest and least stressful. Every step of the way, I was heard and valued. Our new website has exceeded our expectations.'
+    quote: 'Up Rank Digital listened to what we wanted in a new website and built it! Our site views, service inquiries, and ease of maintenance have all improved dramatically. I’ve gone through several website redesigns, and this was by far the smoothest and least stressful. Every step of the way, I was heard and valued. Our new website has exceeded our expectations.'
   }
 ];
 
@@ -98,7 +98,7 @@ export default function Testimonials() {
             
             <div className="testimonial-content" aria-live="polite" aria-atomic="true">
               <p className="testimonial-text">
-                "{testimonials[activeIndex].quote}"
+                &ldquo;{testimonials[activeIndex].quote}&rdquo;
               </p>
               
               <div className="testimonial-author">

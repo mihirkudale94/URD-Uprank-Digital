@@ -16,7 +16,7 @@
   align-items: flex-start;
   padding: 2.1rem 1.85rem;
   border-radius: 18px;
-  min-height: 260px;
+  min-height: 230px;
 }
 
 /* Row 1: three cards, Row 2: two wider cards - no orphan, no dead space */

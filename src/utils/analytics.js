@@ -16,7 +16,7 @@ export const trackWebsiteEvent = (eventName, params = {}) => {
   if (!canUseBrowser() || !eventName) return;
 
   const eventPayload = {
-    event_category: 'website_assistant',
+    event_category: 'engagement',
     ...params
   };
 
@@ -33,21 +33,8 @@ export const trackWebsiteEvent = (eventName, params = {}) => {
     window.gtag('event', eventName, eventPayload);
   }
 
-  // Developer custom event dispatch for external listener integrations
-  try {
-    window.dispatchEvent(
-      new CustomEvent('urd-assistant-event', {
-        detail: {
-          action: eventName,
-          ...params
-        }
-      })
-    );
-  } catch (err) {
-    console.warn('Failed to dispatch urd-assistant-event:', err);
-  }
-
-  // Fallback custom event dispatch
+  // Dispatched whether or not a tag is configured, so an external listener can
+  // pick events up without Google Analytics in the middle.
   try {
     window.dispatchEvent(
       new CustomEvent('urd:analytics', {

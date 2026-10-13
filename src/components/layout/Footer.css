@@ -1,7 +1,7 @@
 .footer-container {
   background-color: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
-  padding: 5rem 0 2rem 0;
+  padding: var(--space-section) 0 2rem 0;
   position: relative;
   z-index: 10;
 }
@@ -10,7 +10,7 @@
   display: grid;
   grid-template-columns: 1.25fr 0.85fr 1.1fr 0.8fr;
   gap: 3rem;
-  margin-bottom: 4rem;
+  margin-bottom: 2.5rem;
 }
 
 .footer-brand-col {
@@ -41,7 +41,7 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-hover-pills);
   border: 1px solid var(--border-color);
   display: flex;
   align-items: center;
@@ -55,7 +55,7 @@
   color: #ffffff;
   border-color: var(--primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(229, 46, 113, 0.25);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
 }
 
 .footer-links-col h3 {
@@ -121,40 +121,11 @@
   padding-left: 5px;
 }
 
-.footer-tagline-bar {
-  text-align: center;
-  padding: 2rem 1rem 1.5rem;
-  border-top: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.footer-tagline-text {
-  font-size: 1.2rem;
-  font-weight: 700;
-  font-style: italic;
-  color: var(--text-main);
-  letter-spacing: 0.01em;
-}
-
-.footer-tagline-sub {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--primary);
-}
-
 .footer-bottom {
   padding-top: 1.5rem;
   display: flex;
   align-items: center;
-  /* Copyright left, legal links right. Stacks and centres under 768px. */
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .footer-copyright {
@@ -167,10 +138,13 @@
   margin: 0;
 }
 
+/* Stacked directly above the assistant launcher (3.5rem tall at a 1.5rem inset, see
+   WebsiteAssistant.css). The z-index sits below the assistant's 50 so the open chat
+   panel covers this button instead of it floating in the conversation. */
 .back-to-top-btn {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: 5.75rem;
+  right: 1.5rem;
   width: 46px;
   height: 46px;
   border-radius: 50%;
@@ -185,7 +159,7 @@
   cursor: pointer;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   outline: none;
-  z-index: 999;
+  z-index: 40;
   opacity: 0;
   pointer-events: none;
   transform: translateY(20px);
@@ -220,34 +194,14 @@
     gap: 2.5rem;
   }
   .footer-container {
-    padding: 3rem 0 2rem 0;
-  }
-  .footer-bottom {
-    flex-direction: column;
-    gap: 1.5rem;
-    justify-content: center;
-  }
-  .footer-bottom-spacer {
-    display: none;
+    padding: var(--space-section) 0 1.5rem 0;
   }
   .footer-contact-list li {
     gap: 0.75rem;
   }
-}
-
-/* Legal links sit beside the copyright line. */
-.footer-legal-links {
-  display: flex;
-  gap: 1.25rem;
-  flex-wrap: wrap;
-}
-
-.footer-legal-links a {
-  color: var(--text-muted);
-  font-size: 0.88rem;
-  transition: color var(--transition-fast);
-}
-
-.footer-legal-links a:hover {
-  color: var(--primary);
+  /* The launcher drops to a 1rem inset here. */
+  .back-to-top-btn {
+    bottom: 5rem;
+    right: 1rem;
+  }
 }

@@ -8,11 +8,9 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "node --test tests/servicePlaybook.test.js tests/faqSchema.test.js tests/analyticsConfig.test.js",
-    "test:db": "node scripts/test-db.js"
+    "test": "node --test tests/analyticsConfig.test.js tests/chatEndpoint.test.js tests/jsonLd.test.js tests/leadEndpoint.test.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.108.2",
     "lucide-react": "0.469.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
@@ -21,9 +19,7 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
-    "dotenv": "^17.4.2",
     "oxlint": "^1.69.0",
-    "vite": "^8.1.0",
-    "zod": "^4.4.3"
+    "vite": "^8.1.0"
   }
 }

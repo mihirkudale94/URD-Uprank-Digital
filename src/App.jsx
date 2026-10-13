@@ -6,14 +6,14 @@ import Footer from '@/components/layout/Footer';
 import Clients from '@/components/sections/Clients';
 import Expertise from '@/components/sections/Expertise';
 import Services from '@/components/sections/Services';
-import ExperienceBanner from '@/components/sections/ExperienceBanner';
 import WhyPartner from '@/components/sections/WhyPartner';
 import Testimonials from '@/components/sections/Testimonials';
 import Leadership from '@/components/sections/Leadership';
 import BrandStatement from '@/components/sections/BrandStatement';
-import FAQ from '@/components/sections/FAQ';
 import ContactForm from '@/components/sections/ContactForm';
 
+// Loaded on its own chunk: the panel and its styles are dead weight for a visitor who never
+// opens it, and nothing above the fold depends on it.
 const WebsiteAssistant = lazy(() => import('@/components/features/WebsiteAssistant'));
 
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
@@ -30,12 +30,10 @@ function App() {
         <Clients />
         <Expertise />
         <Services />
-        <ExperienceBanner />
         <WhyPartner />
         <Testimonials />
         <Leadership />
         <BrandStatement />
-        <FAQ />
         <ContactForm />
       </main>
       <Suspense fallback={null}>

@@ -2,15 +2,41 @@
   background-color: var(--bg-primary);
 }
 
+/* Full width in two columns: the pitch on the left, the contact card on the
+   right. A single 750px column left ~205px dead on each side and pushed the
+   pitch to 86 characters a line, the longest measure on the site; splitting it
+   fills the band and brings the pitch back to ~72.
+
+   Two rows, with the name block alone in row 1, so the contact card's top edge
+   starts on the "Three things we won't do" line rather than up beside the
+   badge. */
 .leader-profile-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  max-width: 750px;
-  margin: 0 auto;
-  gap: 4rem;
-  align-items: flex-start;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 4rem;
+  row-gap: 2.25rem;
+  align-items: start;
   position: relative;
   z-index: 10;
+}
+
+.leader-title-wrap {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.leader-pitch {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.leader-connect-card {
+  grid-column: 2;
+  grid-row: 2;
+  /* Pull the card up by its own top padding so the "Let's Connect" heading
+     sits on the same line as "Three things we won't do", not 2rem below it. */
+  margin-top: -2rem;
 }
 
 .leader-connect-card {
@@ -51,12 +77,6 @@
   color: var(--primary);
 }
 
-.leader-info-box {
-  display: flex;
-  flex-direction: column;
-  gap: 2.25rem;
-}
-
 .leader-badge {
   display: inline-flex;
   align-items: center;
@@ -84,7 +104,7 @@
 .leader-role {
   font-size: 1rem;
   color: var(--text-muted);
-  font-weight: 550;
+  font-weight: 600;
 }
 
 .leader-pitch {
@@ -103,127 +123,40 @@
 .leader-pitch p {
   font-size: 1rem;
   color: var(--text-muted);
-  line-height: 1.6;
-  font-style: italic;
+  line-height: 1.65;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
 }
 
-.why-partner-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.leader-pitch p + p {
+  margin-top: 0.85rem;
 }
 
-.why-work-leader {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.expertise-sublabel {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-dim);
-  margin-bottom: 0.25rem;
-}
-
-.why-work-label {
-  width: 100%;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--primary);
-  margin-bottom: 0.25rem;
-}
-
-.leader-highlight-tag {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-color);
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  min-width: 0;
-}
-
-.tag-bullet {
-  width: 5px;
-  height: 5px;
-  background-color: var(--primary);
-  border-radius: 50%;
-}
-
-.leader-expertise-wrap h3 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 1.25rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.expertise-checkbox-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.expertise-check-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-
-.leader-quote-block {
-  margin-top: 5rem;
-  padding: 3rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  position: relative;
-  z-index: 10;
-}
-
-.quote-icon {
-  color: var(--primary);
-  opacity: 0.15;
-}
-
-.leader-quote-block p {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--text-main);
-  max-width: 600px;
-  line-height: 1.5;
-}
-
-.leader-quote-block span {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--primary);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
+/* Below this the two columns are too narrow to earn their keep, so the contact
+   card drops under the pitch. */
 @media (max-width: 900px) {
   .leader-profile-grid {
-    gap: 3rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    gap: 2.5rem;
+  }
+  .leader-title-wrap,
+  .leader-pitch,
+  .leader-connect-card {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .leader-connect-card {
+    margin-top: 0;
   }
 }
 
 @media (max-width: 600px) {
-  .leader-profile-grid {
-    gap: 2.25rem;
+  /* Too narrow to justify without rivers of white space. */
+  .leader-pitch p {
+    text-align: left;
+    hyphens: manual;
   }
   .leader-connect-card {
     padding: 1.4rem;
@@ -235,17 +168,6 @@
     padding-left: 1rem;
   }
   .leader-pitch h4 {
-    font-size: 1.05rem;
-  }
-  .expertise-checkbox-grid {
-    grid-template-columns: 1fr;
-    gap: 0.85rem;
-  }
-  .leader-quote-block {
-    margin-top: 3rem;
-    padding: 1.5rem;
-  }
-  .leader-quote-block p {
     font-size: 1.05rem;
   }
 }
