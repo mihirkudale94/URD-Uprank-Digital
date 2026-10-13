@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import handler from '../api/chat.js';
+import handler, { __resetRateLimits } from '../api/chat.js';
+import { FALLBACK_REPLY } from '../src/utils/servicePlaybook.js';
 
 const conversation = [
   { role: 'user', content: 'can you run google ads for us?' },
@@ -58,14 +59,32 @@ const withGroq = async (run, { apiKey = 'test-key', replies = [{ ok: true }] } =
   const originalModel = process.env.GROQ_MODEL;
   const calls = [];
 
+  // Every test in this file shares one process and one client key, so the limiter has to
+  // start from nothing or a later test would be rejected for what an earlier one sent.
+  __resetRateLimits();
+
   if (apiKey === null) delete process.env.GROQ_API_KEY;
   else process.env.GROQ_API_KEY = apiKey;
   // Pinned so the fallback list cannot change what the assertions count.
   process.env.GROQ_MODEL = 'stub-model';
+  // Long enough to be a deliberate wait, short enough that the stall test is not one.
+  process.env.CHAT_UPSTREAM_TIMEOUT_MS = '60';
 
   globalThis.fetch = async (url, options) => {
     const reply = replies[calls.length] || replies[replies.length - 1];
     calls.push({ url, options, body: JSON.parse(options.body) });
+
+    // A model that accepts the request and then goes quiet. It only ever settles when
+    // the endpoint's own timeout aborts it, which is the behaviour under test.
+    if (reply.stall) {
+      return new Promise((_resolve, reject) => {
+        options.signal?.addEventListener('abort', () => {
+          const aborted = new Error('The operation was aborted.');
+          aborted.name = 'AbortError';
+          reject(aborted);
+        });
+      });
+    }
 
     return {
       ok: Boolean(reply.ok),
@@ -83,6 +102,7 @@ const withGroq = async (run, { apiKey = 'test-key', replies = [{ ok: true }] } =
     else process.env.GROQ_API_KEY = originalKey;
     if (originalModel === undefined) delete process.env.GROQ_MODEL;
     else process.env.GROQ_MODEL = originalModel;
+    delete process.env.CHAT_UPSTREAM_TIMEOUT_MS;
   }
 };
 
@@ -148,7 +168,9 @@ test('a missing key answers 200 with a fallback frame the widget can swap out', 
       assert.equal(calls.length, 0);
       assert.equal(res.statusCode, 200);
       assert.equal(isFallback(res), true);
-      assert.match(sseContent(res), /having trouble connecting/i);
+      // The widget compares the finished reply against this exact literal to recognise
+      // the frame when it misses the flag, so the frame has to carry it verbatim.
+      assert.equal(sseContent(res), FALLBACK_REPLY);
       assert.equal(res.ended, true);
     },
     { apiKey: null, replies: [{ ok: true }] }
@@ -203,5 +225,155 @@ test('only POST is allowed', async () => {
 
     assert.equal(res.statusCode, 405);
     assert.equal(res.headers.Allow, 'POST');
+  });
+});
+
+test('a flood from one address is turned away before it reaches Groq', async () => {
+  await withGroq(async (calls) => {
+    const request = () => ({
+      method: 'POST',
+      headers: { 'x-forwarded-for': '203.0.113.7' },
+      body: { messages: conversation }
+    });
+
+    const statuses = [];
+    for (let attempt = 0; attempt < 25; attempt += 1) {
+      const res = mockResponse();
+      await handler(request(), res);
+      statuses.push(res.statusCode);
+    }
+
+    const refused = statuses.filter((status) => status === 429);
+    assert.ok(refused.length > 0, 'a 25-message burst should hit the limit');
+    // Only the messages that got through cost anything upstream.
+    assert.equal(calls.length, statuses.length - refused.length);
+  });
+});
+
+test('one visitor hitting the limit does not silence another', async () => {
+  await withGroq(async () => {
+    const send = async (ip) => {
+      const res = mockResponse();
+      await handler({ method: 'POST', headers: { 'x-forwarded-for': ip }, body: { messages: conversation } }, res);
+      return res.statusCode;
+    };
+
+    for (let attempt = 0; attempt < 25; attempt += 1) await send('198.51.100.4');
+
+    assert.equal(await send('198.51.100.9'), 200);
+  });
+});
+
+test('a model that never answers is abandoned for the next one', async () => {
+  await withGroq(
+    async (calls) => {
+      const res = mockResponse();
+      await handler({ method: 'POST', body: { messages: conversation } }, res);
+
+      assert.equal(calls.length, 2, 'the stalled attempt should not be the last word');
+      assert.equal(isFallback(res), false);
+      assert.equal(sseContent(res), 'Here is what we need from you.');
+    },
+    { replies: [{ stall: true }, { ok: true }] }
+  );
+});
+
+test('the prompt tells the model to write the number in plain digits', async () => {
+  await withGroq(async (calls) => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: { messages: conversation } }, res);
+
+    const prompt = calls[0].body.messages[0].content;
+    assert.match(prompt, /\+91 93711 16165/);
+    assert.match(prompt, /ordinary spaces/);
+    // The widget looks for this literal to offer the form button, in any language.
+    assert.match(prompt, /"enquiry form" stay in English/);
+    assert.equal(res.ended, true);
+  });
+});
+
+test('the opening message survives a conversation longer than the cap', async () => {
+  await withGroq(async (calls) => {
+    const opening = { role: 'user', content: 'we run a jewellery showroom in baner' };
+    const long = [opening];
+    for (let index = 0; index < 30; index += 1) {
+      long.push({ role: index % 2 === 0 ? 'assistant' : 'user', content: `turn ${index}` });
+    }
+    long.push({ role: 'user', content: 'so what do i do next?' });
+
+    const res = mockResponse();
+    await handler({ method: 'POST', body: { messages: long } }, res);
+
+    const sent = calls[0].body.messages.filter((message) => message.role !== 'system');
+    // The cap has not moved: the opening message takes a slot rather than adding one.
+    assert.equal(sent.length, 12);
+    assert.equal(sent[0].content, opening.content, 'the business should still be in context');
+    assert.equal(sent.at(-1).content, 'so what do i do next?');
+    assert.equal(res.ended, true);
+  });
+});
+
+test('a short conversation is passed through untouched', async () => {
+  await withGroq(async (calls) => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: { messages: conversation } }, res);
+
+    const sent = calls[0].body.messages.filter((message) => message.role !== 'system');
+    assert.deepEqual(sent, conversation, 'nothing to pin or trim at this length');
+  });
+});
+
+test('the visitor waits one budget, not one per model', async () => {
+  await withGroq(
+    async (calls) => {
+      process.env.CHAT_TOTAL_BUDGET_MS = '150';
+      process.env.CHAT_UPSTREAM_TIMEOUT_MS = '100';
+
+      const started = Date.now();
+      const res = mockResponse();
+      await handler({ method: 'POST', body: { messages: conversation } }, res);
+      const waited = Date.now() - started;
+
+      // Four stalling models at 100ms each would be 400ms without a shared deadline.
+      assert.ok(waited < 320, `waited ${waited}ms, which is past the budget`);
+      assert.ok(calls.length >= 1, 'it should still have tried');
+      assert.equal(res.statusCode, 200);
+      assert.equal(isFallback(res), true, 'the playbook answers once the budget is gone');
+
+      delete process.env.CHAT_TOTAL_BUDGET_MS;
+    },
+    { replies: [{ stall: true }, { stall: true }, { stall: true }, { stall: true }] }
+  );
+});
+
+test('the prompt answers "what do you need from me" with the form, not a shopping list', async () => {
+  await withGroq(async (calls) => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: { messages: conversation } }, res);
+
+    const prompt = calls[0].body.messages[0].content;
+    // Asking for a budget in chat was the single most common rule break in sampling,
+    // because "what do you need from me?" invites a list and budget belongs on it.
+    assert.match(prompt, /what you need from them/i);
+    assert.match(prompt, /Do not list budget, timeline, audience/i);
+    assert.equal(res.ended, true);
+  });
+});
+
+test('the prompt refuses to name deliverables outside the five lines', async () => {
+  await withGroq(async (calls) => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: { messages: conversation } }, res);
+
+    const prompt = calls[0].body.messages[0].content;
+    assert.match(prompt, /name no other deliverable/i);
+    for (const promise of ['payment gateways', 'mobile apps', 'hosting']) {
+      assert.ok(prompt.includes(promise), `the prompt should rule out ${promise}`);
+    }
+    // The rule bounds what the assistant promises, not who it talks to. Listing a word
+    // a whole industry uses for its goal - "booking" for travel, hotels, clinics - made
+    // it turn a real buyer away, so the limit says so in as many words.
+    assert.match(prompt, /limits what you promise, never who you welcome/i);
+    assert.ok(!/booking/i.test(prompt), 'a visitor whose goal is bookings is still a website lead');
   });
 });

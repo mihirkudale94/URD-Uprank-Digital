@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Send, CheckCircle2, ArrowRight } from 'lucide-react';
 import { buildLeadPayload, submitLead } from '@/utils/leadSubmission';
+import {
+  ENQUIRY_PREFILL_EVENT,
+  clearEnquiryPrefill,
+  readEnquiryPrefill
+} from '@/utils/enquiryPrefill';
 import './ContactForm.css';
 
 export default function ContactForm() {
@@ -14,6 +19,21 @@ export default function ContactForm() {
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [websiteConfirmation, setWebsiteConfirmation] = useState('');
+
+  // The assistant hands over what the visitor told it, so the goal field arrives written
+  // instead of blank. Anything the visitor has already typed here is theirs and wins.
+  useEffect(() => {
+    const applyPrefill = (prefill) => {
+      if (!prefill) return;
+      setFormData((current) => (current.message.trim() ? current : { ...current, message: prefill }));
+    };
+
+    applyPrefill(readEnquiryPrefill());
+
+    const handlePrefill = (event) => applyPrefill(event.detail?.prefill);
+    window.addEventListener(ENQUIRY_PREFILL_EVENT, handlePrefill);
+    return () => window.removeEventListener(ENQUIRY_PREFILL_EVENT, handlePrefill);
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -54,6 +74,9 @@ export default function ContactForm() {
         phone: '',
         message: ''
       });
+      // The chat context has reached Sachin, so it should not come back and refill the
+      // form behind a visitor who is sending a second, unrelated enquiry.
+      clearEnquiryPrefill();
     } catch (error) {
       setErrorMsg(error.message || 'We could not submit your inquiry right now. Please call or WhatsApp us directly.');
     } finally {

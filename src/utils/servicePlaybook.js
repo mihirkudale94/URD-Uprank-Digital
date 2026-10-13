@@ -1,3 +1,15 @@
+// Relative, with the extension: `api/chat.js` imports this file directly, so the Vite `@`
+// alias would not resolve inside the serverless function.
+import { CONTACT_EMAIL, WHATSAPP_NUMBER_DISPLAY } from './contactChannels.js';
+
+// Said back to the visitor when no model could be reached. Both ends of the chat import
+// this one literal: the endpoint writes it into the `urd_fallback` frame, and the widget
+// compares the finished reply against it to recognise that frame even if it missed the
+// flag. Two hand-written copies would drift, and a drifted copy is a fallback reply the
+// widget no longer recognises and leaves on screen.
+export const FALLBACK_REPLY =
+  `I am having trouble connecting right now. You can WhatsApp Up Rank Digital at ${WHATSAPP_NUMBER_DISPLAY} or email ${CONTACT_EMAIL}, and the team will pick this up directly.`;
+
 // `aliases` route a visitor's wording to a service and are deliberately broad.
 // `fit` and `bullets` are spoken back to the visitor, so they stay limited to the five service
 // lines and eight areas of expertise published on the site.

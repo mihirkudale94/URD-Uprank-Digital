@@ -86,8 +86,8 @@ is no CORS to configure:
 
 The system prompt is built from `SERVICE_PLAYBOOK`, so the assistant can only offer the
 five service lines the site publishes. It is also told never to quote a price or a
-timeline, never to invent clients or results, and to ask for business name, link, goal,
-timeline and WhatsApp number once a visitor has a direction.
+timeline, never to invent clients or results, and to send a visitor who has a direction
+to the enquiry form rather than collecting their details in chat.
 
 `GROQ_MODEL` overrides the model; otherwise `openai/gpt-oss-120b` is tried first and the
 smaller ids below it cover a retired model. These are reasoning models, so the thinking
@@ -101,8 +101,16 @@ the widget takes that as a signal to answer from the keyword playbook in
 `buildLocalAssistantReply` instead. `vite dev` has no serverless runtime, so the local
 playbook is what answers there too.
 
-The widget asks for business name, goal and timeline but has no lead capture: anything
-typed in lives in `sessionStorage` and dies with the tab.
+The widget has no lead capture of its own: anything typed into it lives in
+`sessionStorage` and dies with the tab. So it routes instead. Every reply that has a
+direction ends by pointing at the enquiry form in `#contact`, and a reply containing the
+words **enquiry form** grows an "Open the enquiry form" button that closes the panel,
+scrolls to the form and focuses the first field. Both ends of the chat produce that
+phrase on purpose — the rule in the system prompt and `contactPrompt` in the widget — so
+changing the wording in one place without the other silently drops the button.
+
+The same detection drives the WhatsApp and email buttons, which key off the number and
+the address appearing in the reply. A reply can carry all three; the form comes first.
 
 ## Deployment (Vercel)
 

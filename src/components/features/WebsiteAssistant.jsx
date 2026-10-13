@@ -1,7 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CheckCircle2, Mail, MessageCircle, RotateCcw, Send, Sparkles, User, X } from 'lucide-react';
-import { SERVICE_PLAYBOOK, getServiceMatch } from '@/utils/servicePlaybook';
+import { ArrowRight, CheckCircle2, Mail, MessageCircle, RotateCcw, Send, Sparkles, User, X } from 'lucide-react';
+import { FALLBACK_REPLY, SERVICE_PLAYBOOK, getServiceMatch } from '@/utils/servicePlaybook';
 import { trackWebsiteEvent } from '@/utils/analytics';
+import { scrollToSection } from '@/utils/scrollToSection';
+import {
+  CONTACT_EMAIL,
+  WHATSAPP_NUMBER_E164,
+  WHATSAPP_URL
+} from '@/utils/contactChannels';
+import { clearEnquiryPrefill, publishEnquiryPrefill } from '@/utils/enquiryPrefill';
+import { trimConversation } from '@/utils/conversationWindow';
 import './WebsiteAssistant.css';
 
 // Same-origin Vercel function, exactly like /api/submit-lead: no key reaches the browser and
@@ -20,8 +28,19 @@ const initialMessages = [
   }
 ];
 
+// The enquiry form collects name, email, phone and the goal, and it reaches Sachin's inbox.
+// Asking a visitor to retype the same things into a chat panel that forgets them when the tab
+// closes only loses the lead, so every reply that has a direction ends by pointing at the form.
+// The exact words "enquiry form" are also what `renderMessageContentAndActions` looks for to
+// offer the button, and the system prompt in api/chat.js tells the model to use them too.
 const contactPrompt =
-  'To route this properly, share your business name, website or social link, main goal, timeline, and WhatsApp number.';
+  'The quickest way forward is the enquiry form on this page: name, email, phone and a line about your goal. Sachin comes back within one business day.';
+
+const CONTACT_SECTION = '#contact';
+
+// Most replies land inside a second. Past this the visitor deserves a word rather than
+// dots that look the same at six seconds as they did at one.
+const SLOW_REPLY_NOTICE_MS = 5000;
 
 const buildLocalAssistantReply = (input) => {
   const lowerInput = input.toLowerCase();
@@ -107,9 +126,15 @@ const parseMarkdownText = (textLine) => {
   return parts.length > 0 ? parts : textLine;
 };
 
-const renderMessageContentAndActions = (message) => {
+const renderMessageContentAndActions = (message, onOpenForm, showActions = true) => {
   let text = message.content;
   if (!text) return null;
+
+  // Markdown is the assistant's formatting, not the visitor's. Running the visitor's own
+  // words through the parser turned anything they typed in [label](url) form into a real
+  // link in their bubble, which is a link the page wrote on their behalf out of text a
+  // stranger could have handed them.
+  const format = message.role === 'assistant' ? parseMarkdownText : (line) => line;
 
   // Strip suggestions tag from text bubbles
   text = text.replace(/\[Suggestions:\s*.*?\]/gi, '').trim();
@@ -124,7 +149,7 @@ const renderMessageContentAndActions = (message) => {
     if (trimmed.startsWith('-') || trimmed.startsWith('*')) {
       currentList.push(
         <li key={`li-${index}`} className="message-list-item">
-          {parseMarkdownText(trimmed.substring(1).trim())}
+          {format(trimmed.substring(1).trim())}
         </li>
       );
     } else if (trimmed.startsWith('###')) {
@@ -138,7 +163,7 @@ const renderMessageContentAndActions = (message) => {
       }
       formattedElements.push(
         <h4 key={`h-${index}`} className="message-header">
-          {parseMarkdownText(trimmed.replace(/^###\s*/, ''))}
+          {format(trimmed.replace(/^###\s*/, ''))}
         </h4>
       );
     } else {
@@ -153,7 +178,7 @@ const renderMessageContentAndActions = (message) => {
       if (trimmed) {
         formattedElements.push(
           <p key={`p-${index}`} className="message-paragraph">
-            {parseMarkdownText(trimmed)}
+            {format(trimmed)}
           </p>
         );
       }
@@ -168,28 +193,38 @@ const renderMessageContentAndActions = (message) => {
     );
   }
 
-  if (message.role === 'assistant') {
-    const hasWhatsApp = text.includes('+91 93711 16165') || text.includes('9371116165');
-    const hasEmail = text.includes('sachin@uprankdigital.com');
+  // Only the newest reply carries the buttons. Every earlier reply that mentioned the
+  // form keeps its words but loses its button, because three stacked orange CTAs in one
+  // short panel is the same nag repeated, and the visitor only ever acts on the last one.
+  if (message.role === 'assistant' && showActions) {
+    // The model writes the number the way prose wants it, which in practice means narrow
+    // no-break spaces between the digit groups rather than ordinary ones. Comparing the
+    // digits alone is what makes the button survive that: matching the literal string
+    // dropped the WhatsApp button from roughly three quarters of the replies that
+    // offered the number, including the ones where the visitor had asked for a person.
+    const hasWhatsApp = text.replace(/\D/g, '').includes(WHATSAPP_NUMBER_E164);
+    const hasEmail = new RegExp(CONTACT_EMAIL.replace(/[.]/g, '\\.'), 'i').test(text);
+    const hasForm = /enquiry form/i.test(text);
 
-    if (hasWhatsApp || hasEmail) {
+    if (hasWhatsApp || hasEmail || hasForm) {
       return (
         <div className="message-content-container">
           <div className="message-text-content">{formattedElements}</div>
           <div className="message-inline-ctas">
+            {hasForm && (
+              <button type="button" className="inline-cta-btn form-cta" onClick={onOpenForm}>
+                <span>Open the enquiry form</span>
+                <ArrowRight size={14} />
+              </button>
+            )}
             {hasWhatsApp && (
-              <a
-                href="https://wa.me/919371116165"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-cta-btn whatsapp-cta"
-              >
+              <a href={WHATSAPP_URL} target="_blank" rel="noreferrer" className="inline-cta-btn whatsapp-cta">
                 <MessageCircle size={14} />
                 <span>Message on WhatsApp</span>
               </a>
             )}
             {hasEmail && (
-              <a href="mailto:sachin@uprankdigital.com" className="inline-cta-btn email-cta">
+              <a href={`mailto:${CONTACT_EMAIL}`} className="inline-cta-btn email-cta">
                 <Mail size={14} />
                 <span>Email Sachin</span>
               </a>
@@ -203,19 +238,20 @@ const renderMessageContentAndActions = (message) => {
   return <div className="message-text-content">{formattedElements}</div>;
 };
 
-const isBackendFallback = (text) =>
-  /higher than normal traffic|having trouble connecting|WhatsApp (the (URD|Up Rank Digital) team|Up Rank Digital|us at)/i.test(
-    text
-  );
+// Only the endpoint's own fallback text, matched exactly. The `urd_fallback` flag is the
+// real signal and this is the backstop for a frame whose flag was missed; it is deliberately
+// not a phrase match. The system prompt tells the model to hand off to WhatsApp and email,
+// so matching on that wording swallowed genuine answers and replaced them with a keyword
+// template the visitor had not asked for.
+const isBackendFallback = (text) => text.trim() === FALLBACK_REPLY;
 
 const cleanMessages = (messages) =>
-  messages
-    .filter((message) => ['assistant', 'user'].includes(message.role) && message.content)
-    .slice(-12)
-    .map((message) => ({
-      role: message.role,
-      content: String(message.content).slice(0, 2000)
-    }));
+  trimConversation(
+    messages.filter((message) => ['assistant', 'user'].includes(message.role) && message.content)
+  ).map((message) => ({
+    role: message.role,
+    content: String(message.content).slice(0, 2000)
+  }));
 
 export default function WebsiteAssistant() {
   const [isOpen, setIsOpen] = useState(() => {
@@ -235,6 +271,9 @@ export default function WebsiteAssistant() {
   });
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  // A model that stalls, or a retry onto the next model in the list, leaves the typing
+  // dots running with nothing to say for it. After a few seconds say so in words.
+  const [isSlow, setIsSlow] = useState(false);
   const [activeModel, setActiveModel] = useState('');
   const [latency, setLatency] = useState(0);
   const scrollRef = useRef(null);
@@ -262,6 +301,16 @@ export default function WebsiteAssistant() {
     if (!list) return;
     list.scrollTop = list.scrollHeight;
   }, [messages, isLoading, isOpen]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setIsSlow(false);
+      return;
+    }
+
+    const timer = window.setTimeout(() => setIsSlow(true), SLOW_REPLY_NOTICE_MS);
+    return () => window.clearTimeout(timer);
+  }, [isLoading]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -298,6 +347,9 @@ export default function WebsiteAssistant() {
       } catch (err) {
         console.warn('Failed to clear session messages:', err);
       }
+      // The conversation is gone, so the context waiting for the enquiry form should go
+      // with it rather than prefilling a story the visitor has just erased.
+      clearEnquiryPrefill();
 
       // Dispatch reset event for developer analytics integration
       trackWebsiteEvent('chat_cleared');
@@ -411,7 +463,9 @@ export default function WebsiteAssistant() {
       }
 
       // Dispatch reply received event for developer analytics integration
-      const isQualified = /sachin@uprankdigital.com|whatsapp/i.test(assistantText);
+      // The form is now the main route to the team, so a reply that sends a visitor there
+      // counts as a handoff alongside the WhatsApp and email ones.
+      const isQualified = /sachin@uprankdigital.com|whatsapp|enquiry form/i.test(assistantText);
       trackWebsiteEvent('reply_received', {
         role: 'assistant',
         replyLength: assistantText.length,
@@ -454,6 +508,23 @@ export default function WebsiteAssistant() {
   const openAssistant = () => {
     setIsOpen(true);
     trackWebsiteEvent('chatbot_opened');
+  };
+
+  // The panel covers most of a phone screen, so leaving it open would scroll the form in
+  // behind it. Closing first means the visitor lands on the fields, which is where the
+  // reply just sent them.
+  const openEnquiryForm = () => {
+    setIsOpen(false);
+    // Everything the visitor just told the assistant travels to the goal field, so the
+    // lead reaches Sachin with the context instead of an empty box and a retyped story.
+    const prefill = publishEnquiryPrefill(messages);
+    trackWebsiteEvent('assistant_form_cta', { prefilled: Boolean(prefill) });
+    scrollToSection(CONTACT_SECTION);
+    // The form is below the fold on most screens, so the scroll has to land before the
+    // first field can take focus.
+    window.setTimeout(() => {
+      document.getElementById('contact-name')?.focus({ preventScroll: true });
+    }, 600);
   };
 
   const handleSubmit = (event) => {
@@ -524,7 +595,7 @@ export default function WebsiteAssistant() {
                   </span>
                 )}
                 <div className="website-assistant-bubble">
-                  {renderMessageContentAndActions(message)}
+                  {renderMessageContentAndActions(message, openEnquiryForm, index === messages.length - 1)}
                 </div>
                 {message.role === 'user' && (
                   <span className="website-assistant-mini-avatar is-user">
@@ -544,6 +615,11 @@ export default function WebsiteAssistant() {
                     <span></span>
                     <span></span>
                   </div>
+                  {isSlow && (
+                    <p className="website-assistant-slow-note">
+                      Still working on this &mdash; one moment.
+                    </p>
+                  )}
                 </div>
               </div>
             )}
