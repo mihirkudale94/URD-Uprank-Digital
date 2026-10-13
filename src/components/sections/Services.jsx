@@ -1,6 +1,5 @@
 import React from 'react';
-import { ArrowRight, Code2, Megaphone, TrendingUp, Cpu, PenLine } from 'lucide-react';
-import { handleAnchorClick } from '@/utils/scrollToSection';
+import { Code2, Megaphone, TrendingUp, Cpu, PenLine } from 'lucide-react';
 import './Services.css';
 
 const services = [
@@ -32,8 +31,6 @@ const services = [
 ];
 
 export default function Services() {
-  const handleScrollToContact = (e) => handleAnchorClick(e, '#contact');
-
   return (
     <section className="section services-section" id="services">
       <div className="glow-bg"></div>
@@ -59,9 +56,6 @@ export default function Services() {
               <span className="service-card-icon">{service.icon}</span>
               <h3 className="service-card-title">{service.title}</h3>
               <p className="service-card-text">{service.text}</p>
-              <a href="#contact" className="service-card-link" onClick={handleScrollToContact}>
-                Talk to us <ArrowRight size={15} />
-              </a>
             </article>
           ))}
         </div>

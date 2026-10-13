@@ -5,9 +5,10 @@ import { handleAnchorClick, prefersReducedMotion } from '@/utils/scrollToSection
 import './Footer.css';
 
 const quickLinks = [
-  { href: '#expertise', label: 'Expertise' },
   { href: '#services', label: 'What We Do' },
+  { href: '#expertise', label: 'Expertise' },
   { href: '#why-us', label: 'Why Us' },
+  { href: '#how-we-work', label: 'How We Work' },
   { href: '#leadership', label: 'About' }
 ];
 
@@ -99,7 +100,7 @@ export default function Footer() {
       {/* Footer Copy & Sticky Top */}
       <div className="container footer-bottom">
         <div className="footer-copyright">
-          <p>URD SOLUTIONS PVT. LTD. &copy; 2017. All Rights Reserved.</p>
+          <p>URD Solutions Pvt. Ltd. &copy; 2017. All rights reserved.</p>
         </div>
       </div>
 

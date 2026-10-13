@@ -30,7 +30,7 @@
 }
 
 .hero-glow-2 {
-  background-color: var(--tech-glow);
+  background-color: var(--navy);
   bottom: 10%;
   right: 15%;
   animation: float-glow 25s infinite alternate-reverse ease-in-out;
@@ -75,9 +75,11 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.25em;
-  color: var(--primary);
-  border: 1px solid rgba(247, 151, 31, 0.25);
-  background: rgba(247, 151, 31, 0.06);
+  /* Navy, not orange: orange on this near-white fill reads at 2.1:1. The chip
+     keeps its orange border and sparkle, so the accent survives. */
+  color: var(--navy);
+  border: 1px solid rgba(var(--primary-rgb), 0.25);
+  background: rgba(var(--primary-rgb), 0.06);
   padding: 0.45rem 1.4rem;
   border-radius: 50px;
   margin-bottom: 2rem;
@@ -90,6 +92,7 @@
 }
 
 .hero-tag-sparkle {
+  color: var(--primary);
   animation: rotate-sparkle 4s linear infinite;
 }
 
@@ -137,7 +140,7 @@
   font-size: 2.1rem;
   font-weight: 800;
   line-height: 1;
-  color: var(--primary);
+  color: var(--primary-ink);
 }
 
 .hero-proof-label {
@@ -162,18 +165,9 @@
   color: var(--text-muted);
 }
 
-.arrow-bounce {
-  animation: bounce 2s infinite;
-}
-
 @keyframes float-glow {
   0% { transform: translate(0, 0) scale(1); }
   100% { transform: translate(50px, -50px) scale(1.15); }
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(6px); }
 }
 
 @keyframes rotate-sparkle {

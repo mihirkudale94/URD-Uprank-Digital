@@ -4,9 +4,21 @@
   background-color: var(--bg-secondary);
 }
 
+/* The lead runs the full container rather than the shared 460px column, so its
+   edges line up with the tile grid below instead of stopping a third of the way
+   across. The heading keeps its own break (the <br> in the markup), and the
+   description sits under it on a single line at desktop width. */
 .expertise-lead {
   position: relative;
   z-index: 2;
+  max-width: none;
+}
+
+/* Wide enough for the whole sentence to stay on one line, and the reason the
+   shared header's centring is overridden here: at 460px it broke across three. */
+.expertise-lead .section-description {
+  max-width: none;
+  text-wrap: pretty;
 }
 
 /* Four across, two down, over the full container. The tiles used to sit in the
@@ -94,6 +106,15 @@
   margin: 0;
 }
 
+/* Sits directly under the title, so the title gives up its zero margin above. */
+.expertise-tile-text {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: 0.6rem 0 0;
+  text-wrap: pretty;
+}
+
 /* Two-up: every tile gets its edges back, then the new outer column and last
    row are stripped for the two-column shape.
    The reset is written as :nth-child(n) rather than a bare .expertise-tile so
@@ -144,5 +165,9 @@
 
   .expertise-tile-title {
     font-size: 0.95rem;
+  }
+
+  .expertise-tile-text {
+    font-size: 0.82rem;
   }
 }

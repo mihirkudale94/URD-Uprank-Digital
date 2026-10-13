@@ -90,7 +90,7 @@
   bottom: 0.28rem;
   height: 2px;
   border-radius: 999px;
-  background: var(--gradient-accent);
+  background: var(--action);
 }
 
 .nav-mobile-toggle {
@@ -228,7 +228,7 @@
   left: 0;
   z-index: 1001;
   height: 2px;
-  background: var(--gradient-accent);
+  background: var(--action);
   box-shadow: 0 0 8px rgba(var(--primary-rgb), 0.45);
   transition: width 0.1s ease-out;
 }

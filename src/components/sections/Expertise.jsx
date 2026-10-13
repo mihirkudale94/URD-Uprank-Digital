@@ -12,14 +12,46 @@ import {
 import './Expertise.css';
 
 const expertise = [
-  { title: 'Website Development', icon: <Code2 size={18} /> },
-  { title: 'Digital Performance Marketing', icon: <TrendingUp size={18} /> },
-  { title: 'AI Powered Marketing Solutions', icon: <Cpu size={18} /> },
-  { title: 'Conversion Optimization', icon: <MousePointerClick size={18} /> },
-  { title: 'Analytics & Growth Strategy', icon: <BarChart3 size={18} /> },
-  { title: 'Content Design & Management', icon: <PenLine size={18} /> },
-  { title: 'Social Media Strategy', icon: <Share2 size={18} /> },
-  { title: 'Campaign Planning & Execution', icon: <Target size={18} /> }
+  {
+    title: 'Website Development',
+    icon: <Code2 size={18} />,
+    text: 'Design, build and launch — WordPress, Shopify or custom-coded.'
+  },
+  {
+    title: 'Digital Performance Marketing',
+    icon: <TrendingUp size={18} />,
+    text: 'Google and Meta ads plus SEO — managed against cost per lead, not impressions.'
+  },
+  {
+    title: 'AI Powered Marketing Solutions',
+    icon: <Cpu size={18} />,
+    text: 'Chat assistants, content systems and automation wired into your funnel.'
+  },
+  {
+    title: 'Conversion Optimization',
+    icon: <MousePointerClick size={18} />,
+    text: 'Fixing the leaks — forms, page speed, mobile flow, enquiry follow-up.'
+  },
+  {
+    title: 'Analytics & Growth Strategy',
+    icon: <BarChart3 size={18} />,
+    text: 'GA4, Search Console and call tracking set up so the numbers are trustworthy.'
+  },
+  {
+    title: 'Content Design & Management',
+    icon: <PenLine size={18} />,
+    text: 'Shoots, graphics, reels and copy — produced and scheduled every month.'
+  },
+  {
+    title: 'Social Media Strategy',
+    icon: <Share2 size={18} />,
+    text: 'Calendar, creative and community handling for Instagram, Facebook, LinkedIn.'
+  },
+  {
+    title: 'Campaign Planning & Execution',
+    icon: <Target size={18} />,
+    text: 'Festive, launch and seasonal pushes planned, run and measured.'
+  }
 ];
 
 export default function Expertise() {
@@ -46,6 +78,7 @@ export default function Expertise() {
               <span className="expertise-tile-index">{String(index + 1).padStart(2, '0')}</span>
               <span className="expertise-tile-icon">{item.icon}</span>
               <h3 className="expertise-tile-title">{item.title}</h3>
+              <p className="expertise-tile-text">{item.text}</p>
             </div>
           ))}
         </div>

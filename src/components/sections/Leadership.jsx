@@ -22,9 +22,8 @@ export default function Leadership() {
 
         <div className="leader-profile-grid scroll-animate delay-100">
           <div className="leader-title-wrap">
-            <span className="leader-badge">Digital Growth Partner</span>
             <h3 className="leader-name">Sachin Raje</h3>
-            <p className="leader-role">Managing Director, Up Rank Digital</p>
+            <p className="leader-role">Managing Director, URD Solutions</p>
           </div>
 
           <div className="leader-pitch">

@@ -1,0 +1,81 @@
+.who-section {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+}
+
+/* Header left, copy right. The header column is narrower so the paragraph gets
+   the measure it needs without running past a comfortable line length. */
+.who-split {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 3.5rem;
+  align-items: start;
+}
+
+/* The shared header carries a bottom margin meant for stacked sections; inside
+   a two-column split it would only push the columns out of alignment. */
+.who-header {
+  margin-bottom: 0;
+  max-width: none;
+}
+
+.who-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding-top: 0.5rem;
+}
+
+.who-lead {
+  font-size: 1.2rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+
+.who-point {
+  position: relative;
+  padding-left: 1.5rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-main);
+  text-wrap: pretty;
+}
+
+.who-point::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--action);
+}
+
+@media (max-width: 900px) {
+  .who-split {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .who-body {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .who-lead {
+    font-size: 1.05rem;
+  }
+
+  .who-point {
+    padding-left: 1.1rem;
+    font-size: 1.12rem;
+  }
+}

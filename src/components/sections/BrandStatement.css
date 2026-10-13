@@ -2,9 +2,9 @@
   /* A thin accent rule between bands, not a band of its own, so it sits below
      the section scale rather than on it. */
   padding: var(--space-strip) 1rem;
-  background: linear-gradient(135deg, rgba(247, 151, 31, 0.06) 0%, rgba(247, 151, 31, 0.02) 100%);
-  border-top: 1px solid rgba(247, 151, 31, 0.15);
-  border-bottom: 1px solid rgba(247, 151, 31, 0.15);
+  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.06) 0%, rgba(var(--primary-rgb), 0.02) 100%);
+  border-top: 1px solid rgba(var(--primary-rgb), 0.15);
+  border-bottom: 1px solid rgba(var(--primary-rgb), 0.15);
 }
 
 .brand-statement-inner {
@@ -18,7 +18,7 @@
 .brand-statement-line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(247, 151, 31, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(var(--primary-rgb), 0.4), transparent);
 }
 
 .brand-statement-content {

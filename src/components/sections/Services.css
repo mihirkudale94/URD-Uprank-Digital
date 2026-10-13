@@ -59,24 +59,7 @@
   color: var(--text-muted);
   font-size: 0.95rem;
   line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.service-card-link {
-  margin-top: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--primary);
-  text-decoration: none;
-  transition: gap var(--transition-fast);
-}
-
-.service-card-link:hover {
-  gap: 0.7rem;
+  margin-bottom: 0;
 }
 
 @media (max-width: 1024px) {

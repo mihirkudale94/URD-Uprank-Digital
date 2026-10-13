@@ -6,14 +6,14 @@ import './Navbar.css';
 
 const navLinks = [
   {
-    label: 'Expertise',
-    href: '#expertise',
-    kicker: 'Eight core capabilities'
-  },
-  {
     label: 'What We Do',
     href: '#services',
     kicker: 'Five service lines'
+  },
+  {
+    label: 'Expertise',
+    href: '#expertise',
+    kicker: 'Eight core capabilities'
   },
   {
     label: 'Why Us',
@@ -21,12 +21,18 @@ const navLinks = [
     kicker: 'Why work with us'
   },
   {
+    label: 'How We Work',
+    href: '#how-we-work',
+    kicker: 'Our four-step process'
+  },
+  {
     label: 'Clients',
     href: '#testimonials',
     kicker: 'Brands that trust us',
-    // The logo wall (#clients) and the quotes (#testimonials) are one idea
-    // split across two sections; both should highlight this item.
-    matches: ['testimonials', 'clients']
+    // The logo wall (#clients), the client profile (#who-we-work-with) and the
+    // quotes (#testimonials) are one idea split across three sections; all of
+    // them should highlight this item.
+    matches: ['testimonials', 'clients', 'who-we-work-with']
   },
   {
     label: 'About',
@@ -35,7 +41,10 @@ const navLinks = [
   }
 ];
 
-const sectionIds = ['home', 'clients', 'expertise', 'services', 'why-us', 'testimonials', 'leadership', 'contact'];
+const sectionIds = [
+  'home', 'clients', 'who-we-work-with', 'services', 'expertise', 'why-us', 'how-we-work',
+  'testimonials', 'leadership', 'contact'
+];
 
 const isLinkActive = (link, activeSection) =>
   (link.matches || [link.href.slice(1)]).includes(activeSection);

@@ -1,52 +1,92 @@
 :root {
-  /* Premium Corporate Light Theme */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --bg-card-hover: #ffffff;
-  
-  /* Precision borders */
-  --border-color: rgba(9, 13, 22, 0.06);
-  --border-color-hover: rgba(247, 151, 31, 0.4);
-  
-  /* Brand colors */
+  /* ── Brand palette ──────────────────────────────────────────────────────
+     Sampled directly out of public/img/logo-header.png, so the page and the
+     logo are literally the same colours:
+       #03446d  navy    — the URD mark
+       #f7971f  orange  — the arrow above it
+       #58595b  grey    — the UPRANK DIGITAL wordmark
+     The discipline, and the reason the old royal blue, cyan and yellow are
+     gone: navy carries structure, headings and emphasis; orange marks things
+     you can click and nothing else; grey is everything in between. A fourth
+     hue does not get added without changing this comment first. */
+  --navy: #03446d;
+  --navy-rgb: 3, 68, 109;
+  /* Same hue lifted, so the headline emphasis reads as a ramp rather than a
+     second colour. */
+  --navy-light: #0a5f96;
   --primary: #f7971f;
   --primary-rgb: 247, 151, 31;
-  --secondary: #ffd200;
-  --tech-glow: #38bdf8;
-  --tech-glow-rgb: 56, 189, 248;
-  
-  /* Text colors */
-  --text-main: #090d16;
-  --text-muted: #4b5563;
-  --text-dim: #9ca3af;
-  
+  --primary-hover: #e4860e;
+  /* The brand orange at the same hue and saturation, walked down in lightness
+     until it clears 4.5:1 on white (#f7971f itself manages only 2.2:1). Orange
+     that carries a word uses this; orange that is a fill, a border or an icon
+     sitting next to its own label stays bright. */
+  --primary-ink: #a76006;
+
+  /* Orange is a light colour: white sits on it at 2.2:1, which is unreadable.
+     Anything placed on an orange fill uses this ink instead (7.7:1). */
+  --on-action: #0b1d2b;
+
+  /* Feedback colours. Not brand, but a form still has to be able to say "sent"
+     and "that failed" in the one language every visitor already reads. */
+  --success: #0f9d6d;
+  --danger: #b91c1c;
+  --danger-rgb: 185, 28, 28;
+  /* WhatsApp's own green, kept deliberately: visitors recognise the colour,
+     and that recognition is the point of the button. */
+  --whatsapp: #25d366;
+  --whatsapp-hover: #1eb858;
+
+  /* Surfaces */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f6f9fb;
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-card-hover: #ffffff;
+
+  /* Precision borders, tinted navy rather than neutral black so hairlines sit
+     in the palette instead of greying it down. */
+  --border-color: rgba(var(--navy-rgb), 0.12);
+  --border-color-hover: rgba(var(--primary-rgb), 0.4);
+
+  /* Text. Main is a navy-black rather than a neutral one, so headings carry the
+     logo's undertone; muted is the wordmark grey straight off the logo. */
+  --text-main: #0b1d2b;
+  --text-muted: #58595b;
+  /* Still the dimmest tier, but dark enough to clear 4.5:1 on both white and the
+     footer's off-white — it labels card numbers and the copyright line, which
+     are small text, not decoration. */
+  --text-dim: #707173;
+
   /* Scrolled Navbar and element backgrounds */
   --bg-nav: rgba(255, 255, 255, 0.85);
-  --bg-hover-pills: rgba(9, 13, 22, 0.02);
-  --bg-hover-pills-hover: rgba(9, 13, 22, 0.05);
+  --bg-hover-pills: rgba(var(--navy-rgb), 0.03);
+  --bg-hover-pills-hover: rgba(var(--navy-rgb), 0.06);
   --logo-filter: brightness(0);
   --logo-opacity: 0.35;
   --logo-opacity-hover: 0.75;
   --footer-logo-filter: brightness(0) opacity(0.85);
-  
-  /* Gradients */
-  --gradient-accent: linear-gradient(135deg, #2563eb 0%, #f7971f 100%);
-  --gradient-accent-hover: linear-gradient(135deg, #3b82f6 0%, #ffae3c 100%);
-  --gradient-tech: linear-gradient(135deg, #2563eb 0%, #38bdf8 100%);
-  --gradient-cyan-blue: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-  --gradient-card-border: linear-gradient(180deg, rgba(9, 13, 22, 0.05) 0%, rgba(9, 13, 22, 0.01) 100%);
-  --gradient-card-border-hover: linear-gradient(180deg, rgba(247, 151, 31, 0.5) 0%, rgba(255, 210, 0, 0.3) 100%);
-  --gradient-hero-glow: radial-gradient(circle, rgba(247, 151, 31, 0.07) 0%, transparent 60%);
-  /* Headline emphasis: kept blue so orange stays reserved for calls to action */
-  --gradient-emphasis: linear-gradient(120deg, #1d4ed8 0%, #3b82f6 100%);
 
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(9, 13, 22, 0.03);
-  --shadow-md: 0 10px 30px rgba(9, 13, 22, 0.04), 0 1px 3px rgba(9, 13, 22, 0.02);
-  --shadow-lg: 0 20px 40px rgba(9, 13, 22, 0.06), 0 1px 3px rgba(9, 13, 22, 0.02);
-  --glass-shadow: 0 8px 30px 0 rgba(9, 13, 22, 0.03);
-  
+  /* Action surface. Flat orange, not a gradient: the old blue-to-orange ramp
+     desaturated through mud at its midpoint, on the one element whose whole job
+     is being clicked. */
+  --action: var(--primary);
+  --action-hover: var(--primary-hover);
+
+  /* Gradients. Every one of these now travels within a single hue. */
+  --gradient-card-border: linear-gradient(180deg, rgba(var(--navy-rgb), 0.08) 0%, rgba(var(--navy-rgb), 0.02) 100%);
+  --gradient-card-border-hover: linear-gradient(180deg, rgba(var(--primary-rgb), 0.5) 0%, rgba(var(--primary-rgb), 0.2) 100%);
+  --gradient-hero-glow: radial-gradient(circle, rgba(var(--primary-rgb), 0.07) 0%, transparent 60%);
+  /* Headline emphasis: navy, so orange stays reserved for calls to action. */
+  --gradient-emphasis: linear-gradient(120deg, var(--navy) 0%, var(--navy-light) 100%);
+
+  /* Shadows, tinted navy to match the borders. */
+  --shadow-sm: 0 2px 8px rgba(var(--navy-rgb), 0.05);
+  --shadow-md: 0 10px 30px rgba(var(--navy-rgb), 0.06), 0 1px 3px rgba(var(--navy-rgb), 0.03);
+  --shadow-lg: 0 20px 40px rgba(var(--navy-rgb), 0.09), 0 1px 3px rgba(var(--navy-rgb), 0.03);
+  --glass-shadow: 0 8px 30px 0 rgba(var(--navy-rgb), 0.05);
+  --shadow-action: 0 4px 20px rgba(var(--primary-rgb), 0.3);
+  --shadow-action-hover: 0 8px 24px rgba(var(--primary-rgb), 0.45);
+
   /* Vertical rhythm. Every band's padding and every section header's gap read
      from these two, so the page's spacing is tuned here rather than in a dozen
      component files. The breakpoints below step them down together. */
@@ -129,7 +169,7 @@ button, input, select, textarea {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(9, 13, 22, 0.12);
+  background: rgba(var(--navy-rgb), 0.22);
   border-radius: 10px;
   border: 2px solid var(--bg-primary);
 }
@@ -167,7 +207,7 @@ button, input, select, textarea {
   background-size: 40px 40px;
   background-image: 
     linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(9, 13, 22, 0.015) 1px, transparent 1px);
+    linear-gradient(to bottom, rgba(var(--navy-rgb), 0.03) 1px, transparent 1px);
   pointer-events: none;
   z-index: 1;
 }
@@ -195,7 +235,7 @@ button, input, select, textarea {
   padding: 0.75rem 1.5rem;
   border-radius: 0 0 10px 10px;
   background: var(--primary);
-  color: #090d16;
+  color: var(--on-action);
   font-weight: 700;
   font-size: 0.9rem;
   transition: transform var(--transition-fast);
@@ -283,7 +323,7 @@ main:focus {
 }
 
 .section-subtitle {
-  color: var(--primary);
+  color: var(--navy);
   font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -373,15 +413,15 @@ main:focus {
 }
 
 .btn-primary {
-  background: var(--gradient-accent);
-  color: #ffffff;
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.25);
+  background: var(--action);
+  color: var(--on-action);
+  box-shadow: var(--shadow-action);
 }
 
 .btn-primary:hover {
-  background: var(--gradient-accent-hover);
+  background: var(--action-hover);
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.45);
+  box-shadow: var(--shadow-action-hover);
 }
 
 .btn-secondary {
@@ -393,7 +433,7 @@ main:focus {
 
 .btn-secondary:hover {
   background: var(--bg-hover-pills-hover);
-  border-color: rgba(9, 13, 22, 0.2);
+  border-color: rgba(var(--navy-rgb), 0.3);
   transform: translateY(-2px);
 }
 

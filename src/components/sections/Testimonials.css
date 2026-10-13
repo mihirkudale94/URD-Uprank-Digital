@@ -76,7 +76,7 @@
 .fallback-avatar-icon {
   font-size: 1.5rem;
   font-weight: 800;
-  color: var(--primary);
+  color: var(--primary-ink);
   z-index: 1;
 }
 
@@ -94,7 +94,7 @@
 }
 
 .highlight-company {
-  color: var(--primary);
+  color: var(--primary-ink);
   font-weight: 600;
 }
 
@@ -122,10 +122,10 @@
 }
 
 .control-btn:hover {
-  background: var(--gradient-accent);
-  color: #ffffff;
+  background: var(--action);
+  color: var(--on-action);
   border-color: var(--primary);
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.3);
   transform: scale(1.05);
 }
 
@@ -141,7 +141,7 @@
   border: none;
   /* Dark on the light theme. This was white, which made every inactive dot
      invisible and left the carousel looking like it had a single slide. */
-  background: rgba(9, 13, 22, 0.18);
+  background: rgba(var(--navy-rgb), 0.25);
   cursor: pointer;
   transition: var(--transition-fast);
   outline: none;

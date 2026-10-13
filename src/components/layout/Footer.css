@@ -51,11 +51,11 @@
 }
 
 .footer-socials a:hover {
-  background: var(--gradient-accent);
-  color: #ffffff;
+  background: var(--action);
+  color: var(--on-action);
   border-color: var(--primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
 }
 
 .footer-links-col h3 {
@@ -101,7 +101,7 @@
 }
 
 .footer-contact-list a:hover {
-  color: var(--primary);
+  color: var(--primary-ink);
 }
 
 .footer-text-links {
@@ -117,7 +117,7 @@
 }
 
 .footer-text-links a:hover {
-  color: var(--primary);
+  color: var(--primary-ink);
   padding-left: 5px;
 }
 
@@ -173,7 +173,7 @@
 
 .back-to-top-btn:hover {
   background: var(--bg-card-hover);
-  color: var(--primary);
+  color: var(--primary-ink);
   border-color: var(--primary);
   transform: translateY(-5px);
   box-shadow: 

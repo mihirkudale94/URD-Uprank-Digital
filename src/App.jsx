@@ -4,9 +4,11 @@ import Hero from '@/components/layout/Hero';
 import Footer from '@/components/layout/Footer';
 
 import Clients from '@/components/sections/Clients';
+import WhoWeWorkWith from '@/components/sections/WhoWeWorkWith';
 import Expertise from '@/components/sections/Expertise';
 import Services from '@/components/sections/Services';
 import WhyPartner from '@/components/sections/WhyPartner';
+import HowWeWork from '@/components/sections/HowWeWork';
 import Testimonials from '@/components/sections/Testimonials';
 import Leadership from '@/components/sections/Leadership';
 import BrandStatement from '@/components/sections/BrandStatement';
@@ -28,9 +30,11 @@ function App() {
       <main id="main-content" tabIndex={-1}>
         <Hero />
         <Clients />
-        <Expertise />
+        <WhoWeWorkWith />
         <Services />
+        <Expertise />
         <WhyPartner />
+        <HowWeWork />
         <Testimonials />
         <Leadership />
         <BrandStatement />

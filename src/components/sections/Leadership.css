@@ -74,16 +74,16 @@
 }
 
 .connect-details-list a:hover {
-  color: var(--primary);
+  color: var(--primary-ink);
 }
 
 .leader-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  color: #10b981;
+  background: rgba(var(--primary-rgb), 0.08);
+  border: 1px solid rgba(var(--primary-rgb), 0.25);
+  color: var(--navy);
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.4rem 1rem;

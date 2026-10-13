@@ -10,9 +10,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  background: var(--gradient-accent);
-  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.34);
+  color: var(--on-action);
+  background: var(--action);
+  box-shadow: 0 12px 32px rgba(var(--primary-rgb), 0.34);
   cursor: pointer;
   overflow: visible;
   transition: transform 0.2s ease, opacity 0.2s ease;
@@ -28,7 +28,7 @@
 }
 
 .website-assistant-toggle.is-open {
-  box-shadow: 0 10px 24px rgba(59, 130, 246, 0.26);
+  box-shadow: 0 10px 24px rgba(var(--primary-rgb), 0.26);
 }
 
 .website-assistant-panel {
@@ -85,7 +85,7 @@
 }
 
 .website-assistant-title small svg {
-  color: #22c55e;
+  color: var(--success);
 }
 
 .website-assistant-avatar,
@@ -94,8 +94,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  background: var(--gradient-accent);
+  color: var(--on-action);
+  background: var(--action);
   border-radius: 50%;
 }
 
@@ -157,8 +157,8 @@
 }
 
 .website-assistant-row.is-user .website-assistant-bubble {
-  color: #ffffff;
-  background: var(--gradient-accent);
+  color: var(--on-action);
+  background: var(--action);
 }
 
 .website-assistant-bubble p {
@@ -240,12 +240,12 @@
   border: 0;
   cursor: pointer;
   font-family: inherit;
-  background: var(--primary);
-  color: #090d16;
+  background: var(--action);
+  color: var(--on-action);
 }
 
 .form-cta:hover {
-  background: #ffa733;
+  background: var(--action-hover);
   transform: translateY(-1px);
 }
 
@@ -255,12 +255,12 @@
 }
 
 .whatsapp-cta {
-  background: #25d366;
-  color: #ffffff;
+  background: var(--whatsapp);
+  color: var(--on-action);
 }
 
 .whatsapp-cta:hover {
-  background: #128c7e;
+  background: var(--whatsapp-hover);
   transform: translateY(-1px);
 }
 
@@ -303,8 +303,8 @@
 .website-assistant-form button {
   width: 2.6rem;
   border-radius: 10px;
-  color: #ffffff;
-  background: var(--gradient-accent);
+  color: var(--on-action);
+  background: var(--action);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -363,13 +363,13 @@
 }
 
 .bubble-markdown-link {
-  color: #3b82f6;
+  color: var(--navy);
   text-decoration: underline;
   word-break: break-all;
 }
 
 .bubble-markdown-link:hover {
-  color: #60a5fa;
+  color: var(--navy-light);
 }
 
 /* Header actions & Clear Chat Button */
@@ -418,5 +418,5 @@
   background: rgba(255, 255, 255, 0.08);
   padding: 0.1rem 0.3rem;
   border-radius: 4px;
-  color: #f43f5e;
+  color: var(--navy);
 }
