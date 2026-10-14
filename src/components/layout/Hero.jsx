@@ -21,7 +21,7 @@ export default function Hero() {
       <div className="container hero-grid-split animate-fade-in-up">
         <div className="hero-left-content">
           <span className="hero-tag">
-            <Sparkles size={13} className="hero-tag-sparkle" /> Built with AI. Measured in enquiries.
+            <Sparkles size={13} className="hero-tag-sparkle" /> Clicks don&rsquo;t pay. Enquiries do.
           </span>
 
           <h1 className="hero-title">

@@ -1,6 +1,9 @@
 .clients-section {
+  /* Every logo file is a 320x180 canvas with the artwork centred and scaled to
+     a constant optical size, so the card only has to match that 16:9 shape:
+     200px wide minus 2x1.25rem padding leaves 160px, and 160 / (320/180) = 90. */
   --logo-width: 200px;
-  --logo-height: 75px;
+  --logo-height: 90px;
   --logo-gap: 4.5rem;
 
   padding: var(--space-strip) 0;
@@ -96,8 +99,9 @@
 
 @media (max-width: 640px) {
   .clients-section {
+    /* 145px minus 2x0.5rem padding leaves 129px; 129 / (320/180) = 73. */
     --logo-width: 145px;
-    --logo-height: 52px;
+    --logo-height: 73px;
     --logo-gap: 2.5rem;
   }
   .clients-title {

@@ -32,8 +32,8 @@ export default function Clients() {
                     src={publicAsset(`/img/Logo Clouds/${logo.file}`)}
                     alt={labelled ? logo.name : ''}
                     className="client-logo-img"
-                    width="200"
-                    height="75"
+                    width="320"
+                    height="180"
                     loading="lazy"
                   />
                 </div>

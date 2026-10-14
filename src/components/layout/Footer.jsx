@@ -62,7 +62,6 @@ export default function Footer() {
               <div>
                 <h4>Call Us</h4>
                 <p>+91 93711 16165</p>
-                <p>+91 73910 96690</p>
               </div>
             </li>
           </ul>
