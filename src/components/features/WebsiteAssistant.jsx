@@ -10,6 +10,7 @@ import {
   WHATSAPP_URL
 } from '@/utils/contactChannels';
 import { clearEnquiryPrefill, publishEnquiryPrefill } from '@/utils/enquiryPrefill';
+import { OPEN_ASSISTANT_EVENT } from '@/utils/assistantEvents';
 import { trimConversation } from '@/utils/conversationWindow';
 import './WebsiteAssistant.css';
 
@@ -334,6 +335,18 @@ export default function WebsiteAssistant() {
     inputRef.current?.focus();
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
+
+  // Anything on the page can open the panel by dispatching OPEN_ASSISTANT_EVENT, so a
+  // link (the AI service card's "try it") does not need a reference to this component.
+  useEffect(() => {
+    const handleOpenRequest = (event) => {
+      setIsOpen(true);
+      trackWebsiteEvent('chatbot_opened', { location: event.detail?.location || 'page_link' });
+    };
+
+    window.addEventListener(OPEN_ASSISTANT_EVENT, handleOpenRequest);
+    return () => window.removeEventListener(OPEN_ASSISTANT_EVENT, handleOpenRequest);
+  }, []);
 
   const appendAssistantText = (text) => {
     setMessages((current) => {

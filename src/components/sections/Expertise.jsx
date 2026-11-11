@@ -31,14 +31,15 @@ export default function Expertise() {
 
       <div className="container">
         <div className="expertise-lead section-header section-header-left scroll-animate">
-          <span className="section-subtitle">Expertise</span>
+          <span className="section-subtitle">Our Capabilities</span>
           <h2 className="heading-md">
             Eight capabilities.<br />
             <span className="gradient-text">One accountable team.</span>
           </h2>
           <p className="section-description">
-            Everything needed to grow a digital presence, held by one partner instead of split
-            across five vendors.
+            These are the skills behind every service line. You don&rsquo;t hire them separately
+            or coordinate between them: they work as one team toward one goal, more enquiries
+            from the money you already spend.
           </p>
         </div>
 

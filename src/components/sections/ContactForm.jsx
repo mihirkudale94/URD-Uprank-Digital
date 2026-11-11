@@ -107,7 +107,7 @@ export default function ContactForm() {
         <div className="contact-info-panel scroll-animate">
           <div className="section-header section-header-left">
             <span className="section-subtitle">Get in Touch</span>
-            <h2 className="heading-md">Get a straight answer on your website and ads</h2>
+            <h2 className="heading-md">Get a straight answer on your website and ads, and what we&rsquo;d do first</h2>
             <p className="section-description">
               Tell us the goal, the site, and roughly what you can spend. We&rsquo;ll come back with
               an honest view of whether we can help &mdash; and what we&rsquo;d do first.
@@ -192,8 +192,8 @@ export default function ContactForm() {
                 <textarea 
                   name="message" 
                   id="contact-message"
-                  aria-label="Project Goals Message"
-                  placeholder="Tell us more about your project goals..." 
+                  aria-label="Your goal, website and rough monthly budget"
+                  placeholder="What do you want more of (calls, enquiries, sales)? Your website, if you have one, and a rough monthly budget."
                   value={formData.message} 
                   onChange={handleInputChange} 
                   maxLength={3000}
@@ -207,7 +207,7 @@ export default function ContactForm() {
                 className="btn btn-primary submit-btn" 
                 disabled={loading}
               >
-                {loading ? 'Submitting...' : 'Submit Inquiry'} 
+                {loading ? 'Sending...' : 'Request My Free Discovery Call'}
                 <Send size={16} />
               </button>
 

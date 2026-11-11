@@ -25,15 +25,21 @@ export default function Hero() {
           </span>
 
           <h1 className="hero-title">
-            Website development and digital performance marketing{' '}
-            <span className="gradient-text">using AI.</span>
+            Websites and performance marketing that{' '}
+            <span className="gradient-text">bring in enquiries.</span>
           </h1>
+
+          <p className="hero-subtitle">
+            We build your website, run your Google and Meta ads, and use AI to answer and follow
+            up faster, then report every month on the enquiries it produced and what each one
+            cost.
+          </p>
 
           {/* Two ways in, because they suit different visitors: the form captures the
               considered enquiry, WhatsApp catches the one who wants an answer now. */}
           <div className="hero-ctas">
             <a href="#contact" className="btn btn-primary" onClick={handleScrollToContact}>
-              Book a Call <PhoneCall size={18} />
+              Book a Free Discovery Call <PhoneCall size={18} />
             </a>
             <a
               href={WHATSAPP_URL}
@@ -52,7 +58,7 @@ export default function Hero() {
             <strong className="hero-proof-value">10+</strong>
             <span className="hero-proof-label">
               Years of experience
-              <em>Websites, campaigns and reporting for Indian businesses.</em>
+              <em>Websites, campaigns and reporting for Indian businesses, founder-led.</em>
             </span>
           </div>
         </div>

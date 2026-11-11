@@ -1,29 +1,17 @@
 import React from 'react';
 import { PhoneCall, ClipboardList, Rocket, LineChart } from 'lucide-react';
+import { PROCESS_STEPS } from '@/data/siteContent';
 import './HowWeWork.css';
 
-const steps = [
-  {
-    title: 'Discovery call',
-    icon: <PhoneCall size={20} />,
-    text: 'A free call to understand the business, what you’re already running, and where the enquiries are leaking.'
-  },
-  {
-    title: 'Scope and plan',
-    icon: <ClipboardList size={20} />,
-    text: 'You get it in writing — what we’ll do, what it costs, and the numbers we’re measuring it against.'
-  },
-  {
-    title: 'Build and launch',
-    icon: <Rocket size={20} />,
-    text: 'We build the site, wire up the tracking and take the campaigns live — in your accounts, in your name.'
-  },
-  {
-    title: 'Run and report monthly',
-    icon: <LineChart size={20} />,
-    text: 'Every month you get what changed, what it produced, and what we’re doing about it next.'
-  }
-];
+// Icons are presentation, so they stay here; the titles and copy come from siteContent.js.
+const stepIcons = {
+  discovery: <PhoneCall size={20} />,
+  plan: <ClipboardList size={20} />,
+  launch: <Rocket size={20} />,
+  report: <LineChart size={20} />
+};
+
+const steps = PROCESS_STEPS.map((step) => ({ ...step, icon: stepIcons[step.id] }));
 
 export default function HowWeWork() {
   return (
@@ -34,10 +22,11 @@ export default function HowWeWork() {
         <div className="section-header scroll-animate">
           <span className="section-subtitle">How We Work</span>
           <h2 className="heading-md">
-            Four steps, from first call to <span className="gradient-text">monthly report.</span>
+            From first call to <span className="gradient-text">first results.</span>
           </h2>
           <p className="section-description">
-            No onboarding maze, no account-manager relay. This is the whole process.
+            No long onboarding and no account manager in the middle. You talk to the people
+            doing the work, and this is the whole process.
           </p>
         </div>
 

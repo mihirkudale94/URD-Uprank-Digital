@@ -79,7 +79,8 @@ export default function Testimonials() {
           <span className="section-subtitle">Testimonials</span>
           <h2 className="heading-md">What Our Clients Say</h2>
           <p className="section-description">
-            Read stories of how we have helped business owners establish reliable websites and drive growth.
+            In their own words: the business owners whose websites, product shoots and campaigns
+            we have built and run.
           </p>
         </div>
 

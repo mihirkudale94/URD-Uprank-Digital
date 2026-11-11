@@ -15,7 +15,7 @@ export default function Clients() {
   return (
     <section className="section clients-section" id="clients">
       <div className="container">
-        <h3 className="clients-title">Brands That Trust Us</h3>
+        <h3 className="clients-title">Brands We&rsquo;ve Grown With</h3>
 
         <div className="logo-slider-container" role="group" aria-label="Logos of brands we have worked with">
           <div className="logo-slide-track">

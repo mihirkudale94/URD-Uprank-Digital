@@ -9,7 +9,7 @@ import './Footer.css';
 
 const quickLinks = [
   { href: '#services', label: 'What We Do' },
-  { href: '#expertise', label: 'Expertise' },
+  { href: '#expertise', label: 'Capabilities' },
   { href: '#why-us', label: 'Why Us' },
   { href: '#how-we-work', label: 'How We Work' },
   { href: '#leadership', label: 'About' }

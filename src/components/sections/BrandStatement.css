@@ -46,6 +46,15 @@
   min-width: 2rem;
 }
 
+.brand-statement-content {
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand-statement-cta {
+  align-self: center;
+}
+
 @media (max-width: 600px) {
   .brand-statement-line {
     display: none;

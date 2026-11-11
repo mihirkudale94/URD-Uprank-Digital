@@ -11,14 +11,14 @@ const navLinks = [
     kicker: 'Five service lines'
   },
   {
-    label: 'Expertise',
+    label: 'Capabilities',
     href: '#expertise',
-    kicker: 'Eight core capabilities'
+    kicker: 'Eight capabilities, one team'
   },
   {
     label: 'Why Us',
     href: '#why-us',
-    kicker: 'Why work with us'
+    kicker: 'Six reasons clients stay'
   },
   {
     label: 'How We Work',
