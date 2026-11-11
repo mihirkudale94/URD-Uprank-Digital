@@ -85,6 +85,13 @@ export const initAnalytics = (env = import.meta.env) => {
   if (typeof window === 'undefined') return 'none';
   if (window.__urdAnalyticsMode) return window.__urdAnalyticsMode;
 
+  // A Google tag hardcoded in index.html wins. Injecting a second one from env
+  // would load the container twice and double-count every event.
+  if (document.querySelector('script[src*="googletagmanager.com/"]')) {
+    window.__urdAnalyticsMode = 'gtm';
+    return 'gtm';
+  }
+
   const { mode, id, warning } = resolveAnalyticsConfig(env);
 
   if (warning) {
