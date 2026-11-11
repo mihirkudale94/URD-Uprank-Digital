@@ -93,7 +93,7 @@ export const SERVICES = [
     forWho: 'For new businesses, and for sites that get traffic but not calls.',
     includes: [
       'Conversion-first design and copy',
-      'WordPress, Shopify or custom build',
+      'Shopify or custom build',
       'Fast on mobile, with SEO foundations',
       'Forms, GA4 and call tracking wired in'
     ]
@@ -154,7 +154,7 @@ export const EXPERTISE = [
   {
     id: 'website-development',
     title: 'Website Development',
-    text: 'Design, build and launch on WordPress, Shopify or custom code. Fast on mobile and easy for your team to update.'
+    text: 'Design, build and launch on Shopify or custom code. Fast on mobile and easy for your team to update.'
   },
   {
     id: 'performance-marketing',
