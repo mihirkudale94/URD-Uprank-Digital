@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Send, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Send, CheckCircle2, ArrowRight, ArrowUpRight, MapPin } from 'lucide-react';
 import { buildLeadPayload, submitLead } from '@/utils/leadSubmission';
+import {
+  ADDRESS,
+  BUSINESS,
+  FULL_ADDRESS,
+  MAP_DIRECTIONS_URL,
+  MAP_EMBED_URL
+} from '@/data/siteContent';
 import { trackWebsiteEvent } from '@/utils/analytics';
 import {
   ENQUIRY_PREFILL_EVENT,
@@ -104,14 +111,41 @@ export default function ContactForm() {
       <div className="glow-bg"></div>
 
       <div className="container contact-container">
+        {/* Spans both columns, so the heading and its line run the full width above the
+            map and the form instead of being squeezed into the left column. */}
+        <div className="section-header section-header-left contact-header scroll-animate">
+          <span className="section-subtitle">Contact Us</span>
+          <h2 className="heading-md">Let&rsquo;s talk about your business</h2>
+          <p className="section-description">
+            Whether it&rsquo;s a new website, more enquiries from your ads, or a question about
+            our services, send us a message. We reply within one business day.
+          </p>
+        </div>
+
         <div className="contact-info-panel scroll-animate">
-          <div className="section-header section-header-left">
-            <span className="section-subtitle">Get in Touch</span>
-            <h2 className="heading-md">Get a straight answer on your website and ads, and what we&rsquo;d do first</h2>
-            <p className="section-description">
-              Tell us the goal, the site, and roughly what you can spend. We&rsquo;ll come back with
-              an honest view of whether we can help &mdash; and what we&rsquo;d do first.
-            </p>
+          {/* Lazy-loaded, so Google's map only downloads when the visitor scrolls here. */}
+          <div className="contact-map">
+            <iframe
+              title={`Map showing the ${BUSINESS.name} office in ${ADDRESS.locality}`}
+              src={MAP_EMBED_URL}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+            <div className="contact-map-footer">
+              <span className="contact-map-address">
+                <MapPin size={16} aria-hidden="true" />
+                {FULL_ADDRESS}
+              </span>
+              <a
+                href={MAP_DIRECTIONS_URL}
+                target="_blank"
+                rel="noreferrer noopener"
+                onClick={() => trackWebsiteEvent('directions_click', { location: 'contact_map' })}
+              >
+                Get directions <ArrowUpRight size={14} aria-hidden="true" />
+              </a>
+            </div>
           </div>
         </div>
 
@@ -119,7 +153,7 @@ export default function ContactForm() {
           {isSubmitted ? (
             <div className="success-state animate-fade-in-up">
               <CheckCircle2 className="success-icon" size={64} />
-              <h3>Got it &mdash; thanks.</h3>
+              <h3>Thank you for your message.</h3>
               <p>Sachin will call or WhatsApp you within one business day.</p>
               <button className="btn btn-secondary" onClick={() => setIsSubmitted(false)}>
                 Send Another Message <ArrowRight size={16} />
@@ -192,8 +226,8 @@ export default function ContactForm() {
                 <textarea 
                   name="message" 
                   id="contact-message"
-                  aria-label="Your goal, website and rough monthly budget"
-                  placeholder="What do you want more of (calls, enquiries, sales)? Your website, if you have one, and a rough monthly budget."
+                  aria-label="Your message"
+                  placeholder="How can we help? Tell us a little about your business and what you're looking for."
                   value={formData.message} 
                   onChange={handleInputChange} 
                   maxLength={3000}
@@ -207,7 +241,7 @@ export default function ContactForm() {
                 className="btn btn-primary submit-btn" 
                 disabled={loading}
               >
-                {loading ? 'Sending...' : 'Request My Free Discovery Call'}
+                {loading ? 'Sending...' : 'Send Message'}
                 <Send size={16} />
               </button>
 

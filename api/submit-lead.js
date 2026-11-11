@@ -72,11 +72,21 @@ const buildAttributionText = ({ first, last }) => {
   ];
 };
 
+// Where on the site the lead was captured. Anything else posted here is ignored, so the
+// subject line cannot be steered by whoever is calling the endpoint.
+const LEAD_SOURCES = {
+  contact_form: 'Website enquiry form',
+  assistant: 'Corporate solutions assistant (chat)'
+};
+
 const buildEmailText = (lead) =>
   [
     'New inquiry from the Up Rank Digital website',
+    `Captured by: ${LEAD_SOURCES[lead.leadSource]}`,
     '',
     `Name: ${lead.name}`,
+    ...(lead.jobTitle ? [`Role: ${lead.jobTitle}`] : []),
+    ...(lead.company ? [`Company: ${lead.company}`] : []),
     `Email: ${lead.email}`,
     `Phone: ${lead.phone}`,
     '',
@@ -121,6 +131,9 @@ export default async function handler(request, response) {
     name: cleanText(body.name, 120),
     email: cleanText(body.email, 254).toLowerCase(),
     phone: cleanText(body.phone, 40),
+    company: cleanText(body.company, 160),
+    jobTitle: cleanText(body.job_title, 120),
+    leadSource: LEAD_SOURCES[body.lead_source] ? body.lead_source : 'contact_form',
     message: cleanText(body.message, 3000),
     pageUrl: normalizeUrl(body.page_url),
     userAgent: cleanText(body.user_agent, 500),
@@ -157,7 +170,9 @@ export default async function handler(request, response) {
       body: JSON.stringify({
         from: process.env.RESEND_FROM_EMAIL || DEFAULT_FROM,
         to: process.env.CONTACT_RECIPIENT || DEFAULT_RECIPIENT,
-        subject: `New website inquiry from ${lead.name}`,
+        subject: lead.company
+          ? `New website inquiry from ${lead.name}, ${lead.company}`
+          : `New website inquiry from ${lead.name}`,
         text: buildEmailText(lead),
         // Replying to the notification replies to the visitor.
         reply_to: lead.email

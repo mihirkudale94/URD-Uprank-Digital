@@ -206,6 +206,23 @@
   }
 }
 
+/* Phones: the mobile action bar is fixed along the bottom, so the back-to-top button
+   sits just above it and the footer gets room to scroll clear of it. */
+@media (max-width: 640px) {
+  .back-to-top-btn {
+    bottom: calc(var(--mobile-bar-height) + env(safe-area-inset-bottom, 0px) + 0.75rem);
+  }
+
+  .footer-container {
+    padding-bottom: calc(1.5rem + var(--mobile-bar-height) + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Keep the last line (with the Privacy Policy link) out from under back-to-top. */
+  .footer-copyright {
+    padding-right: 4rem;
+  }
+}
+
 .footer-copyright a {
   color: inherit;
   text-decoration: underline;

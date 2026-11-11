@@ -76,6 +76,36 @@ test('a valid lead is emailed and acknowledged', async () => {
   });
 });
 
+test('a lead from the assistant carries company, role and source', async () => {
+  await withResend(async (calls) => {
+    const res = mockResponse();
+    await handler(
+      {
+        method: 'POST',
+        body: { ...validLead, company: 'Kulkarni Logistics', job_title: 'Head of Marketing', lead_source: 'assistant' }
+      },
+      res
+    );
+
+    assert.equal(res.recorded.statusCode, 200);
+    const sent = calls[0].body;
+    assert.equal(sent.subject, 'New website inquiry from Asha Kulkarni, Kulkarni Logistics');
+    assert.match(sent.text, /Captured by: Corporate solutions assistant \(chat\)/);
+    assert.match(sent.text, /Company: Kulkarni Logistics/);
+    assert.match(sent.text, /Role: Head of Marketing/);
+  });
+});
+
+test('an unknown lead source is labelled as the enquiry form', async () => {
+  await withResend(async (calls) => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: { ...validLead, lead_source: '<b>spoofed</b>' } }, res);
+
+    assert.match(calls[0].body.text, /Captured by: Website enquiry form/);
+    assert.doesNotMatch(calls[0].body.text, /spoofed/);
+  });
+});
+
 test('HTML in a field is stripped before it reaches the inbox', async () => {
   await withResend(async (calls) => {
     const res = mockResponse();

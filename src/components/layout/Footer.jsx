@@ -12,7 +12,8 @@ const quickLinks = [
   { href: '#expertise', label: 'Capabilities' },
   { href: '#why-us', label: 'Why Us' },
   { href: '#how-we-work', label: 'How We Work' },
-  { href: '#leadership', label: 'About' }
+  { href: '#leadership', label: 'About' },
+  { href: '#contact', label: 'Contact' }
 ];
 
 export default function Footer() {

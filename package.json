@@ -8,7 +8,8 @@
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.js",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "node --test tests/analyticsConfig.test.js tests/chatEndpoint.test.js tests/jsonLd.test.js tests/leadEndpoint.test.js tests/attribution.test.js"
+    "test": "node --test tests/analyticsConfig.test.js tests/chatEndpoint.test.js tests/jsonLd.test.js tests/leadEndpoint.test.js tests/attribution.test.js tests/chatLogEndpoint.test.js tests/chatGuardrails.test.js",
+    "eval": "node --env-file=.env evals/run.js"
   },
   "dependencies": {
     "lucide-react": "0.469.0",

@@ -70,11 +70,13 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 2000,
-    // Two pages: the site itself and the static privacy policy.
+    // Three pages: the site itself, the static privacy policy, and the 404 page that
+    // Vercel serves (with a 404 status) for any address that does not exist.
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
         privacy: path.resolve(__dirname, 'privacy.html'),
+        notFound: path.resolve(__dirname, '404.html'),
       },
     },
   },

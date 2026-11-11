@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight, CheckCircle2, Mail, MessageCircle, RotateCcw, Send, Sparkles, User, X } from 'lucide-react';
-import { FALLBACK_REPLY, SERVICE_PLAYBOOK, getServiceMatch } from '@/utils/servicePlaybook';
+import { ArrowRight, Briefcase, CheckCircle2, Mail, MessageCircle, RotateCcw, Send, Sparkles, User, X } from 'lucide-react';
+import { CONSULTATION_PHRASE, FALLBACK_REPLY, SERVICE_PLAYBOOK, getServiceMatch } from '@/utils/servicePlaybook';
 import { trackWebsiteEvent } from '@/utils/analytics';
-import { scrollToSection } from '@/utils/scrollToSection';
 import {
   CONTACT_EMAIL,
   WHATSAPP_NUMBER_DISPLAY,
   WHATSAPP_NUMBER_E164,
   WHATSAPP_URL
 } from '@/utils/contactChannels';
-import { clearEnquiryPrefill, publishEnquiryPrefill } from '@/utils/enquiryPrefill';
+import { clearEnquiryPrefill } from '@/utils/enquiryPrefill';
 import { OPEN_ASSISTANT_EVENT } from '@/utils/assistantEvents';
 import { trimConversation } from '@/utils/conversationWindow';
+import { resetTranscriptLog, sendTranscriptLog } from '@/utils/chatTranscriptLog';
+import ConsultationCard from './ConsultationCard';
 import './WebsiteAssistant.css';
 
 // Same-origin Vercel function, exactly like /api/submit-lead: no key reaches the browser and
@@ -26,19 +27,27 @@ const initialMessages = [
   {
     role: 'assistant',
     content:
-      'Hi, I’m Up Rank Digital’s AI assistant. How can I help you?'
+      'Welcome to Up Rank Digital. I am the corporate solutions assistant. I can outline how we support companies across web, marketing, performance and AI, help you work through a business challenge, or arrange a consultation with our team. How may I assist you today?'
   }
 ];
 
-// The enquiry form collects name, email, phone and the goal, and it reaches Sachin's inbox.
-// Asking a visitor to retype the same things into a chat panel that forgets them when the tab
-// closes only loses the lead, so every reply that has a direction ends by pointing at the form.
-// The exact words "enquiry form" are also what `renderMessageContentAndActions` looks for to
-// offer the button, and the system prompt in api/chat.js tells the model to use them too.
-const contactPrompt =
-  'The quickest way forward is the enquiry form on this page: name, email, phone and a line about your goal. Sachin comes back within one business day.';
+// Offered under the welcome message only. Decision makers skim, and a first tap is easier
+// than a first sentence. `consult` opens the consultation form directly instead of asking.
+const QUICK_REPLIES = [
+  { label: 'Explore corporate services', prompt: 'What services do you offer for companies like ours?' },
+  { label: 'Discuss a business challenge', prompt: 'I would like to discuss a challenge my company is facing.' },
+  { label: 'Request a consultation', consult: true },
+  { label: 'Speak with the team', prompt: 'I would like to speak with someone from your team.' }
+];
 
-const CONTACT_SECTION = '#contact';
+const LEAD_SUBMITTED_KEY = 'urd_assistant_lead_submitted';
+
+const hasConsultationInvite = (text = '') => text.toLowerCase().includes(CONSULTATION_PHRASE);
+
+// Every local reply that has a direction ends with the consultation invitation, in the
+// same words the model uses, so the panel offers the in-chat form either way.
+const contactPrompt =
+  'To take this forward, you can request a consultation here in the chat: a short form for your name, work email, company and phone. A senior strategist responds within one business day.';
 
 // Most replies land inside a second. Past this the visitor deserves a word rather than
 // dots that look the same at six seconds as they did at one.
@@ -51,7 +60,7 @@ const buildLocalAssistantReply = (input) => {
   if (matchedService) {
     const service = SERVICE_PLAYBOOK.find((item) => item.id === matchedService.id) || matchedService;
     return [
-      `${service.title} looks like the right starting point.`,
+      `${service.title} would be the appropriate starting point.`,
       service.fit,
       `Common scope: ${service.bullets.join(', ')}.`,
       contactPrompt
@@ -60,18 +69,18 @@ const buildLocalAssistantReply = (input) => {
 
   if (/(price|pricing|cost|budget|package|quote)/i.test(lowerInput)) {
     return [
-      'Pricing depends on scope, timeline, channels, content, integrations, and complexity.',
-      'Share your website, goal, preferred timeline, and budget range, and the team can advise on the right scope instead of guessing.'
+      'Corporate engagements are scoped individually, based on objectives, channels, markets, integrations and timeline, and the team prepares a tailored proposal.',
+      contactPrompt
     ].join('\n\n');
   }
 
   if (/(contact|call|phone|whatsapp|human|team)/i.test(lowerInput)) {
-    return `You can message Up Rank Digital on WhatsApp at ${WHATSAPP_NUMBER_DISPLAY} or email us at ${CONTACT_EMAIL}. For a sharper handoff, include your business name, website/social link, goal, and timeline.`;
+    return `You can reach the Up Rank Digital team on WhatsApp at ${WHATSAPP_NUMBER_DISPLAY} or by email at ${CONTACT_EMAIL}. Alternatively, you can request a consultation here and a senior strategist will contact you within one business day.`;
   }
 
   return [
-    'I can help you narrow this down across website development, digital marketing, performance marketing, AI powered solutions, and content design & management.',
-    'What is the main outcome you want right now: more leads, a better website, more sales, or stronger tracking?'
+    'We support companies across website development, digital marketing, performance marketing, AI powered solutions, and content design & management.',
+    'What is the main challenge your organisation is trying to solve at present: too few enquiries, advertising that does not pay back, a website that does not convert, or unclear measurement?'
   ].join('\n\n');
 };
 
@@ -128,7 +137,7 @@ const parseMarkdownText = (textLine) => {
   return parts.length > 0 ? parts : textLine;
 };
 
-const renderMessageContentAndActions = (message, onOpenForm, showActions = true) => {
+const renderMessageContentAndActions = (message, onOpenConsultation, showActions = true) => {
   let text = message.content;
   if (!text) return null;
 
@@ -206,16 +215,17 @@ const renderMessageContentAndActions = (message, onOpenForm, showActions = true)
     // offered the number, including the ones where the visitor had asked for a person.
     const hasWhatsApp = text.replace(/\D/g, '').includes(WHATSAPP_NUMBER_E164);
     const hasEmail = new RegExp(CONTACT_EMAIL.replace(/[.]/g, '\\.'), 'i').test(text);
-    const hasForm = /enquiry form/i.test(text);
+    const hasConsult = Boolean(onOpenConsultation) && hasConsultationInvite(text);
 
-    if (hasWhatsApp || hasEmail || hasForm) {
+    if (hasWhatsApp || hasEmail || hasConsult) {
       return (
         <div className="message-content-container">
           <div className="message-text-content">{formattedElements}</div>
           <div className="message-inline-ctas">
-            {hasForm && (
-              <button type="button" className="inline-cta-btn form-cta" onClick={onOpenForm}>
-                <span>Open the enquiry form</span>
+            {hasConsult && (
+              <button type="button" className="inline-cta-btn form-cta" onClick={onOpenConsultation}>
+                <Briefcase size={14} />
+                <span>Request a consultation</span>
                 <ArrowRight size={14} />
               </button>
             )}
@@ -238,7 +248,7 @@ const renderMessageContentAndActions = (message, onOpenForm, showActions = true)
                 onClick={() => trackWebsiteEvent('email_click', { location: 'assistant' })}
               >
                 <Mail size={14} />
-                <span>Email Sachin</span>
+                <span>Email the team</span>
               </a>
             )}
           </div>
@@ -288,8 +298,33 @@ export default function WebsiteAssistant() {
   const [isSlow, setIsSlow] = useState(false);
   const [activeModel, setActiveModel] = useState('');
   const [latency, setLatency] = useState(0);
+  const [isConsultationOpen, setIsConsultationOpen] = useState(false);
+  const [leadSubmitted, setLeadSubmitted] = useState(() => {
+    try {
+      return sessionStorage.getItem(LEAD_SUBMITTED_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  });
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
+  // The page-hide listener is registered once, so it reads the latest conversation from
+  // here rather than from the render it was created in.
+  const transcriptRef = useRef({ messages, leadSubmitted });
+  transcriptRef.current = { messages, leadSubmitted };
+
+  useEffect(() => {
+    const flush = () => sendTranscriptLog(transcriptRef.current);
+    const handleVisibility = () => {
+      if (document.visibilityState === 'hidden') flush();
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('pagehide', flush);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('pagehide', flush);
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -312,7 +347,7 @@ export default function WebsiteAssistant() {
     const list = anchor?.parentElement;
     if (!list) return;
     list.scrollTop = list.scrollHeight;
-  }, [messages, isLoading, isOpen]);
+  }, [messages, isLoading, isOpen, isConsultationOpen]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -363,9 +398,13 @@ export default function WebsiteAssistant() {
 
   const clearChatHistory = () => {
     if (window.confirm('Are you sure you want to clear your conversation history?')) {
+      // Send what was said before it is erased; the new conversation starts its own log.
+      sendTranscriptLog(transcriptRef.current);
+      resetTranscriptLog();
       setMessages(initialMessages);
       setActiveModel('');
       setLatency(0);
+      setIsConsultationOpen(false);
       try {
         sessionStorage.removeItem('urd_assistant_messages');
       } catch (err) {
@@ -422,6 +461,7 @@ export default function WebsiteAssistant() {
       let assistantText = '';
       let streamedModel = '';
       let servedFallback = false;
+      let guardrail = null;
 
       for (;;) {
         const { done, value } = await reader.read();
@@ -452,6 +492,9 @@ export default function WebsiteAssistant() {
             const model = chunk.model;
             if (chunk.urd_fallback) {
               servedFallback = true;
+            }
+            if (chunk.urd_guardrail) {
+              guardrail = chunk.urd_guardrail;
             }
             if (model) {
               streamedModel = streamedModel || model;
@@ -487,18 +530,28 @@ export default function WebsiteAssistant() {
       }
 
       // Dispatch reply received event for developer analytics integration
-      // The form is now the main route to the team, so a reply that sends a visitor there
-      // counts as a handoff alongside the WhatsApp and email ones.
+      // A consultation invitation is the main route to the team, so it counts as a handoff
+      // alongside the WhatsApp and email ones.
       const isQualified =
         assistantText.toLowerCase().includes(CONTACT_EMAIL.toLowerCase()) ||
-        /whatsapp|enquiry form/i.test(assistantText);
+        /whatsapp/i.test(assistantText) ||
+        hasConsultationInvite(assistantText);
       trackWebsiteEvent('reply_received', {
         role: 'assistant',
         replyLength: assistantText.length,
         model: streamedModel,
-        reply_source: servedFallback ? 'backend_fallback' : 'model',
+        reply_source: servedFallback ? 'backend_fallback' : guardrail ? `guardrail_${guardrail.outcome}` : 'model',
         isQualifiedHandoff: isQualified
       });
+
+      // A reply the server had to correct. Counted so the rate at which the model breaks
+      // its rules is visible in GA4 without reading transcripts.
+      if (guardrail) {
+        trackWebsiteEvent('assistant_guardrail', {
+          rules: (guardrail.rules || []).join(','),
+          outcome: guardrail.outcome
+        });
+      }
 
       if (servedFallback || isBackendFallback(assistantText)) {
         setMessages((current) =>
@@ -536,21 +589,28 @@ export default function WebsiteAssistant() {
     trackWebsiteEvent('chatbot_opened');
   };
 
-  // The panel covers most of a phone screen, so leaving it open would scroll the form in
-  // behind it. Closing first means the visitor lands on the fields, which is where the
-  // reply just sent them.
-  const openEnquiryForm = () => {
-    setIsOpen(false);
-    // Everything the visitor just told the assistant travels to the goal field, so the
-    // lead reaches Sachin with the context instead of an empty box and a retyped story.
-    const prefill = publishEnquiryPrefill(messages);
-    trackWebsiteEvent('assistant_form_cta', { prefilled: Boolean(prefill) });
-    scrollToSection(CONTACT_SECTION);
-    // The form is below the fold on most screens, so the scroll has to land before the
-    // first field can take focus.
-    window.setTimeout(() => {
-      document.getElementById('contact-name')?.focus({ preventScroll: true });
-    }, 600);
+  const openConsultation = (location = 'reply_cta') => {
+    setIsConsultationOpen(true);
+    trackWebsiteEvent('assistant_consultation_opened', { location });
+  };
+
+  const handleConsultationSubmitted = (lead) => {
+    setIsConsultationOpen(false);
+    setLeadSubmitted(true);
+    try {
+      sessionStorage.setItem(LEAD_SUBMITTED_KEY, 'true');
+    } catch {
+      // Storage blocked: the confirmation still shows for this page view.
+    }
+    const firstName = lead.name.trim().split(/\s+/)[0];
+    setMessages((current) => [
+      ...current,
+      {
+        role: 'assistant',
+        local: true,
+        content: `Thank you, ${firstName}. Your consultation request for ${lead.company.trim()} has been received, together with the context from this conversation. A senior strategist will contact you within one business day. In the meantime, I am happy to answer any further questions.`
+      }
+    ]);
   };
 
   const handleSubmit = (event) => {
@@ -578,7 +638,7 @@ export default function WebsiteAssistant() {
           className="website-assistant-panel"
           role="dialog"
           aria-modal="false"
-          aria-label="Up Rank Digital's AI Assistant"
+          aria-label="Up Rank Digital corporate solutions assistant"
         >
           <header className="website-assistant-header">
             <div className="website-assistant-title">
@@ -586,9 +646,9 @@ export default function WebsiteAssistant() {
                 <Sparkles size={18} />
               </span>
               <span>
-                <strong>Up Rank Digital&rsquo;s AI Assistant</strong>
+                <strong>Up Rank Digital</strong>
                 <small>
-                  <CheckCircle2 size={12} /> Online now
+                  <CheckCircle2 size={12} /> Corporate Solutions Desk &middot; Online
                 </small>
               </span>
             </div>
@@ -621,7 +681,29 @@ export default function WebsiteAssistant() {
                   </span>
                 )}
                 <div className="website-assistant-bubble">
-                  {renderMessageContentAndActions(message, openEnquiryForm, index === messages.length - 1)}
+                  {renderMessageContentAndActions(
+                    message,
+                    leadSubmitted || isConsultationOpen ? null : () => openConsultation('reply_cta'),
+                    index === messages.length - 1
+                  )}
+                  {index === 0 && messages.length === 1 && !isLoading && (
+                    <div className="assistant-quick-replies">
+                      {QUICK_REPLIES.filter((reply) => !(reply.consult && leadSubmitted)).map((reply) => (
+                        <button
+                          key={reply.label}
+                          type="button"
+                          className="assistant-quick-reply"
+                          onClick={() => {
+                            trackWebsiteEvent('assistant_quick_reply', { label: reply.label });
+                            if (reply.consult) openConsultation('quick_reply');
+                            else sendMessage(reply.prompt);
+                          }}
+                        >
+                          {reply.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 {message.role === 'user' && (
                   <span className="website-assistant-mini-avatar is-user">
@@ -649,6 +731,13 @@ export default function WebsiteAssistant() {
                 </div>
               </div>
             )}
+            {isConsultationOpen && (
+              <ConsultationCard
+                messages={messages}
+                onClose={() => setIsConsultationOpen(false)}
+                onSubmitted={handleConsultationSubmitted}
+              />
+            )}
             <div ref={scrollRef} />
           </div>
 
@@ -659,7 +748,7 @@ export default function WebsiteAssistant() {
               maxLength={2000}
               value={inputValue}
               onChange={(event) => setInputValue(event.target.value)}
-              placeholder="Ask me a question"
+              placeholder="Describe the challenge you want to solve…"
               aria-label="Message"
               disabled={isLoading}
             />
@@ -667,6 +756,12 @@ export default function WebsiteAssistant() {
               <Send size={16} />
             </button>
           </form>
+          <p className="website-assistant-notice">
+            Conversations are reviewed by our team to improve answers.{' '}
+            <a href="/privacy.html" target="_blank" rel="noopener">
+              Privacy Policy
+            </a>
+          </p>
 
           {import.meta.env.DEV && activeModel && (
             <div className="website-assistant-debug-badge" title="Developer Telemetry (Only visible in Local Development)">

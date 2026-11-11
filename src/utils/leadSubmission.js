@@ -12,10 +12,13 @@ const cleanText = (value, maxLength = 500) =>
     .trim()
     .slice(0, maxLength);
 
-export const buildLeadPayload = ({ formData, websiteConfirmation = '' }) => ({
+export const buildLeadPayload = ({ formData, websiteConfirmation = '', leadSource = 'contact_form' }) => ({
   name: cleanText(formData.name, 120),
   email: cleanText(formData.email, 254).toLowerCase(),
   phone: cleanText(formData.phone, 40),
+  company: cleanText(formData.company, 160),
+  job_title: cleanText(formData.jobTitle, 120),
+  lead_source: leadSource,
   message: cleanText(formData.message, 3000),
   // The honeypot travels with the lead so the endpoint can catch a bot that filled it in
   // with JavaScript disabled or by posting here directly.

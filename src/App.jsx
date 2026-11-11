@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useEffect, useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/layout/Hero';
 import Footer from '@/components/layout/Footer';
+import MobileActionBar from '@/components/layout/MobileActionBar';
 
 import Clients from '@/components/sections/Clients';
 import WhoWeWorkWith from '@/components/sections/WhoWeWorkWith';
@@ -51,6 +52,7 @@ function App() {
         </Suspense>
       )}
       <Footer />
+      <MobileActionBar />
     </div>
   );
 }

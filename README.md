@@ -153,7 +153,10 @@ container never loads twice. Leave those variables unset.
 Events pushed to the `dataLayer`:
 
 - `whatsapp_click`, `phone_click`, `email_click`, each with a `location`
-  (`hero`, `footer`, `connect_card`, `assistant`).
+  (`hero`, `footer`, `connect_card`, `assistant`, `mobile_bar`).
+- `chatbot_opened`, with a `location` when something other than the bubble opened it
+  (`mobile_bar`, `ai_service_card`). On phones the bubble is hidden and the "Ask AI"
+  button in the bottom action bar (`src/components/layout/MobileActionBar.jsx`) opens it.
 - The assistant emits `message_sent`, `reply_received` and `chat_cleared`.
   `reply_received` carries a `reply_source`: `model` for a real answer, `local_error`
   when the endpoint could not be reached, `backend_fallback` when it answered but
@@ -186,7 +189,10 @@ tag is configured, for any external listener.
 
 - Vercel hosts the static React app and the one `/api/submit-lead` function.
 - `vite.config.js` sets `base: '/'`: the site is served from the domain root.
-- The build has no router: the site is one page plus a static `privacy.html`.
+- The build has no router: the site is one page plus a static `privacy.html` and a
+  `404.html`. Vercel serves `404.html`, with a 404 status, for any address that does not
+  exist. It is `noindex`, stays out of the sitemap, and pushes a `page_not_found` event
+  (with `page_path` and `page_referrer`) so broken inbound links can be found.
 - `npm run build` prerenders the page (`src/entry-server.jsx` + `scripts/prerender.js`), so
   the served HTML already contains the content and `main.jsx` hydrates it. The chat
   assistant mounts only after hydration because it reads browser storage.

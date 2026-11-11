@@ -17,6 +17,11 @@ const serviceById = (id) => {
 export const FALLBACK_REPLY =
   `I am having trouble connecting right now. You can WhatsApp Up Rank Digital at ${WHATSAPP_NUMBER_DISPLAY} or email ${CONTACT_EMAIL}, and the team will pick this up directly.`;
 
+// The words the model uses to invite a visitor to a consultation. The widget looks for them
+// to offer the in-chat consultation form, and the endpoint looks for them to know the
+// invitation has already been made, so all three key on this one literal.
+export const CONSULTATION_PHRASE = 'request a consultation';
+
 // `aliases` route a visitor's wording to a service and are deliberately broad.
 // `fit` and `bullets` are spoken back to the visitor, so they stay limited to the five service
 // lines and eight areas of expertise published on the site.

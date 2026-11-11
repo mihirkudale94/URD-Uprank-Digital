@@ -1,7 +1,7 @@
 .contact-container {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
-  gap: 4rem;
+  gap: 2.5rem 4rem;
   /* Top-aligned, not centred: the copy and the form card are different
      heights, and centring floats the heading below the form's first field. */
   align-items: start;
@@ -14,8 +14,92 @@
   flex-direction: column;
 }
 
-.contact-info-panel .section-header-left {
-  max-width: 100%;
+/* Full-width row above the map and the form. Overrides the 460px cap that
+   .section-header-left sets for side-column headers. */
+.contact-header {
+  grid-column: 1 / -1;
+  max-width: none;
+  margin-bottom: 0;
+}
+
+.contact-header .section-description {
+  max-width: none;
+}
+
+/* The office map sits in the left column, in a card that matches the form, and
+   stretches to the form's full height so the two columns end level. */
+.contact-info-panel {
+  align-self: stretch;
+}
+
+.contact-map {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-top: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.contact-map iframe {
+  display: block;
+  flex: 1;
+  width: 100%;
+  min-height: 380px;
+  border: 0;
+}
+
+.contact-map-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.875rem;
+}
+
+.contact-map-address {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.contact-map-address svg {
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  color: var(--primary-ink);
+}
+
+.contact-map-footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+  font-weight: 700;
+  color: var(--navy);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.contact-map-footer a:hover {
+  color: var(--primary-ink);
+}
+
+@media (max-width: 600px) {
+  .contact-map iframe {
+    min-height: 320px;
+  }
+
+  .contact-map-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .contact-form-panel:hover {
@@ -120,7 +204,7 @@
 @media (max-width: 900px) {
   .contact-container {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2rem;
   }
 }
 

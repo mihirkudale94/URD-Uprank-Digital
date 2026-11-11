@@ -5,7 +5,10 @@
 // Plain JS with no imports and no JSX: the serverless functions in /api and vite.config.js
 // load this file directly under Node, outside the Vite build.
 
-export const SITE_URL = 'https://uprankdigital.com/';
+// The address the site is actually served from. Vercel 308-redirects the bare domain to
+// www, so the canonical tag, sitemap, robots.txt, Open Graph and JSON-LD must all say www:
+// pointing them at an address that redirects tells Google two different things.
+export const SITE_URL = 'https://www.uprankdigital.com/';
 
 export const BUSINESS = {
   name: 'Up Rank Digital',
@@ -29,7 +32,7 @@ export const CONTACT = {
 // One address, written one way. `lines` is how it is shown on the page; the JSON-LD
 // builds its PostalAddress from the same fields, so the two cannot disagree.
 export const ADDRESS = {
-  streetAddress: 'Shyamal CHS',
+  streetAddress: 'Shyamal CHS, VIIT College Road, Kondhwa Budruk',
   locality: 'Pune',
   region: 'Maharashtra',
   postalCode: '411048',
@@ -43,6 +46,25 @@ export const ADDRESS_LINES = [
 ];
 
 export const FULL_ADDRESS = ADDRESS_LINES.join(', ');
+
+// The office on Google Maps. No API key: the map is Google's keyless embed.
+//
+// MAP_LINK is the office's own Google Maps share link: "Get directions" opens it, so the
+// visitor lands on exactly the place the business chose.
+//
+// MAP_PLACE is what the embedded map searches for to drop its pin. An embed cannot take a
+// share link, so it needs the place itself: its name as Google Maps shows it, a plus code,
+// or "lat,lng". Do not put the street line here: Google does not know "Shyamal CHS" and
+// drops the pin in the wrong village. If the name ever resolves wrongly, the plus code
+// 'FV4J+VQQ Kondhwa Budruk, Pune, Maharashtra 411048' pins the same spot.
+const MAP_LINK = 'https://maps.app.goo.gl/hMVzpkcoUZSXPKnr9';
+const MAP_PLACE = 'Shyamal Society, VIIT College Rd, Kondhwa Budruk, Pune, Maharashtra 411048';
+export const MAP_QUERY =
+  MAP_PLACE || `${ADDRESS.locality}, ${ADDRESS.region} ${ADDRESS.postalCode}, ${ADDRESS.country}`;
+// Street level for the exact office; neighbourhood level for the postcode fallback.
+export const MAP_EMBED_URL = `https://www.google.com/maps?q=${encodeURIComponent(MAP_QUERY)}&z=${MAP_PLACE ? 16 : 13}&output=embed`;
+export const MAP_DIRECTIONS_URL =
+  MAP_LINK || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP_QUERY)}`;
 
 export const AREA_SERVED = [
   { type: 'City', name: ADDRESS.locality },

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Google tag (GTM-K99R8SHN) -->
+    <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-K99R8SHN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // Which broken address a visitor landed on, so dead links can be found and fixed.
+      dataLayer.push({ event: 'page_not_found', page_path: location.pathname, page_referrer: document.referrer });
+    </script>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="%BASE_URL%img/favcon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#03446d" />
+    <!-- Never indexed: Vercel serves this page for every address that does not exist. -->
+    <meta name="robots" content="noindex" />
+    <title>Page not found | Up Rank Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap"
+    />
+    <style>
+      :root {
+        --navy: #03446d;
+        --navy-rgb: 3, 68, 109;
+        --primary: #f7971f;
+        --primary-ink: #a76006;
+        --text-main: #0b1d2b;
+        --text-muted: #58595b;
+        --bg: #ffffff;
+        --bg-alt: #f6f9fb;
+        --border: rgba(3, 68, 109, 0.12);
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        background: var(--bg-alt);
+        color: var(--text-main);
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        line-height: 1.6;
+      }
+      header { background: var(--bg); border-bottom: 1px solid var(--border); }
+      .wrap { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 16px; }
+      header .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; padding-bottom: 16px; }
+      header img { height: 36px; width: auto; display: block; }
+      header a.back { color: var(--navy); font-weight: 600; text-decoration: none; font-size: 0.95rem; }
+      header a.back:hover { color: var(--primary-ink); }
+
+      main { flex: 1; display: flex; align-items: center; padding: 64px 0; }
+      .panel { max-width: 640px; margin: 0 auto; text-align: center; }
+      .code {
+        font-family: 'Outfit', sans-serif;
+        font-weight: 800;
+        font-size: clamp(5rem, 18vw, 8.5rem);
+        line-height: 1;
+        letter-spacing: -0.02em;
+        color: var(--navy);
+        margin: 0;
+      }
+      .code span { color: var(--primary); }
+      .eyebrow {
+        display: inline-block;
+        margin: 20px 0 8px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--primary-ink);
+      }
+      h1 { font-family: 'Outfit', sans-serif; font-size: clamp(1.6rem, 4.5vw, 2.2rem); line-height: 1.2; color: var(--text-main); margin: 0 0 12px; }
+      p.lead { color: var(--text-muted); margin: 0 auto 32px; max-width: 520px; }
+
+      .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        padding: 14px 26px; border-radius: 12px;
+        font-weight: 700; font-size: 0.95rem; text-decoration: none;
+        transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+      }
+      .btn:hover { transform: translateY(-2px); }
+      .btn-primary { background: var(--primary); color: var(--text-main); }
+      .btn-secondary { background: var(--bg); color: var(--navy); border: 1px solid var(--border); }
+      .btn-secondary:hover { border-color: var(--navy); }
+
+      .links { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--border); }
+      .links p { margin: 0 0 12px; font-size: 0.85rem; color: var(--text-muted); }
+      .links ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; }
+      .links a { color: var(--navy); font-weight: 600; text-decoration: none; font-size: 0.95rem; }
+      .links a:hover { color: var(--primary-ink); }
+
+      footer { border-top: 1px solid var(--border); background: var(--bg); padding: 20px 0; color: var(--text-muted); font-size: 0.85rem; text-align: center; }
+      footer a { color: inherit; }
+
+      @media (max-width: 480px) {
+        .actions .btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <a href="/"><img src="/img/logo-header.png" alt="Up Rank Digital" width="160" height="40" /></a>
+        <a class="back" href="/">Back to website</a>
+      </div>
+    </header>
+
+    <main>
+      <div class="wrap">
+        <div class="panel">
+          <p class="code" aria-hidden="true">4<span>0</span>4</p>
+          <span class="eyebrow">Page not found</span>
+          <h1>This page doesn&rsquo;t exist, but we&rsquo;re still here.</h1>
+          <p class="lead">
+            The link may be old or mistyped. Head back to the homepage, or get in touch and
+            we&rsquo;ll help you find what you were looking for.
+          </p>
+
+          <div class="actions">
+            <a class="btn btn-primary" href="/">Go to homepage</a>
+            <a class="btn btn-secondary" href="/#contact">Contact us</a>
+          </div>
+
+          <nav class="links" aria-label="Popular pages">
+            <p>Or jump to</p>
+            <ul>
+              <li><a href="/#services">What We Do</a></li>
+              <li><a href="/#expertise">Capabilities</a></li>
+              <li><a href="/#why-us">Why Us</a></li>
+              <li><a href="/#how-we-work">How We Work</a></li>
+              <li><a href="tel:+__SITE_PHONE_E164__">Call __SITE_PHONE_DISPLAY__</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        __SITE_LEGAL_NAME__ &copy; __SITE_FOUNDING_YEAR__. All rights reserved. &middot;
+        <a href="/privacy.html">Privacy Policy</a>
+      </div>
+    </footer>
+  </body>
+</html>

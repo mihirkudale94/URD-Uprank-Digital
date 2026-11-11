@@ -1,0 +1,64 @@
+/* Height of the bar (without the iPhone home-indicator inset), shared with the rules that
+   move the chat panel, the back-to-top button and the footer clear of it. */
+:root {
+  --mobile-bar-height: 56px;
+}
+
+.mobile-action-bar {
+  display: none;
+}
+
+/* One solid navy strip in the brand colour, split into three equal segments by hairline
+   dividers: restrained, the way a bank or consultancy does it, rather than three
+   floating app buttons. The thin orange rule on top ties it to the brand accent. */
+@media (max-width: 640px) {
+  .mobile-action-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 49;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: var(--navy);
+    border-top: 2px solid var(--primary);
+    box-shadow: 0 -8px 24px rgba(var(--navy-rgb), 0.18);
+  }
+
+  .mobile-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: var(--mobile-bar-height);
+    padding: 0 0.5rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #fff;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.15s ease;
+  }
+
+  .mobile-action-btn + .mobile-action-btn {
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .mobile-action-btn svg {
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .mobile-action-btn:active,
+  .mobile-action-btn:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
+    outline: none;
+  }
+}

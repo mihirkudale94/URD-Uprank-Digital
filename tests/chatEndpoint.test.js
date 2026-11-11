@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import handler, { __resetRateLimits } from '../api/chat.js';
+import handler, { __resetRateLimits, detectVisitorLanguage } from '../api/chat.js';
 import { FALLBACK_REPLY } from '../src/utils/servicePlaybook.js';
 
 const conversation = [
@@ -286,8 +286,8 @@ test('the prompt tells the model to write the number in plain digits', async () 
     const prompt = calls[0].body.messages[0].content;
     assert.match(prompt, /\+91 93711 16165/);
     assert.match(prompt, /ordinary spaces/);
-    // The widget looks for this literal to offer the form button, in any language.
-    assert.match(prompt, /"enquiry form" stay in English/);
+    // The widget looks for this literal to offer the consultation button, in any language.
+    assert.match(prompt, /"request a consultation" stay in English/);
     assert.equal(res.ended, true);
   });
 });
@@ -346,17 +346,34 @@ test('the visitor waits one budget, not one per model', async () => {
   );
 });
 
-test('the prompt answers "what do you need from me" with the form, not a shopping list', async () => {
+test('the prompt qualifies corporate visitors one question at a time', async () => {
   await withGroq(async (calls) => {
     const res = mockResponse();
     await handler({ method: 'POST', body: { messages: conversation } }, res);
 
     const prompt = calls[0].body.messages[0].content;
-    // Asking for a budget in chat was the single most common rule break in sampling,
-    // because "what do you need from me?" invites a list and budget belongs on it.
-    assert.match(prompt, /what you need from them/i);
-    assert.match(prompt, /Do not list budget, timeline, audience/i);
+    assert.match(prompt, /corporate solutions assistant/i);
+    assert.match(prompt, /at most one question per reply/i);
+    assert.match(prompt, /indicative budget range/i);
+    // Contact details go through the in-chat form, never typed into the conversation.
+    assert.match(prompt, /Do not ask for a name, email address or phone number in the chat itself/);
+    assert.match(prompt, /request a consultation/);
     assert.equal(res.ended, true);
+  });
+});
+
+test('the consultation invitation is not repeated once it has been made', async () => {
+  await withGroq(async (calls) => {
+    const res = mockResponse();
+    const invited = [
+      { role: 'user', content: 'We are a 200-person logistics firm looking at paid campaigns.' },
+      { role: 'assistant', content: 'That fits Performance Marketing. You can request a consultation whenever you are ready.' },
+      { role: 'user', content: 'Do you work with LinkedIn?' }
+    ];
+    await handler({ method: 'POST', body: { messages: invited } }, res);
+
+    const prompt = calls[0].body.messages[0].content;
+    assert.match(prompt, /already invited this visitor/);
   });
 });
 
@@ -375,5 +392,152 @@ test('the prompt refuses to name deliverables outside the five lines', async () 
     // it turn a real buyer away, so the limit says so in as many words.
     assert.match(prompt, /limits what you promise, never who you welcome/i);
     assert.ok(!/booking/i.test(prompt), 'a visitor whose goal is bookings is still a website lead');
+  });
+});
+
+test('a model at its token limit hands over to the next one', async () => {
+  await withGroq(
+    async (calls) => {
+      const res = mockResponse();
+      await handler({ method: 'POST', body: { messages: conversation } }, res);
+
+      // Groq counts tokens per minute per model, so a 429 on one is not the end of the list.
+      assert.equal(calls.length, 2);
+      assert.equal(isFallback(res), false);
+    },
+    { replies: [{ ok: false, status: 429 }, { ok: true }] }
+  );
+});
+
+test('a pricing or timing question gets the consultation, not a budget question or a period', async () => {
+  await withGroq(async (calls) => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: { messages: conversation } }, res);
+
+    const prompt = calls[0].body.messages[0].content;
+    assert.match(prompt, /Cost, fees, pricing or "how much": do not ask for their budget in reply/);
+    assert.match(prompt, /do not give any period, not even "a few weeks"/);
+    assert.match(prompt, /Never ask for something the visitor has already told you/);
+  });
+});
+
+test('positioning comes from the site, so the bot can answer "how are you different"', async () => {
+  await withGroq(async (calls) => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: { messages: conversation } }, res);
+
+    const prompt = calls[0].body.messages[0].content;
+    assert.match(prompt, /Measured on enquiries, not clicks/);
+    assert.match(prompt, /You own everything/);
+    assert.match(prompt, /Free discovery call/);
+    assert.match(prompt, /what challenge they are trying to solve/);
+  });
+});
+
+test('the language of the latest message is named in the prompt', async () => {
+  const hinglish = [{ role: 'user', content: 'mera skincare brand hai, kya aap ads fix kar sakte ho?' }];
+  const devanagari = [{ role: 'user', content: 'मुझे नई वेबसाइट चाहिए' }];
+
+  for (const [messages, expected] of [
+    [hinglish, /Hinglish or Romanised Marathi/],
+    [devanagari, /written in Devanagari/],
+    [conversation, /Reply in the language of the visitor's latest message/]
+  ]) {
+    await withGroq(async (calls) => {
+      const res = mockResponse();
+      await handler({ method: 'POST', body: { messages } }, res);
+      assert.match(calls[0].body.messages[0].content, expected);
+    });
+  }
+});
+
+test('plain English is not mistaken for Hinglish', () => {
+  assert.equal(detectVisitorLanguage('We need more enquiries, what is the cost per month?'), 'english');
+  assert.equal(detectVisitorLanguage('jaldi chahiye, aapki fees kitni hai?'), 'romanised');
+});
+
+test('the prompt carries the company facts and names what it must not guess', async () => {
+  await withGroq(async (calls) => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: { messages: conversation } }, res);
+
+    const prompt = calls[0].body.messages[0].content;
+    // Without these the model invented a Mumbai office, a remote team and office hours.
+    assert.match(prompt, /Kondhwa Budruk/);
+    assert.match(prompt, /Founded in 2017/);
+    assert.match(prompt, /URD Solutions Pvt\. Ltd\./);
+    assert.match(prompt, /This is the only office/);
+    for (const topic of ['team size', 'office hours', 'Google Partner', 'GST', 'outside India', 'lock-in', 'refunds']) {
+      assert.ok(prompt.includes(topic), `the prompt should name "${topic}" as unknown`);
+    }
+    assert.match(prompt, /never say something does not exist/i);
+    assert.match(prompt, /letter for letter/);
+  });
+});
+
+test('Marathi is told apart from Hindi, though both use Devanagari', () => {
+  assert.equal(detectVisitorLanguage('तुमची फी किती आहे?'), 'marathi');
+  assert.equal(detectVisitorLanguage('मुझे नई वेबसाइट चाहिए'), 'devanagari');
+});
+
+const guardrailFrame = (res) =>
+  res.chunks
+    .join('')
+    .split('\n')
+    .filter((line) => line.startsWith('data: ') && !line.includes('[DONE]'))
+    .map((line) => JSON.parse(line.slice(6)))
+    .find((frame) => frame.urd_guardrail)?.urd_guardrail;
+
+test('a reply that breaks a guardrail is rewritten before the visitor sees it', async () => {
+  await withGroq(
+    async (calls) => {
+      const res = mockResponse();
+      await handler({ method: 'POST', body: { messages: conversation } }, res);
+
+      assert.equal(calls.length, 2, 'one draft, one rewrite');
+      const correction = calls[1].body.messages.at(-1);
+      assert.equal(correction.role, 'system');
+      assert.match(correction.content, /quoted a price/);
+      assert.equal(sseContent(res), 'Costs are set out in a written plan after a discovery call.');
+      assert.deepEqual(guardrailFrame(res), { rules: ['price'], outcome: 'rewritten' });
+    },
+    {
+      replies: [
+        { ok: true, text: 'A basic website costs ₹25,000.' },
+        { ok: true, text: 'Costs are set out in a written plan after a discovery call.' }
+      ]
+    }
+  );
+});
+
+test('a rewrite that still breaks a guardrail is replaced by the safe reply', async () => {
+  await withGroq(
+    async (calls) => {
+      const res = mockResponse();
+      await handler({ method: 'POST', body: { messages: conversation } }, res);
+
+      assert.equal(calls.length, 2);
+      const sent = sseContent(res);
+      assert.ok(!sent.includes('Mumbai'));
+      assert.match(sent, /do not have that detail here/);
+      assert.match(sent, /request a consultation/);
+      assert.equal(guardrailFrame(res).outcome, 'safe_reply');
+      assert.equal(isFallback(res), false);
+    },
+    {
+      replies: [
+        { ok: true, text: 'Our office is located in Mumbai.' },
+        { ok: true, text: 'Our team is based in Mumbai and Pune.' }
+      ]
+    }
+  );
+});
+
+test('a clean reply goes out untouched, with no guardrail flag', async () => {
+  await withGroq(async (calls) => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: { messages: conversation } }, res);
+    assert.equal(calls.length, 1);
+    assert.equal(guardrailFrame(res), undefined);
   });
 });

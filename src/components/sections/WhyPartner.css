@@ -3,6 +3,13 @@
   overflow: hidden;
 }
 
+/* Let the header span the container instead of the 460px side-column cap
+   from .section-header-left, so the description runs on one line. */
+.why-partner-section .section-header-left,
+.why-partner-section .section-description {
+  max-width: none;
+}
+
 .why-partner-pillars {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

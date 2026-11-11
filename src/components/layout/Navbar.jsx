@@ -38,6 +38,11 @@ const navLinks = [
     label: 'About',
     href: '#leadership',
     kicker: 'About Up Rank Digital'
+  },
+  {
+    label: 'Contact',
+    href: '#contact',
+    kicker: 'Send us a message'
   }
 ];
 
