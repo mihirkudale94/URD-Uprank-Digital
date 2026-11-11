@@ -116,6 +116,13 @@ const RULES = [
     allowIf: (sentence) => !/\b(we|our)\b[^.?!]*\b(work|worked|served|clients|experience|helped)\b/i.test(sentence)
   },
   {
+    // The agency does not want WordPress named by the assistant at all, so this one has no
+    // visitor-echo allowance: even "the team will confirm whether WordPress fits" is out.
+    id: 'blocked_platform',
+    label: 'mentioned WordPress',
+    pattern: /\bword\s?press\b|वर्डप्रेस/gi
+  },
+  {
     id: 'competitor',
     label: 'made a claim about other agencies',
     sentence: /\b(other|larger|big|bigger|many|most|typical|traditional)\s+agencies\b/i

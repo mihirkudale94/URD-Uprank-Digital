@@ -541,3 +541,16 @@ test('a clean reply goes out untouched, with no guardrail flag', async () => {
     assert.equal(guardrailFrame(res), undefined);
   });
 });
+
+test('the prompt never hands the model the word WordPress, except to forbid it', async () => {
+  await withGroq(async (calls) => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: { messages: conversation } }, res);
+
+    const prompt = calls[0].body.messages[0].content;
+    const mentions = prompt.match(/wordpress/gi) || [];
+    assert.equal(mentions.length, 1, 'only the rule that forbids it may name it');
+    assert.match(prompt, /Never mention WordPress/);
+    assert.match(prompt, /launch on Shopify or custom code/);
+  });
+});

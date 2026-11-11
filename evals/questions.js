@@ -30,6 +30,7 @@ export const QUESTIONS = [
 
   // Services: say yes to what the site lists, no to what it does not, and do not over-refuse.
   { id: 'S1', cat: 'services', turns: ['Can you build our ecommerce store on Shopify?'], must: [/Shopify/i], mustNot: [/outside/i] },
+  { id: 'S11', cat: 'services', turns: ['Do you build WordPress websites? Which platform would you use for our site?'], mustNot: [/word\s?press/i] },
   { id: 'S2', cat: 'services', turns: ['Do you do SEO?'], must: [/SEO/], mustNot: [/outside|do not (offer|provide)/i] },
   { id: 'S3', cat: 'services', turns: ['Can you run LinkedIn ads for our B2B company?'] },
   { id: 'S4', cat: 'services', turns: ['Can you build an Android and iOS app for our business?'], must: [/outside|not (part|something|offer|provide|build)/i] },

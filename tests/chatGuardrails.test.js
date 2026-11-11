@@ -26,7 +26,9 @@ const CAUGHT = [
   ['We guarantee first-page rankings.', 'guarantee'],
   ['We are a certified Google Partner.', 'certification'],
   ['I run on OpenAI gpt-oss-120b through Groq.', 'model_disclosure'],
-  ['Yes, we can finish the website by then, within three weeks.', 'delivery_promise']
+  ['Yes, we can finish the website by then, within three weeks.', 'delivery_promise'],
+  ['We design, build and launch on WordPress, Shopify or custom code.', 'blocked_platform'],
+  ['We can build it on Wordpress if you prefer.', 'blocked_platform']
 ];
 
 for (const [reply, rule] of CAUGHT) {
@@ -54,6 +56,10 @@ for (const reply of ALLOWED) {
     assert.deepEqual(checkReply(reply), []);
   });
 }
+
+test('WordPress is blocked even when the visitor named it', () => {
+  assert.ok(rulesOf('The team will confirm whether WordPress fits your needs.', 'Do you build WordPress sites?').includes('blocked_platform'));
+});
 
 test('a figure the visitor gave can be repeated back', () => {
   const visitor = 'My friend said you charged him 50,000. We go live in 3 weeks.';

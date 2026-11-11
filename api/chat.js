@@ -154,7 +154,7 @@ const buildFactSheet = () => {
     ...(brands.length
       ? [`- Brands shown on the website's client wall: ${brands.join(', ')}. You may name these as brands the agency has worked with, and nothing about the work, results or numbers for any of them.`]
       : []),
-    '- Platforms named on the website: WordPress, Shopify and custom code for websites; Google Ads, Meta Ads and SEO for marketing; GA4, Search Console and call tracking for measurement; Instagram, Facebook and LinkedIn for social media.'
+    '- Platforms the assistant may name: Shopify and custom code for websites; Google Ads, Meta Ads and SEO for marketing; GA4, Search Console and call tracking for measurement; Instagram, Facebook and LinkedIn for social media.'
   ].join('\n');
 };
 
@@ -173,11 +173,17 @@ const UNKNOWN_TOPICS = [
   'which AI model or company powers this assistant'
 ];
 
+// Platforms the assistant must never name, even though the website's own copy may list
+// them. Stripped out of the site text before it reaches the prompt, forbidden by a rule,
+// and enforced by the `blocked_platform` guardrail in src/utils/chatGuardrails.js.
+const UNSPOKEN_PLATFORMS = /\bWord\s?Press\b,?\s*(or\s+|and\s+)?/gi;
+const withoutUnspokenPlatforms = (text) => text.replace(UNSPOKEN_PLATFORMS, '');
+
 const buildSystemPrompt = (messages = []) => {
   const services = SERVICE_PLAYBOOK.map(
     (service) => `- ${service.title}: ${service.fit} Common scope: ${service.bullets.join(', ')}.`
   ).join('\n');
-  const capabilities = EXPERTISE.map((item) => `- ${item.title}: ${item.text}`).join('\n');
+  const capabilities = EXPERTISE.map((item) => `- ${item.title}: ${withoutUnspokenPlatforms(item.text)}`).join('\n');
   const reasons = WHY_US.map((item) => `- ${item.title}: ${item.text}`).join('\n');
   const process = PROCESS_STEPS.map((step, index) => `${index + 1}. ${step.title}: ${step.text}`).join('\n');
 
@@ -227,6 +233,7 @@ const buildSystemPrompt = (messages = []) => {
     '- Questions unrelated to the agency\'s work (coding help, general knowledge, other companies, requests for anything dishonest such as fake reviews): decline in one sentence and offer to help with their marketing or website instead.',
     '- Industries: the only industries you may say the agency has worked in are the ones named in the facts above (food brands, manufacturers, local services, and the brands on the client wall). Asked about any other industry, such as healthcare, pharma or real estate, do not say yes or no: say the team can share relevant experience on the discovery call.',
     '- Other agencies: never say anything about what other agencies do, offer or fail to do. Explain only what this agency does.',
+    '- Never mention WordPress, in any language, even if the visitor names it. If a visitor asks about it or about which platform their website would use, say the right platform is chosen with the team on the discovery call, and name only Shopify or custom code if you name any platform.',
     '- The registered company name and the founder are in the facts above: give them when asked.',
     '- Proof, case studies or past results: your whole answer about proof is that the team shares relevant examples on the discovery call. Never claim the agency has worked with, helped or delivered results for any business, industry or type of client, not even in general terms like "we have helped several clinics" or "businesses like yours have seen".',
     '',
