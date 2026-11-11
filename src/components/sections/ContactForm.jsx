@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Send, CheckCircle2, ArrowRight } from 'lucide-react';
 import { buildLeadPayload, submitLead } from '@/utils/leadSubmission';
+import { trackWebsiteEvent } from '@/utils/analytics';
 import {
   ENQUIRY_PREFILL_EVENT,
   clearEnquiryPrefill,
@@ -65,7 +66,21 @@ export default function ContactForm() {
     setLoading(true);
 
     try {
-      await submitLead(buildLeadPayload({ formData, websiteConfirmation }));
+      const payload = buildLeadPayload({ formData, websiteConfirmation });
+      await submitLead(payload);
+
+      // GA4's recommended lead event, fired only once the server has accepted the lead,
+      // so a failed send or a bot caught by the honeypot never counts as a conversion.
+      // No name, email or phone: those must not reach Google Analytics.
+      const source = payload.attribution?.last || {};
+      trackWebsiteEvent('generate_lead', {
+        event_category: 'conversion',
+        form_id: 'contact_form',
+        has_message: Boolean(payload.message),
+        lead_source: source.utm_source || (source.gclid ? 'google_ads' : '') || source.referrer || 'direct',
+        lead_medium: source.utm_medium || '',
+        lead_campaign: source.utm_campaign || ''
+      });
 
       setIsSubmitted(true);
       setFormData({
@@ -195,6 +210,11 @@ export default function ContactForm() {
                 {loading ? 'Submitting...' : 'Submit Inquiry'} 
                 <Send size={16} />
               </button>
+
+              <p className="form-privacy-note">
+                We use these details only to reply to your enquiry. See our{' '}
+                <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.
+              </p>
             </form>
           )}
         </div>

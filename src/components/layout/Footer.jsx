@@ -2,6 +2,9 @@ import React from 'react';
 import { Mail, Phone, MapPin, Linkedin, Facebook, ArrowUp } from 'lucide-react';
 import { publicAsset } from '@/utils/publicAsset';
 import { handleAnchorClick, prefersReducedMotion } from '@/utils/scrollToSection';
+import { trackWebsiteEvent } from '@/utils/analytics';
+import { CONTACT_EMAIL, EMAIL_URL, PHONE_TEL_URL, WHATSAPP_NUMBER_DISPLAY } from '@/utils/contactChannels';
+import { ADDRESS_LINES, BUSINESS, SOCIAL_LINKS } from '@/data/siteContent';
 import './Footer.css';
 
 const quickLinks = [
@@ -32,15 +35,15 @@ export default function Footer() {
       <div className="container footer-wrap">
         {/* Brand Block */}
         <div className="footer-brand-col">
-          <img src={publicAsset('/img/logo-footer.png')} alt="Up Rank Digital" className="footer-logo" width="168" height="42" loading="lazy" />
+          <img src={publicAsset('/img/logo-footer.png')} alt={BUSINESS.name} className="footer-logo" width="168" height="42" loading="lazy" />
           <p className="footer-slogan">
-            Creating impact online. Winning results together.
+            {BUSINESS.slogan}
           </p>
           <div className="footer-socials">
-            <a href="https://in.linkedin.com/company/uprankdigital" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
               <Linkedin size={18} />
             </a>
-            <a href="https://www.facebook.com/UpRankDigital/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <a href={SOCIAL_LINKS.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
               <Facebook size={18} />
             </a>
           </div>
@@ -54,14 +57,22 @@ export default function Footer() {
               <Mail size={16} className="footer-contact-icon" />
               <div>
                 <h4>Email</h4>
-                <p><a href="mailto:sachin@uprankdigital.com">sachin@uprankdigital.com</a></p>
+                <p>
+                  <a href={EMAIL_URL} onClick={() => trackWebsiteEvent('email_click', { location: 'footer' })}>
+                    {CONTACT_EMAIL}
+                  </a>
+                </p>
               </div>
             </li>
             <li>
               <Phone size={16} className="footer-contact-icon" />
               <div>
                 <h4>Call Us</h4>
-                <p>+91 93711 16165</p>
+                <p>
+                  <a href={PHONE_TEL_URL} onClick={() => trackWebsiteEvent('phone_click', { location: 'footer' })}>
+                    {WHATSAPP_NUMBER_DISPLAY}
+                  </a>
+                </p>
               </div>
             </li>
           </ul>
@@ -75,8 +86,9 @@ export default function Footer() {
               <MapPin size={16} className="footer-contact-icon" />
               <div>
                 <h4>India Office</h4>
-                <p>Shyamal CHS</p>
-                <p>Pune 411048, India</p>
+                {ADDRESS_LINES.map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
               </div>
             </li>
           </ul>
@@ -99,7 +111,10 @@ export default function Footer() {
       {/* Footer Copy & Sticky Top */}
       <div className="container footer-bottom">
         <div className="footer-copyright">
-          <p>URD Solutions Pvt. Ltd. &copy; 2017. All rights reserved.</p>
+          <p>
+            {BUSINESS.legalName} &copy; {BUSINESS.foundingYear}. All rights reserved. &middot;{' '}
+            <a href="/privacy.html">Privacy Policy</a>
+          </p>
         </div>
       </div>
 

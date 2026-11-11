@@ -130,7 +130,7 @@ security headers, so the dashboard needs almost nothing configured by hand.
    | `GROQ_MODEL` | chat assistant | Server-side only; optional model override |
    | `CONTACT_RECIPIENT` | contact form | Server-side only; optional |
    | `RESEND_FROM_EMAIL` | contact form | Server-side only; optional |
-   | `VITE_GTM_ID` *or* `VITE_GA_MEASUREMENT_ID` | browser | Analytics; build-time |
+   | `VITE_GTM_ID` *or* `VITE_GA_MEASUREMENT_ID` | browser | Not needed: the Google tag is hardcoded (see Analytics) |
 
    Everything prefixed `VITE_` is **baked in at build time**. Changing one needs a
    redeploy, not just a save. The server-side ones are read per request.
@@ -142,25 +142,30 @@ Every push to `main` deploys. Pull requests get preview deployments.
 
 ## Analytics
 
-The contact form and the assistant already emit events. They go nowhere until a tag is
-configured, so set **one** of these in Vercel and redeploy:
+The Google tag for Tag Manager container **`GTM-K99R8SHN`** is hardcoded right after
+`<head>` in `index.html` and `privacy.html`. GA4, Google Ads and any pixels are configured
+inside that container, not in code.
 
-```bash
-VITE_GTM_ID=GTM-XXXXXXX           # preferred if the client already uses Tag Manager
-VITE_GA_MEASUREMENT_ID=G-XXXXXXX  # plain GA4, no container
-```
+`src/utils/analyticsLoader.js` can still inject a tag from `VITE_GTM_ID` /
+`VITE_GA_MEASUREMENT_ID`, but it stands down when it finds the hardcoded tag, so the
+container never loads twice. Leave those variables unset.
 
-- Leave both blank and no tracking script is requested at all.
-- Setting both is a misconfiguration: a container almost always carries its own
-  GA4 tag, so every event would be counted twice. Tag Manager wins and a warning
-  is logged.
-- A malformed ID is rejected with a console warning rather than loading a broken tag.
-- Read at **build time**. Changing one needs a redeploy.
+Events pushed to the `dataLayer`:
+
+- `whatsapp_click`, `phone_click`, `email_click`, each with a `location`
+  (`hero`, `footer`, `connect_card`, `assistant`).
 - The assistant emits `message_sent`, `reply_received` and `chat_cleared`.
   `reply_received` carries a `reply_source`: `model` for a real answer, `local_error`
   when the endpoint could not be reached, `backend_fallback` when it answered but
   bailed out. While no model is wired up every reply is `local_error`, so the dashboard
   shows plainly whether the bot is thinking or reciting.
+
+- The contact form fires GA4's `generate_lead` only after the server accepts the lead,
+  with `lead_source`, `lead_medium` and `lead_campaign` (never name, email or phone).
+  Mark it as a key event in GA4 and import it into Google Ads as the lead conversion.
+- UTM tags and ad click IDs (`gclid`, `fbclid`, `li_fat_id`, `msclkid`, …) are captured on
+  arrival by `src/utils/attribution.js`, kept 90 days, and printed in every lead email as
+  first-visit and most-recent-visit source.
 
 A `urd:analytics` `CustomEvent` is always dispatched on `window`, whether or not a
 tag is configured, for any external listener.
@@ -168,20 +173,24 @@ tag is configured, for any external listener.
 ## Pre-Deployment Checklist
 
 - [ ] `npm run build` succeeds and `dist/` is the published folder.
-- [ ] Vite env vars set in Vercel (read at build time — redeploy after changing them).
 - [ ] `RESEND_API_KEY` set in Vercel, and the sending domain verified in Resend.
 - [ ] Submit a real test lead on the deployed site and confirm the email arrives, and that replying to it reaches the address you submitted.
 - [ ] Open the assistant on a phone and confirm the panel fits and sends.
-- [ ] Set `VITE_GTM_ID` **or** `VITE_GA_MEASUREMENT_ID`, redeploy, then confirm `message_sent` arrives in GA4 Realtime or GTM Preview.
+- [ ] In GTM Preview on the deployed site, confirm `generate_lead`, `phone_click` and `message_sent` arrive, then publish the container.
+- [ ] Mark `generate_lead` as a key event in GA4 and import it into Google Ads.
+- [ ] Have the privacy policy (`privacy.html`) reviewed before running ads.
 - [ ] `public/sitemap.xml` lists only pages that exist, and is submitted in Search Console.
-- [ ] Client brand names filled into `src/data/clientLogos.js`, or left blank deliberately.
+- [ ] Client brand names for logos 1, 2, 3 and 12 in `src/data/clientLogos.js` (symbol-only, so not guessed).
 
 ## Production Notes
 
 - Vercel hosts the static React app and the one `/api/submit-lead` function.
 - `vite.config.js` sets `base: '/'`: the site is served from the domain root.
-- The build has no router: the site is one page and every link is an in-page anchor.
+- The build has no router: the site is one page plus a static `privacy.html`.
+- `npm run build` prerenders the page (`src/entry-server.jsx` + `scripts/prerender.js`), so
+  the served HTML already contains the content and `main.jsx` hydrates it. The chat
+  assistant mounts only after hydration because it reads browser storage.
 - No database, no keys in the browser, and nothing to keep awake.
 - `RESEND_API_KEY` is server-side only. An email API key in a `VITE_` variable would
   be published in the bundle for anyone to send mail with.
-- Analytics is wired and inert until an ID is set; see the Analytics section above.
+- Analytics runs through the hardcoded GTM container; see the Analytics section above.

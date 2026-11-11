@@ -205,3 +205,8 @@
     right: 1rem;
   }
 }
+
+.footer-copyright a {
+  color: inherit;
+  text-decoration: underline;
+}

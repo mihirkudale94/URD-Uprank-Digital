@@ -1,7 +1,14 @@
 import React from 'react';
 import { Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
-import { WHATSAPP_URL } from '@/utils/contactChannels';
+import {
+  CONTACT_EMAIL,
+  EMAIL_URL,
+  PHONE_TEL_URL,
+  WHATSAPP_NUMBER_DISPLAY,
+  WHATSAPP_URL
+} from '@/utils/contactChannels';
 import { trackWebsiteEvent } from '@/utils/analytics';
+import { BUSINESS, FOUNDER, FULL_ADDRESS } from '@/data/siteContent';
 import './Leadership.css';
 
 export default function Leadership() {
@@ -22,8 +29,8 @@ export default function Leadership() {
 
         <div className="leader-profile-grid scroll-animate delay-100">
           <div className="leader-title-wrap">
-            <h3 className="leader-name">Sachin Raje</h3>
-            <p className="leader-role">Managing Director, URD Solutions</p>
+            <h3 className="leader-name">{FOUNDER.name}</h3>
+            <p className="leader-role">{FOUNDER.jobTitle}, {BUSINESS.shortName}</p>
           </div>
 
           <div className="leader-pitch">
@@ -45,15 +52,19 @@ export default function Leadership() {
             <ul className="connect-details-list">
               <li>
                 <Phone size={14} className="connect-icon" />
-                <span>+91 93711 16165</span>
+                <a href={PHONE_TEL_URL} onClick={() => trackWebsiteEvent('phone_click', { location: 'connect_card' })}>
+                  {WHATSAPP_NUMBER_DISPLAY}
+                </a>
               </li>
               <li>
                 <Mail size={14} className="connect-icon" />
-                <a href="mailto:sachin@uprankdigital.com">sachin@uprankdigital.com</a>
+                <a href={EMAIL_URL} onClick={() => trackWebsiteEvent('email_click', { location: 'connect_card' })}>
+                  {CONTACT_EMAIL}
+                </a>
               </li>
               <li>
                 <MapPin size={14} className="connect-icon" />
-                <span>Pune, Maharashtra, India</span>
+                <span>{FULL_ADDRESS}</span>
               </li>
               <li>
                 {/* lucide ships no WhatsApp glyph, so this borrows the chat bubble to stay

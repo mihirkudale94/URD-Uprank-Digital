@@ -1,34 +1,16 @@
 import React from 'react';
 import { Code2, Megaphone, TrendingUp, Cpu, PenLine } from 'lucide-react';
+import { SERVICES } from '@/data/siteContent';
 import './Services.css';
 
-const services = [
-  {
-    title: 'Website Development',
-    icon: <Code2 size={22} />,
-    text: 'Websites built to perform — designed around conversion optimization, not decoration.'
-  },
-  {
-    title: 'Digital Marketing',
-    icon: <Megaphone size={22} />,
-    text: 'Grow your digital presence with social media strategy and engaging content.'
-  },
-  {
-    title: 'Performance Marketing',
-    icon: <TrendingUp size={22} />,
-    text: 'Campaign planning and execution backed by analytics and growth strategy.'
-  },
-  {
-    title: 'AI Powered Solutions',
-    icon: <Cpu size={22} />,
-    text: 'AI-powered strategies applied to marketing, so decisions move faster.'
-  },
-  {
-    title: 'Content Design & Management',
-    icon: <PenLine size={22} />,
-    text: 'Engaging content, designed and managed end to end.'
-  }
-];
+// Icons are presentation, so they stay here; the titles and copy come from siteContent.js.
+const serviceIcons = {
+  'website-development': <Code2 size={22} />,
+  'digital-marketing': <Megaphone size={22} />,
+  'performance-marketing': <TrendingUp size={22} />,
+  'ai-solutions': <Cpu size={22} />,
+  'content-management': <PenLine size={22} />
+};
 
 export default function Services() {
   return (
@@ -48,12 +30,12 @@ export default function Services() {
         </div>
 
         <div className="services-bento scroll-animate delay-100">
-          {services.map((service) => (
+          {SERVICES.map((service) => (
             <article
-              key={service.title}
+              key={service.id}
               className="service-card glass-card"
             >
-              <span className="service-card-icon">{service.icon}</span>
+              <span className="service-card-icon">{serviceIcons[service.id]}</span>
               <h3 className="service-card-title">{service.title}</h3>
               <p className="service-card-text">{service.text}</p>
             </article>

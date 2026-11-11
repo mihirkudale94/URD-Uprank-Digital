@@ -8,7 +8,10 @@
 //   CONTACT_RECIPIENT   optional; defaults to sachin@uprankdigital.com
 //   RESEND_FROM_EMAIL   optional; must be an address on a domain verified in Resend
 
-const DEFAULT_RECIPIENT = 'sachin@uprankdigital.com';
+import { sanitizeTouch } from '../src/utils/attribution.js';
+import { CONTACT_EMAIL } from '../src/utils/contactChannels.js';
+
+const DEFAULT_RECIPIENT = CONTACT_EMAIL;
 // Resend's shared sender, which needs no DNS and works the moment a key exists. It can
 // only deliver to the address that owns the Resend account, so once uprankdigital.com is
 // verified in Resend, set RESEND_FROM_EMAIL to 'Up Rank Digital <leads@uprankdigital.com>'
@@ -36,6 +39,39 @@ const normalizeUrl = (value) => {
   }
 };
 
+const TOUCH_LABELS = [
+  ['utm_source', 'Source'],
+  ['utm_medium', 'Medium'],
+  ['utm_campaign', 'Campaign'],
+  ['utm_term', 'Keyword'],
+  ['utm_content', 'Ad content'],
+  ['gclid', 'Google Ads click ID'],
+  ['gbraid', 'Google Ads gbraid'],
+  ['wbraid', 'Google Ads wbraid'],
+  ['fbclid', 'Meta click ID'],
+  ['li_fat_id', 'LinkedIn click ID'],
+  ['msclkid', 'Microsoft Ads click ID'],
+  ['referrer', 'Came from'],
+  ['landing_page', 'Landed on'],
+  ['captured_at', 'First seen']
+];
+
+const describeTouch = (heading, touch) =>
+  touch
+    ? [heading, ...TOUCH_LABELS.filter(([key]) => touch[key]).map(([key, label]) => `  ${label}: ${touch[key]}`)]
+    : [];
+
+// Most leads are direct visits; say so instead of leaving the section out, so a blank
+// is not mistaken for broken tracking.
+const buildAttributionText = ({ first, last }) => {
+  if (!first && !last) return ['Lead source: Direct / unknown (no campaign tag or referring site)'];
+  const sameVisit = first && last && JSON.stringify(first) === JSON.stringify(last);
+  return [
+    ...describeTouch(sameVisit ? 'Lead source:' : 'First visit source:', first),
+    ...(sameVisit ? [] : describeTouch('Most recent visit source:', last))
+  ];
+};
+
 const buildEmailText = (lead) =>
   [
     'New inquiry from the Up Rank Digital website',
@@ -46,6 +82,8 @@ const buildEmailText = (lead) =>
     '',
     'Message:',
     lead.message || 'Not provided',
+    '',
+    ...buildAttributionText(lead.attribution),
     '',
     `Submitted from: ${lead.pageUrl || 'Not provided'}`,
     `Browser: ${lead.userAgent || 'Not provided'}`
@@ -85,7 +123,11 @@ export default async function handler(request, response) {
     phone: cleanText(body.phone, 40),
     message: cleanText(body.message, 3000),
     pageUrl: normalizeUrl(body.page_url),
-    userAgent: cleanText(body.user_agent, 500)
+    userAgent: cleanText(body.user_agent, 500),
+    attribution: {
+      first: sanitizeTouch(body.attribution?.first),
+      last: sanitizeTouch(body.attribution?.last)
+    }
   };
 
   if (!lead.name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email) || !lead.phone) {

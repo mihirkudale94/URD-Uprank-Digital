@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/layout/Hero';
 import Footer from '@/components/layout/Footer';
@@ -23,6 +23,11 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 function App() {
   useScrollAnimation();
 
+  // The assistant is browser-only (it reads saved chat from storage). Mounting it after
+  // hydration keeps the prerendered HTML and the first browser render identical.
+  const [isHydrated, setIsHydrated] = useState(false);
+  useEffect(() => setIsHydrated(true), []);
+
   return (
     <div className="app-root">
       <a className="skip-to-content" href="#main-content">Skip to main content</a>
@@ -40,9 +45,11 @@ function App() {
         <BrandStatement />
         <ContactForm />
       </main>
-      <Suspense fallback={null}>
-        <WebsiteAssistant />
-      </Suspense>
+      {isHydrated && (
+        <Suspense fallback={null}>
+          <WebsiteAssistant />
+        </Suspense>
+      )}
       <Footer />
     </div>
   );

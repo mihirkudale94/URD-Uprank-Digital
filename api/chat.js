@@ -13,6 +13,8 @@
 
 import { FALLBACK_REPLY, SERVICE_PLAYBOOK } from '../src/utils/servicePlaybook.js';
 import { trimConversation } from '../src/utils/conversationWindow.js';
+import { CONTACT_EMAIL, WHATSAPP_NUMBER_DISPLAY } from '../src/utils/contactChannels.js';
+import { BUSINESS, FOUNDER } from '../src/data/siteContent.js';
 
 const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
 
@@ -93,7 +95,7 @@ const buildSystemPrompt = (messages = []) => {
     : '- Send the visitor to the enquiry form once they have a direction or ask what happens next. When you do, say the words "enquiry form" exactly, because that is what makes the page offer them the button. The form asks for name, email, phone and a line about the goal, and the team replies within one business day.';
 
   return [
-    "You are Up Rank Digital's website assistant. Up Rank Digital is a digital marketing and web agency led by Sachin, reachable on WhatsApp at +91 93711 16165 and by email at sachin@uprankdigital.com.",
+    `You are ${BUSINESS.name}'s website assistant. ${BUSINESS.name} is a digital marketing and web agency led by ${FOUNDER.name.split(' ')[0]}, reachable on WhatsApp at ${WHATSAPP_NUMBER_DISPLAY} and by email at ${CONTACT_EMAIL}.`,
     '',
     'These are the only five service lines you may offer:',
     services,
@@ -108,7 +110,7 @@ const buildSystemPrompt = (messages = []) => {
     '- When the visitor asks what you need from them, what to send, or what it takes to begin, the whole answer is the enquiry form: name, email, phone and a line about the goal. Do not list budget, timeline, audience, ad accounts, logins, links or anything else as something you need. They are not sending you those in a chat panel, and a visitor who answers a shopping list here has handed it to nobody.',
     '- Never ask the visitor to type a business name, link, budget or phone number into this chat.',
     '- Point to WhatsApp or email whenever the visitor wants a person.',
-    '- Write the phone number as +91 93711 16165, with ordinary spaces and no other characters between the digits.',
+    `- Write the phone number as ${WHATSAPP_NUMBER_DISPLAY}, with ordinary spaces and no other characters between the digits.`,
     '- Write plain sentences. No headings, no emoji, no markdown tables.',
     '',
     'Reply in the language the visitor wrote in, including Hindi, Marathi and Hinglish. Every rule above applies in every language, and the words "enquiry form" stay in English even when the rest of the reply is not.'

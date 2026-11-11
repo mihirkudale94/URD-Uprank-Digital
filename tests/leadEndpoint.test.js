@@ -176,3 +176,32 @@ test('a Resend failure is surfaced as a failure', async () => {
     { ok: false, status: 422 }
   );
 });
+
+test('the lead email says which campaign brought the visitor', async () => {
+  await withResend(async (calls) => {
+    const res = mockResponse();
+    const touch = {
+      utm_source: 'google',
+      utm_medium: 'cpc',
+      utm_campaign: 'pune-web',
+      gclid: 'abc123',
+      landing_page: 'https://uprankdigital.com/?utm_source=google',
+      injected: 'ignored'
+    };
+    await handler({ method: 'POST', body: { ...validLead, attribution: { first: touch, last: touch } } }, res);
+
+    assert.equal(res.recorded.statusCode, 200);
+    const text = calls[0].body.text;
+    assert.match(text, /Lead source:/);
+    assert.match(text, /Campaign: pune-web/);
+    assert.match(text, /Google Ads click ID: abc123/);
+    assert.doesNotMatch(text, /injected|ignored/);
+  });
+});
+
+test('a lead without attribution is labelled direct', async () => {
+  await withResend(async (calls) => {
+    await handler({ method: 'POST', body: validLead }, mockResponse());
+    assert.match(calls[0].body.text, /Direct \/ unknown/);
+  });
+});

@@ -1,10 +1,14 @@
-// Every WhatsApp and email entry point on the site reads from here, so the number,
-// the address and the prefilled greeting cannot drift apart between the floating
-// button, the contact section and the footer.
+// Every WhatsApp, phone and email entry point on the site reads from here. The values
+// themselves live in src/data/siteContent.js; this file builds the links from them.
+// Relative import with the extension, because /api imports this file under plain Node.
+import { CONTACT } from '../data/siteContent.js';
 
-export const WHATSAPP_NUMBER_E164 = '919371116165';
-export const WHATSAPP_NUMBER_DISPLAY = '+91 93711 16165';
-export const CONTACT_EMAIL = 'sachin@uprankdigital.com';
+export const WHATSAPP_NUMBER_E164 = CONTACT.phoneE164;
+export const WHATSAPP_NUMBER_DISPLAY = CONTACT.phoneDisplay;
+export const CONTACT_EMAIL = CONTACT.email;
+// tel: dials straight away on a phone, which is the most common way a local lead calls.
+export const PHONE_TEL_URL = `tel:+${WHATSAPP_NUMBER_E164}`;
+export const EMAIL_URL = `mailto:${CONTACT_EMAIL}`;
 
 const DEFAULT_WHATSAPP_MESSAGE =
   "Hi Up Rank Digital, I'd like to talk about my website and marketing.";

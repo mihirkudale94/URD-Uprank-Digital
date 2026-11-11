@@ -1,6 +1,8 @@
 // The contact form posts to /api/submit-lead, a Vercel serverless function that emails
 // the inquiry. Same origin, so no keys and no CORS in the browser.
 
+import { getAttribution } from './attribution.js';
+
 const LEAD_ENDPOINT = '/api/submit-lead';
 
 const cleanText = (value, maxLength = 500) =>
@@ -19,7 +21,9 @@ export const buildLeadPayload = ({ formData, websiteConfirmation = '' }) => ({
   // with JavaScript disabled or by posting here directly.
   website_confirmation: cleanText(websiteConfirmation, 100),
   page_url: cleanText(window.location.href, 500),
-  user_agent: cleanText(navigator.userAgent, 500)
+  user_agent: cleanText(navigator.userAgent, 500),
+  // Which campaign or site brought them, captured on arrival (see attribution.js).
+  attribution: getAttribution()
 });
 
 export const submitLead = async (leadPayload) => {

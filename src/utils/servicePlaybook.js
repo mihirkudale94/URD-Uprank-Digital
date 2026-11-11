@@ -1,6 +1,13 @@
 // Relative, with the extension: `api/chat.js` imports this file directly, so the Vite `@`
 // alias would not resolve inside the serverless function.
 import { CONTACT_EMAIL, WHATSAPP_NUMBER_DISPLAY } from './contactChannels.js';
+import { SERVICES } from '../data/siteContent.js';
+
+const serviceById = (id) => {
+  const service = SERVICES.find((item) => item.id === id);
+  if (!service) throw new Error(`servicePlaybook: no service "${id}" in siteContent.js`);
+  return service;
+};
 
 // Said back to the visitor when no model could be reached. Both ends of the chat import
 // this one literal: the endpoint writes it into the `urd_fallback` frame, and the widget
@@ -16,37 +23,37 @@ export const FALLBACK_REPLY =
 export const SERVICE_PLAYBOOK = [
   {
     id: 'website-development',
-    title: 'Website Development',
+    title: serviceById('website-development').title,
     aliases: ['website', 'web', 'ui', 'ux', 'design', 'landing page', 'landing', 'conversion page', 'ecommerce', 'e-commerce', 'shopify', 'redesign', 'custom website'],
-    fit: 'Websites built to perform, designed around conversion optimization rather than decoration.',
+    fit: serviceById('website-development').text,
     bullets: ['Website Development', 'Conversion Optimization']
   },
   {
     id: 'digital-marketing',
-    title: 'Digital Marketing',
+    title: serviceById('digital-marketing').title,
     aliases: ['marketing', 'digital marketing', 'seo', 'search engine optimization', 'local search', 'email marketing', 'newsletter', 'organic growth', 'traffic', 'search presence', 'organic', 'social media', 'social'],
-    fit: 'Grow your digital presence with social media strategy and engaging content.',
+    fit: serviceById('digital-marketing').text,
     bullets: ['Social Media Strategy', 'Content Design & Management']
   },
   {
     id: 'performance-marketing',
-    title: 'Performance Marketing',
+    title: serviceById('performance-marketing').title,
     aliases: ['performance marketing', 'ads', 'advertising', 'google ads', 'meta ads', 'facebook ads', 'instagram ads', 'linkedin ads', 'ppc', 'paid search', 'paid social', 'paid media', 'campaign planning', 'campaign'],
-    fit: 'Campaign planning and execution backed by analytics and growth strategy.',
+    fit: serviceById('performance-marketing').text,
     bullets: ['Campaign Planning & Execution', 'Analytics & Growth Strategy', 'Digital Performance Marketing']
   },
   {
     id: 'ai-solutions',
-    title: 'AI Powered Solutions',
+    title: serviceById('ai-solutions').title,
     aliases: ['ai', 'artificial intelligence', 'automation', 'chatbot', 'chat bot', 'voice agent', 'voice bot', 'ai agent', 'copilot', 'workflow automation', 'ai marketing'],
-    fit: 'AI-powered strategies applied to marketing, so decisions move faster.',
+    fit: serviceById('ai-solutions').text,
     bullets: ['AI Powered Marketing Solutions']
   },
   {
     id: 'content-management',
-    title: 'Content Design & Management',
+    title: serviceById('content-management').title,
     aliases: ['content', 'content design', 'content management', 'copy', 'copywriting', 'graphics', 'visuals', 'storytelling', 'reels', 'photoshoot', 'photo shoot', 'video', 'video production', 'shoot', 'social media management', 'creative', 'brand creative'],
-    fit: 'Engaging content, designed and managed end to end.',
+    fit: serviceById('content-management').text,
     bullets: ['Content Design & Management', 'Social Media Strategy']
   }
 ];

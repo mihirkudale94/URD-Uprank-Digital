@@ -5,6 +5,7 @@ import { trackWebsiteEvent } from '@/utils/analytics';
 import { scrollToSection } from '@/utils/scrollToSection';
 import {
   CONTACT_EMAIL,
+  WHATSAPP_NUMBER_DISPLAY,
   WHATSAPP_NUMBER_E164,
   WHATSAPP_URL
 } from '@/utils/contactChannels';
@@ -64,7 +65,7 @@ const buildLocalAssistantReply = (input) => {
   }
 
   if (/(contact|call|phone|whatsapp|human|team)/i.test(lowerInput)) {
-    return 'You can message Up Rank Digital on WhatsApp at +91 93711 16165 or email us at sachin@uprankdigital.com. For a sharper handoff, include your business name, website/social link, goal, and timeline.';
+    return `You can message Up Rank Digital on WhatsApp at ${WHATSAPP_NUMBER_DISPLAY} or email us at ${CONTACT_EMAIL}. For a sharper handoff, include your business name, website/social link, goal, and timeline.`;
   }
 
   return [
@@ -218,13 +219,23 @@ const renderMessageContentAndActions = (message, onOpenForm, showActions = true)
               </button>
             )}
             {hasWhatsApp && (
-              <a href={WHATSAPP_URL} target="_blank" rel="noreferrer" className="inline-cta-btn whatsapp-cta">
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-cta-btn whatsapp-cta"
+                onClick={() => trackWebsiteEvent('whatsapp_click', { location: 'assistant' })}
+              >
                 <MessageCircle size={14} />
                 <span>Message on WhatsApp</span>
               </a>
             )}
             {hasEmail && (
-              <a href={`mailto:${CONTACT_EMAIL}`} className="inline-cta-btn email-cta">
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="inline-cta-btn email-cta"
+                onClick={() => trackWebsiteEvent('email_click', { location: 'assistant' })}
+              >
                 <Mail size={14} />
                 <span>Email Sachin</span>
               </a>
@@ -465,7 +476,9 @@ export default function WebsiteAssistant() {
       // Dispatch reply received event for developer analytics integration
       // The form is now the main route to the team, so a reply that sends a visitor there
       // counts as a handoff alongside the WhatsApp and email ones.
-      const isQualified = /sachin@uprankdigital.com|whatsapp|enquiry form/i.test(assistantText);
+      const isQualified =
+        assistantText.toLowerCase().includes(CONTACT_EMAIL.toLowerCase()) ||
+        /whatsapp|enquiry form/i.test(assistantText);
       trackWebsiteEvent('reply_received', {
         role: 'assistant',
         replyLength: assistantText.length,
