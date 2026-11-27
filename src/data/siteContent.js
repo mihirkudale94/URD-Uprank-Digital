@@ -257,9 +257,9 @@ export const PROCESS_STEPS = [
 // Keep every answer to something the business already commits to elsewhere on the site.
 export const SERVICE_PAGES = {
   'website-development': {
-    metaTitle: 'Website Development Company in Pune | Shopify & Custom Websites | Up Rank Digital',
+    metaTitle: 'Website Development Company in Pune | Up Rank Digital',
     metaDescription:
-      'Pune website development company building fast Shopify and custom websites designed to turn visitors into enquiries. GA4, call tracking and SEO foundations included.',
+      'Fast Shopify and custom websites built to turn visitors into enquiries, with GA4, call tracking and SEO foundations included. Pune-based, founder-led.',
     heading: 'Website development in Pune, built to bring in enquiries',
     intro:
       'Most business websites look fine and still do not ring the phone. We design and build Shopify and custom websites where every page has one job: turning a visitor into a call, a WhatsApp message or a form.',
@@ -289,9 +289,9 @@ export const SERVICE_PAGES = {
     ]
   },
   'digital-marketing': {
-    metaTitle: 'Social Media Marketing Services in Pune | Instagram, Facebook & LinkedIn | Up Rank Digital',
+    metaTitle: 'Social Media Marketing in Pune | Up Rank Digital',
     metaDescription:
-      'Social media and digital marketing services from a Pune IT solutions company. Monthly content plans, Instagram, Facebook and LinkedIn management, community replies and a monthly review of results.',
+      'Monthly content plans and Instagram, Facebook and LinkedIn management from a Pune IT solutions company, with a monthly review of results.',
     heading: 'Social media and digital marketing in Pune, handled every month',
     intro:
       'Customers check your Instagram and LinkedIn before they call. We plan, post and manage your pages every month so your brand looks active and trustworthy, without you hiring an in-house team.',
@@ -321,9 +321,9 @@ export const SERVICE_PAGES = {
     ]
   },
   'performance-marketing': {
-    metaTitle: 'Google Ads & Meta Ads Management in Pune | Performance Marketing | Up Rank Digital',
+    metaTitle: 'Google Ads & Meta Ads Management in Pune | Up Rank Digital',
     metaDescription:
-      'Performance marketing from a Pune IT solutions company: Google Search, Meta ads and SEO managed against cost per lead, not impressions. Accounts in your name, monthly reporting on enquiries.',
+      'Google Search, Meta ads and SEO managed against cost per lead, not impressions. Accounts in your name, monthly reporting on enquiries.',
     heading: 'Google Ads and Meta Ads in Pune, managed against cost per lead',
     intro:
       'Clicks and impressions do not pay salaries. We run Google Search, Meta ads and SEO measured on one number: what each genuine enquiry costs you, and we move budget toward whatever brings that down.',
@@ -353,9 +353,9 @@ export const SERVICE_PAGES = {
     ]
   },
   'ai-solutions': {
-    metaTitle: 'AI Chatbot & Marketing Automation Services in Pune | Up Rank Digital',
+    metaTitle: 'AI Chatbots & Automation in Pune | Up Rank Digital',
     metaDescription:
-      'AI chat assistants that answer and route enquiries, AI-assisted content and lead follow-up automation for Pune businesses, built into the tools you already use.',
+      'AI chat assistants that answer and route enquiries, plus content and lead follow-up automation, built into the tools you already use.',
     heading: 'AI chatbots and automation that answer leads faster',
     intro:
       'Enquiries are often won by whoever replies first. We build AI assistants that answer visitors instantly and pass serious leads to your team, and automate the follow-up and reporting work your team repeats every day.',
@@ -385,7 +385,7 @@ export const SERVICE_PAGES = {
     ]
   },
   'content-management': {
-    metaTitle: 'Product Photography, Reels & Content Creation in Pune | Up Rank Digital',
+    metaTitle: 'Product Photography & Reels in Pune | Up Rank Digital',
     metaDescription:
       'Pune content design and management: product and brand photo shoots, reels, graphics and copywriting, produced and published every month.',
     heading: 'Product shoots, reels and content in Pune, produced every month',

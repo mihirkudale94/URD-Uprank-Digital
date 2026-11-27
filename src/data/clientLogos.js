@@ -8,16 +8,16 @@
 // Logos 1, 2, 3 and 12 are symbols with no readable brand name; fill them in once
 // confirmed.
 export const clientLogos = [
-  { file: 'Logo 1.png', name: '' },
-  { file: 'Logo 2.png', name: '' },
-  { file: 'Logo 3.png', name: '' },
-  { file: 'Logo-4.png', name: 'Shree Devashree Foods' },
-  { file: 'Logo 5.png', name: 'Fitcon Fitness Consultancy' },
-  { file: 'Logo-6.png', name: 'Flipper' },
-  { file: 'Logo 7.png', name: 'Jigsaw Passion' },
-  { file: 'Logo 8.png', name: 'Kanak Jaggery' },
-  { file: 'Logo 9.png', name: 'ubTECH Consulting Engineers' },
-  { file: 'Logo 10.png', name: 'Gangdhar Mithaiwale' },
-  { file: 'Logo 11.png', name: 'Kalpataru Infinite Learning' },
-  { file: 'Logo 12.png', name: '' }
+  { file: 'Logo 1.webp', name: '' },
+  { file: 'Logo 2.webp', name: '' },
+  { file: 'Logo 3.webp', name: '' },
+  { file: 'Logo-4.webp', name: 'Shree Devashree Foods' },
+  { file: 'Logo 5.webp', name: 'Fitcon Fitness Consultancy' },
+  { file: 'Logo-6.webp', name: 'Flipper' },
+  { file: 'Logo 7.webp', name: 'Jigsaw Passion' },
+  { file: 'Logo 8.webp', name: 'Kanak Jaggery' },
+  { file: 'Logo 9.webp', name: 'ubTECH Consulting Engineers' },
+  { file: 'Logo 10.webp', name: 'Gangdhar Mithaiwale' },
+  { file: 'Logo 11.webp', name: 'Kalpataru Infinite Learning' },
+  { file: 'Logo 12.webp', name: '' }
 ];

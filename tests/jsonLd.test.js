@@ -54,6 +54,9 @@ test('every service line has a landing page with its own FAQ JSON-LD and a sitem
     const page = SERVICE_PAGES[service.id];
     assert.ok(page, `${service.id} has no landing page content`);
     assert.ok(page.metaTitle && page.metaDescription && page.heading && page.faqs.length, `${service.id} is incomplete`);
+    // Google cuts titles past about 60 characters and descriptions past about 155.
+    assert.ok(page.metaTitle.length <= 60, `${service.id} title is ${page.metaTitle.length} characters`);
+    assert.ok(page.metaDescription.length <= 155, `${service.id} description is ${page.metaDescription.length} characters`);
     const graph = buildServicePageJsonLd(service.id)['@graph'];
     const faq = graph.find((block) => block['@type'] === 'FAQPage');
     assert.equal(faq.mainEntity.length, page.faqs.length);
