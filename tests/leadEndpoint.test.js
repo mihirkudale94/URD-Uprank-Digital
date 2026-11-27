@@ -298,6 +298,25 @@ test('the chosen service reaches the email, and a made-up one is dropped', async
   });
 });
 
+test('HubSpot gets the service as its own field and Indian mobiles with +91', async () => {
+  const { withIndianCountryCode } = await import('../api/submit-lead.js');
+  assert.equal(withIndianCountryCode('98765 43210'), '+91 9876543210');
+  assert.equal(withIndianCountryCode('+91 98765 43210'), '+91 98765 43210');
+  assert.equal(withIndianCountryCode('+1 415 555 0100'), '+1 415 555 0100');
+  assert.equal(withIndianCountryCode('020 2612 3456'), '020 2612 3456');
+
+  await withHubSpot(async (calls) => {
+    await handler(
+      { method: 'POST', body: { ...validLead, phone: '9876543210', service: 'Performance Marketing' } },
+      mockResponse()
+    );
+    const hubspot = calls.find((call) => call.url.includes('api.hsforms.com'));
+    const fields = Object.fromEntries(hubspot.body.fields.map((field) => [field.name, field.value]));
+    assert.equal(fields.service_interest, 'Performance Marketing');
+    assert.equal(fields.phone, '+91 9876543210');
+  });
+});
+
 test('one address sending a flood of leads is cut off', async () => {
   await withResend(async (calls) => {
     const statuses = [];

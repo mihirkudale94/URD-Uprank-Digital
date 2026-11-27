@@ -242,15 +242,25 @@ const sendEmail = async (lead) => {
 // HubSpot's form submission API: no key needed, the lead lands as a contact with the
 // form submission on its timeline. The message carries the lead source too, so the CRM
 // record shows which campaign brought the visitor.
+// Most visitors are Indian and type a bare 10-digit mobile number. HubSpot reads a number
+// without a country code as its own default (US), so those get +91. Anything else, such
+// as a number already starting with + or a landline with an STD code, is sent as typed.
+export const withIndianCountryCode = (phone) => {
+  const digits = phone.replace(/\D/g, '');
+  return !phone.trim().startsWith('+') && /^[6-9]\d{9}$/.test(digits) ? `+91 ${digits}` : phone;
+};
+
 export const buildHubSpotSubmission = (lead) => {
   const [firstname, ...rest] = lead.name.split(' ');
   const fields = {
     email: lead.email,
     firstname,
     lastname: rest.join(' '),
-    phone: lead.phone,
+    phone: withIndianCountryCode(lead.phone),
     company: lead.company,
     jobtitle: lead.jobTitle,
+    // HubSpot's "Service interest" dropdown; its option values match SERVICE_CHOICES.
+    service_interest: lead.service,
     message: [lead.message, lead.service && `Interested in: ${lead.service}`, `Captured by: ${LEAD_SOURCES[lead.leadSource]}`, ...buildAttributionText(lead.attribution)]
       .filter(Boolean)
       .join('\n')
