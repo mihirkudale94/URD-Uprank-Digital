@@ -14,7 +14,8 @@
 
 import { sanitizeTouch } from '../src/utils/attribution.js';
 import { CONTACT_EMAIL } from '../src/utils/contactChannels.js';
-import { createRateLimiter } from './_rateLimit.js';
+import { clientKey, createRateLimiter } from './_rateLimit.js';
+import { isIP } from 'node:net';
 import { SERVICES } from '../src/data/siteContent.js';
 
 // The form's service picker. Anything else posted is dropped, so the email and CRM only
@@ -168,6 +169,9 @@ export default async function handler(request, response) {
     leadSource: LEAD_SOURCES[body.lead_source] ? body.lead_source : 'contact_form',
     message: cleanText(body.message, 3000),
     pageUrl: normalizeUrl(body.page_url),
+    // For HubSpot only, so it places the contact where the visitor is rather than where
+    // this server runs. Never put in the email.
+    ipAddress: isIP(String(clientKey(request))) ? String(clientKey(request)) : '',
     userAgent: cleanText(body.user_agent, 500),
     attribution: {
       first: sanitizeTouch(body.attribution?.first),
@@ -272,6 +276,7 @@ export const buildHubSpotSubmission = (lead) => {
       .map(([name, value]) => ({ objectTypeId: '0-1', name, value })),
     context: {
       ...(lead.pageUrl ? { pageUri: lead.pageUrl } : {}),
+      ...(lead.ipAddress ? { ipAddress: lead.ipAddress } : {}),
       pageName: LEAD_SOURCES[lead.leadSource]
     }
   };

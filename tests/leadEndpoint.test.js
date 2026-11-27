@@ -312,8 +312,22 @@ test('HubSpot gets the service as its own field and Indian mobiles with +91', as
     );
     const hubspot = calls.find((call) => call.url.includes('api.hsforms.com'));
     const fields = Object.fromEntries(hubspot.body.fields.map((field) => [field.name, field.value]));
+    assert.equal(hubspot.body.context.ipAddress, undefined, 'no address known, none sent');
     assert.equal(fields.service_interest, 'Performance Marketing');
     assert.equal(fields.phone, '+91 9876543210');
+  });
+});
+
+test("HubSpot is told the visitor's IP so it sets their location, and the email is not", async () => {
+  await withHubSpot(async (calls) => {
+    await handler(
+      { method: 'POST', headers: { 'x-forwarded-for': '49.36.10.20, 10.0.0.1' }, body: validLead },
+      mockResponse()
+    );
+    const hubspot = calls.find((call) => call.url.includes('api.hsforms.com'));
+    assert.equal(hubspot.body.context.ipAddress, '49.36.10.20');
+    const email = calls.find((call) => call.url.includes('api.resend.com'));
+    assert.doesNotMatch(email.body.text, /49\.36\.10\.20/);
   });
 });
 

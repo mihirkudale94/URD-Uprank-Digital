@@ -430,5 +430,5 @@ export const SITE_PAGES = [
     changefreq: 'monthly',
     priority: '0.8'
   })),
-  { path: 'privacy.html', lastmod: '2026-11-11', changefreq: 'yearly', priority: '0.2' }
+  { path: 'privacy.html', lastmod: '2026-11-27', changefreq: 'yearly', priority: '0.2' }
 ];

@@ -5,7 +5,9 @@
 // instances gets more through. Fine as a cost and spam guard at this site's traffic;
 // move to Vercel KV or Upstash if a real attack ever gets past it.
 
-const clientKey = (request) => {
+// The visitor's address as Vercel reports it. Vercel overwrites x-forwarded-for, so a
+// visitor cannot spoof it.
+export const clientKey = (request) => {
   const headers = request.headers || {};
   const forwarded = headers['x-forwarded-for'];
   const first = Array.isArray(forwarded) ? forwarded[0] : String(forwarded || '').split(',')[0];
