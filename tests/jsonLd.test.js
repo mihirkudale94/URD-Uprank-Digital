@@ -46,3 +46,27 @@ test('the structured data matches the details the page shows', () => {
   );
   assert.deepEqual(business.knowsAbout, EXPERTISE.map((item) => item.title));
 });
+
+test('every service line has a landing page with its own FAQ JSON-LD and a sitemap entry', async () => {
+  const { buildServicePageJsonLd } = await import('../src/data/structuredData.js');
+  const { SERVICE_PAGES, SITE_PAGES, servicePath } = await import('../src/data/siteContent.js');
+  for (const service of SERVICES) {
+    const page = SERVICE_PAGES[service.id];
+    assert.ok(page, `${service.id} has no landing page content`);
+    assert.ok(page.metaTitle && page.metaDescription && page.heading && page.faqs.length, `${service.id} is incomplete`);
+    const graph = buildServicePageJsonLd(service.id)['@graph'];
+    const faq = graph.find((block) => block['@type'] === 'FAQPage');
+    assert.equal(faq.mainEntity.length, page.faqs.length);
+    assert.ok(SITE_PAGES.some((entry) => entry.path === servicePath(service.id)), `${service.id} missing from sitemap`);
+  }
+});
+
+test('llms.txt links every service page so AI search tools can cite them', async () => {
+  const { renderLlmsTxt } = await import('../src/data/siteFiles.js');
+  const { SITE_URL, servicePath } = await import('../src/data/siteContent.js');
+  const text = renderLlmsTxt();
+  assert.match(text, /^# /);
+  for (const service of SERVICES) {
+    assert.ok(text.includes(new URL(servicePath(service.id), SITE_URL).href), `${service.id} missing from llms.txt`);
+  }
+});

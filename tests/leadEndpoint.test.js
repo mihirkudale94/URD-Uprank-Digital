@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import handler from '../api/submit-lead.js';
+import handler, { __resetLeadLimits } from '../api/submit-lead.js';
 
 const validLead = {
   name: 'Asha Kulkarni',
@@ -36,6 +36,8 @@ const withResend = async (run, { apiKey = 'test-key', ok = true, status = 200 } 
   const originalFetch = globalThis.fetch;
   const originalKey = process.env.RESEND_API_KEY;
   const calls = [];
+  // Every test posts from the same (missing) address, so the rate limit starts clean.
+  __resetLeadLimits();
 
   if (apiKey === null) delete process.env.RESEND_API_KEY;
   else process.env.RESEND_API_KEY = apiKey;
@@ -233,5 +235,78 @@ test('a lead without attribution is labelled direct', async () => {
   await withResend(async (calls) => {
     await handler({ method: 'POST', body: validLead }, mockResponse());
     assert.match(calls[0].body.text, /Direct \/ unknown/);
+  });
+});
+
+// Swaps in HubSpot form settings next to the fake Resend; `failing` picks which hosts error.
+const withHubSpot = async (run, failing = []) => {
+  process.env.HUBSPOT_PORTAL_ID = '123';
+  process.env.HUBSPOT_FORM_GUID = 'form-guid';
+  try {
+    return await withResend(async (calls) => {
+      globalThis.fetch = async (url, options) => {
+        calls.push({ url, body: JSON.parse(options.body) });
+        const ok = !failing.some((host) => url.includes(host));
+        return { ok, status: ok ? 200 : 500, text: async () => 'stub error' };
+      };
+      return run(calls);
+    });
+  } finally {
+    delete process.env.HUBSPOT_PORTAL_ID;
+    delete process.env.HUBSPOT_FORM_GUID;
+  }
+};
+
+test('a lead goes to HubSpot as well as the inbox, with its source in the message', async () => {
+  await withHubSpot(async (calls) => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: { ...validLead, company: 'Kulkarni Logistics' } }, res);
+
+    assert.equal(res.recorded.statusCode, 200);
+    const hubspot = calls.find((call) => call.url.includes('api.hsforms.com'));
+    assert.match(hubspot.url, /\/submit\/123\/form-guid$/);
+    const fields = Object.fromEntries(hubspot.body.fields.map((field) => [field.name, field.value]));
+    assert.equal(fields.email, 'asha@example.com');
+    assert.equal(fields.firstname, 'Asha');
+    assert.equal(fields.lastname, 'Kulkarni');
+    assert.equal(fields.company, 'Kulkarni Logistics');
+    assert.match(fields.message, /We need a new site\.[\s\S]*Direct \/ unknown/);
+  });
+});
+
+test('HubSpot keeps the lead when the email fails, and both failing is an error', async () => {
+  await withHubSpot(async () => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: validLead }, res);
+    assert.equal(res.recorded.statusCode, 200);
+  }, ['api.resend.com']);
+
+  await withHubSpot(async () => {
+    const res = mockResponse();
+    await handler({ method: 'POST', body: validLead }, res);
+    assert.equal(res.recorded.statusCode, 502);
+  }, ['api.resend.com', 'api.hsforms.com']);
+});
+
+test('the chosen service reaches the email, and a made-up one is dropped', async () => {
+  await withResend(async (calls) => {
+    await handler({ method: 'POST', body: { ...validLead, service: 'Website Development' } }, mockResponse());
+    assert.match(calls[0].body.text, /Interested in: Website Development/);
+
+    await handler({ method: 'POST', body: { ...validLead, service: 'Free iPhone' } }, mockResponse());
+    assert.doesNotMatch(calls[1].body.text, /Interested in/);
+  });
+});
+
+test('one address sending a flood of leads is cut off', async () => {
+  await withResend(async (calls) => {
+    const statuses = [];
+    for (let i = 0; i < 7; i += 1) {
+      const res = mockResponse();
+      await handler({ method: 'POST', headers: { 'x-forwarded-for': '198.51.100.9' }, body: validLead }, res);
+      statuses.push(res.recorded.statusCode);
+    }
+    assert.deepEqual(statuses, [200, 200, 200, 200, 200, 429, 429]);
+    assert.equal(calls.length, 5);
   });
 });

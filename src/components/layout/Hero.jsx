@@ -25,14 +25,14 @@ export default function Hero() {
           </span>
 
           <h1 className="hero-title">
-            Websites and performance marketing that{' '}
+            IT solutions that{' '}
             <span className="gradient-text">bring in enquiries.</span>
           </h1>
 
           <p className="hero-subtitle">
-            We build your website, run your Google and Meta ads, and use AI to answer and follow
-            up faster, then report every month on the enquiries it produced and what each one
-            cost.
+            One IT partner for your website, AI automation and digital marketing. We build the
+            technology your business grows on, run it, and report every month on the enquiries it
+            produced and what each one cost.
           </p>
 
           {/* Two ways in, because they suit different visitors: the form captures the
@@ -58,7 +58,7 @@ export default function Hero() {
             <strong className="hero-proof-value">10+</strong>
             <span className="hero-proof-label">
               Years of experience
-              <em>Websites, campaigns and reporting for Indian businesses, founder-led.</em>
+              <em>Websites, AI and digital marketing for Indian businesses, founder-led.</em>
             </span>
           </div>
         </div>

@@ -9,7 +9,9 @@ import {
   EXPERTISE,
   FOUNDER,
   SERVICES,
+  SERVICE_PAGES,
   SITE_URL,
+  servicePath,
   SOCIAL_LINKS
 } from './siteContent.js';
 
@@ -64,6 +66,43 @@ export const buildOrganizationJsonLd = () => {
       }))
     },
     sameAs: Object.values(SOCIAL_LINKS)
+  };
+};
+
+// A service landing page: the Service it sells, its FAQ, and where it sits in the site.
+export const buildServicePageJsonLd = (serviceId) => {
+  const service = SERVICES.find((item) => item.id === serviceId);
+  const page = SERVICE_PAGES[serviceId];
+  const url = new URL(servicePath(serviceId), SITE_URL).href;
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Service',
+        '@id': `${url}#service`,
+        name: service.title,
+        description: page.metaDescription,
+        url,
+        provider: { '@id': `${SITE_URL}#organization` },
+        areaServed: AREA_SERVED.map(({ type, name }) => ({ '@type': type, name }))
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: page.faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.q,
+          acceptedAnswer: { '@type': 'Answer', text: faq.a }
+        }))
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+          { '@type': 'ListItem', position: 2, name: service.title, item: url }
+        ]
+      }
+    ]
   };
 };
 

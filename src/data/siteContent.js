@@ -15,9 +15,9 @@ export const BUSINESS = {
   legalName: 'URD Solutions Pvt. Ltd.',
   shortName: 'URD Solutions',
   alternateNames: ['URD', 'URD Solutions', 'URD Solutions Pvt. Ltd.'],
-  slogan: 'Websites and marketing measured on enquiries.',
+  slogan: 'IT solutions measured on enquiries.',
   description:
-    'Pune-based digital agency providing website development, performance marketing, content design and analytics for growing businesses.',
+    'Pune-based IT solutions company providing website development, AI automation, digital and performance marketing, content design and analytics for growing businesses.',
   foundingYear: '2017',
   logoPath: 'img/logo-header.png',
   languages: ['English', 'Hindi', 'Marathi']
@@ -252,9 +252,183 @@ export const PROCESS_STEPS = [
   }
 ];
 
+// One landing page per service line, served at /services/<id>/. Each targets the search a
+// Pune buyer actually types, so the title and h1 lead with the service and the city.
+// Keep every answer to something the business already commits to elsewhere on the site.
+export const SERVICE_PAGES = {
+  'website-development': {
+    metaTitle: 'Website Development Company in Pune | Shopify & Custom Websites | Up Rank Digital',
+    metaDescription:
+      'Pune website development company building fast Shopify and custom websites designed to turn visitors into enquiries. GA4, call tracking and SEO foundations included.',
+    heading: 'Website development in Pune, built to bring in enquiries',
+    intro:
+      'Most business websites look fine and still do not ring the phone. We design and build Shopify and custom websites where every page has one job: turning a visitor into a call, a WhatsApp message or a form.',
+    problems: [
+      'Your site gets traffic, but almost nobody calls or fills the form',
+      'It is slow on mobile, where most of your visitors are',
+      'You cannot tell which page or ad an enquiry came from',
+      'Every small text change means waiting on a developer'
+    ],
+    faqs: [
+      {
+        q: 'Do you build on Shopify or custom code?',
+        a: 'Both. Shopify suits most online stores; a custom build suits service businesses and anything Shopify cannot do well. We recommend one on the discovery call based on what you sell.'
+      },
+      {
+        q: 'Who owns the website and the domain?',
+        a: 'You do. The domain, hosting, store and analytics are registered in your business name. If we ever part ways, you keep all of it.'
+      },
+      {
+        q: 'How long does a website take and what does it cost?',
+        a: 'It depends on the number of pages, products and integrations. After the free discovery call you get a written plan with the scope, timeline and price before any work starts.'
+      },
+      {
+        q: 'Will the site be set up for SEO and tracking?',
+        a: 'Yes. Every site launches with mobile speed work, SEO foundations, GA4, Search Console and form and call tracking, so you can see what each page brings in.'
+      }
+    ]
+  },
+  'digital-marketing': {
+    metaTitle: 'Social Media Marketing Services in Pune | Instagram, Facebook & LinkedIn | Up Rank Digital',
+    metaDescription:
+      'Social media and digital marketing services from a Pune IT solutions company. Monthly content plans, Instagram, Facebook and LinkedIn management, community replies and a monthly review of results.',
+    heading: 'Social media and digital marketing in Pune, handled every month',
+    intro:
+      'Customers check your Instagram and LinkedIn before they call. We plan, post and manage your pages every month so your brand looks active and trustworthy, without you hiring an in-house team.',
+    problems: [
+      'Your pages have not been updated in weeks',
+      'Posting happens only when someone remembers',
+      'Messages and comments go unanswered',
+      'You cannot tell whether social media is doing anything for the business'
+    ],
+    faqs: [
+      {
+        q: 'Which platforms do you manage?',
+        a: 'Instagram, Facebook and LinkedIn. We pick the ones your customers actually use rather than being everywhere for the sake of it.'
+      },
+      {
+        q: 'Do I approve posts before they go live?',
+        a: 'Yes. You see the monthly plan in advance and approve it before anything is scheduled.'
+      },
+      {
+        q: 'Do you create the content too?',
+        a: 'Yes. Graphics, copy and reels are produced by the same team. Photo and video shoots are part of our content design service.'
+      },
+      {
+        q: 'How do you report results?',
+        a: 'A monthly review in plain language: reach, response, enquiries that came from social, and what we will change next month.'
+      }
+    ]
+  },
+  'performance-marketing': {
+    metaTitle: 'Google Ads & Meta Ads Management in Pune | Performance Marketing | Up Rank Digital',
+    metaDescription:
+      'Performance marketing from a Pune IT solutions company: Google Search, Meta ads and SEO managed against cost per lead, not impressions. Accounts in your name, monthly reporting on enquiries.',
+    heading: 'Google Ads and Meta Ads in Pune, managed against cost per lead',
+    intro:
+      'Clicks and impressions do not pay salaries. We run Google Search, Meta ads and SEO measured on one number: what each genuine enquiry costs you, and we move budget toward whatever brings that down.',
+    problems: [
+      'You spend on ads every month but cannot say what a lead costs',
+      'Reports talk about impressions and clicks, not enquiries',
+      'Leads come in, but many are not serious buyers',
+      'The ad account was set up by someone else and you do not have access'
+    ],
+    faqs: [
+      {
+        q: 'What budget do I need to start?',
+        a: 'It depends on your market and how competitive your keywords are. On the discovery call we look at your numbers and suggest a starting budget you can test without risking much.'
+      },
+      {
+        q: 'Who owns the ad accounts?',
+        a: 'You do. Google Ads, Meta Business Manager and analytics are set up in your business name, with your billing.'
+      },
+      {
+        q: 'How do you track which ads bring enquiries?',
+        a: 'We set up GA4, conversion tracking and call and form tracking before ads go live, and tag every campaign, so each enquiry can be traced to the ad and keyword that produced it.'
+      },
+      {
+        q: 'Do you also do SEO?',
+        a: 'Yes, focused on the searches that bring buyers in your city and category, so you are not paying for every visit forever.'
+      }
+    ]
+  },
+  'ai-solutions': {
+    metaTitle: 'AI Chatbot & Marketing Automation Services in Pune | Up Rank Digital',
+    metaDescription:
+      'AI chat assistants that answer and route enquiries, AI-assisted content and lead follow-up automation for Pune businesses, built into the tools you already use.',
+    heading: 'AI chatbots and automation that answer leads faster',
+    intro:
+      'Enquiries are often won by whoever replies first. We build AI assistants that answer visitors instantly and pass serious leads to your team, and automate the follow-up and reporting work your team repeats every day.',
+    problems: [
+      'Enquiries that arrive at night or on weekends wait hours for a reply',
+      'Your team answers the same questions again and again',
+      'Leads are not followed up consistently',
+      'Weekly reports take hours to put together by hand'
+    ],
+    faqs: [
+      {
+        q: 'Can I see an example?',
+        a: 'Yes. The chat assistant on this website is one we built. Open it and ask it anything about our services.'
+      },
+      {
+        q: 'Will the chatbot make things up about my business?',
+        a: 'It is set up to answer only from information you approve, and to hand the conversation to your team when it does not know.'
+      },
+      {
+        q: 'Does it work with WhatsApp, my CRM or my email?',
+        a: 'We build it into the tools you already use, so leads land where your team already works instead of in yet another dashboard.'
+      },
+      {
+        q: 'Do I need a technical team to run it?',
+        a: 'No. We set it up, test it and keep it updated as your services and prices change.'
+      }
+    ]
+  },
+  'content-management': {
+    metaTitle: 'Product Photography, Reels & Content Creation in Pune | Up Rank Digital',
+    metaDescription:
+      'Pune content design and management: product and brand photo shoots, reels, graphics and copywriting, produced and published every month.',
+    heading: 'Product shoots, reels and content in Pune, produced every month',
+    intro:
+      'Good products lose sales to bad photos. We plan and produce product and brand shoots, reels, graphics and copy, then schedule and publish them, so your brand looks as good online as it does in hand.',
+    problems: [
+      'Your product photos were taken on a phone and it shows',
+      'You know you need reels but nobody has time to make them',
+      'Your brand looks different on every platform',
+      'Content is made at the last minute, before every festival'
+    ],
+    faqs: [
+      {
+        q: 'Do you shoot products in Pune?',
+        a: 'Yes. We plan and run product and brand shoots, including large product ranges in a short time, and deliver images ready for your website, marketplaces and social media.'
+      },
+      {
+        q: 'Do you make reels and short videos?',
+        a: 'Yes. Reels and short-form video are planned, shot, edited and published as part of the monthly plan.'
+      },
+      {
+        q: 'Can you write copy in Hindi and Marathi?',
+        a: 'We work in English, Hindi and Marathi, so content can speak to customers in the language they prefer.'
+      },
+      {
+        q: 'Who owns the photos and videos?',
+        a: 'You do. Everything we produce for you is yours to use on any channel.'
+      }
+    ]
+  }
+};
+
+export const servicePath = (id) => `services/${id}/`;
+
 // Pages listed in sitemap.xml. `lastmod` is the date the page's content last changed:
 // update it when you edit that page, so search engines know to look again.
 export const SITE_PAGES = [
-  { path: '', lastmod: '2026-11-11', changefreq: 'weekly', priority: '1.0' },
+  { path: '', lastmod: '2026-11-27', changefreq: 'weekly', priority: '1.0' },
+  ...Object.keys(SERVICE_PAGES).map((id) => ({
+    path: servicePath(id),
+    lastmod: '2026-11-27',
+    changefreq: 'monthly',
+    priority: '0.8'
+  })),
   { path: 'privacy.html', lastmod: '2026-11-11', changefreq: 'yearly', priority: '0.2' }
 ];

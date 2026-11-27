@@ -54,7 +54,9 @@ const sectionIds = [
 const isLinkActive = (link, activeSection) =>
   (link.matches || [link.href.slice(1)]).includes(activeSection);
 
-export default function Navbar() {
+// basePath '/' on service pages: the sections live on the homepage, so links navigate
+// there instead of scrolling.
+export default function Navbar({ basePath = '' }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -129,15 +131,15 @@ export default function Navbar() {
   }, []);
 
   const handleLinkClick = (e, href) => {
-    e.preventDefault();
     setIsMobileMenuOpen(false);
-    scrollToSection(href);
+    // On a service page only Contact stays on the page; the rest go to the homepage.
+    if ((!basePath || href === '#contact') && scrollToSection(href)) e.preventDefault();
   };
 
   return (
     <nav className={`nav-container ${isScrolled ? 'nav-scrolled' : ''}`} aria-label="Primary navigation">
       <div className="container nav-wrap">
-        <a href="#home" className="nav-logo" onClick={(e) => handleLinkClick(e, '#home')} aria-label="Up Rank Digital home">
+        <a href={`${basePath}#home`} className="nav-logo" onClick={(e) => handleLinkClick(e, '#home')} aria-label="Up Rank Digital home">
           <img src={publicAsset('/img/logo-header.png')} alt="Up Rank Digital" className="logo-header-img" width="160" height="40" />
         </a>
 
@@ -146,7 +148,7 @@ export default function Navbar() {
             {navLinks.map((link) => (
               <li key={link.label}>
                 <a
-                  href={link.href}
+                  href={`${basePath}${link.href}`}
                   onClick={(e) => handleLinkClick(e, link.href)}
                   className={`nav-item-link ${isLinkActive(link, activeSection) ? 'active' : ''}`}
                   aria-current={isLinkActive(link, activeSection) ? 'page' : undefined}
@@ -187,7 +189,7 @@ export default function Navbar() {
             {navLinks.map((link) => (
               <li key={link.label}>
                 <a
-                  href={link.href}
+                  href={`${basePath}${link.href}`}
                   onClick={(e) => handleLinkClick(e, link.href)}
                   className={isLinkActive(link, activeSection) ? 'active' : ''}
                 >

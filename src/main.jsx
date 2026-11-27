@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import { SERVICE_PAGES } from './data/siteContent.js'
 import { initAnalytics } from './utils/analyticsLoader.js'
 import { captureAttribution } from './utils/attribution.js'
 
@@ -11,9 +12,11 @@ captureAttribution()
 // No-op unless VITE_GTM_ID or VITE_GA_MEASUREMENT_ID is set at build time.
 initAnalytics()
 
+// /services/<id>/ renders that service's landing page; anything else is the homepage.
+const serviceId = window.location.pathname.match(/^\/services\/([a-z-]+)\/?$/)?.[1]
 const app = (
   <StrictMode>
-    <App />
+    <App serviceId={SERVICE_PAGES[serviceId] ? serviceId : undefined} />
   </StrictMode>
 )
 const rootElement = document.getElementById('root')

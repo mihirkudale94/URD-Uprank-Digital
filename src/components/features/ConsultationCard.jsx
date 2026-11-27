@@ -3,6 +3,7 @@ import { Briefcase, Loader2, X } from 'lucide-react';
 import { buildLeadPayload, submitLead } from '@/utils/leadSubmission';
 import { buildEnquiryPrefill } from '@/utils/enquiryPrefill';
 import { trackWebsiteEvent } from '@/utils/analytics';
+import { FOUNDER } from '@/data/siteContent';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -26,8 +27,7 @@ export default function ConsultationCard({ messages, onClose, onSubmitted }) {
     setErrorMsg('');
 
     if (!formData.name.trim()) return setErrorMsg('Please enter your name.');
-    if (!EMAIL_PATTERN.test(formData.email.trim())) return setErrorMsg('Please enter a valid work email.');
-    if (!formData.company.trim()) return setErrorMsg('Please enter your company name.');
+    if (!EMAIL_PATTERN.test(formData.email.trim())) return setErrorMsg('Please enter a valid email address.');
     if (!formData.phone.trim()) return setErrorMsg('Please enter a contact number.');
 
     // Bots fill the hidden field; people never see it. Pretend it worked.
@@ -76,7 +76,7 @@ export default function ConsultationCard({ messages, onClose, onSubmitted }) {
         </span>
         <div>
           <strong>Request a consultation</strong>
-          <small>A senior strategist responds within one business day.</small>
+          <small>{FOUNDER.name.split(' ')[0]} replies within one business day.</small>
         </div>
         <button type="button" className="consultation-card-close" onClick={onClose} aria-label="Close consultation form">
           <X size={16} />
@@ -89,12 +89,12 @@ export default function ConsultationCard({ messages, onClose, onSubmitted }) {
           <input type="text" autoComplete="name" value={formData.name} onChange={update('name')} maxLength={120} required />
         </label>
         <label>
-          <span>Work email *</span>
+          <span>Email *</span>
           <input type="email" autoComplete="email" value={formData.email} onChange={update('email')} maxLength={254} required />
         </label>
         <label>
-          <span>Company *</span>
-          <input type="text" autoComplete="organization" value={formData.company} onChange={update('company')} maxLength={160} required />
+          <span>Business name</span>
+          <input type="text" autoComplete="organization" value={formData.company} onChange={update('company')} maxLength={160} />
         </label>
         <label>
           <span>Job title</span>

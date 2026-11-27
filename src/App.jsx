@@ -14,6 +14,7 @@ import Testimonials from '@/components/sections/Testimonials';
 import Leadership from '@/components/sections/Leadership';
 import BrandStatement from '@/components/sections/BrandStatement';
 import ContactForm from '@/components/sections/ContactForm';
+import ServicePage from '@/components/sections/ServicePage';
 
 // Loaded on its own chunk: the panel and its styles are dead weight for a visitor who never
 // opens it, and nothing above the fold depends on it.
@@ -21,7 +22,8 @@ const WebsiteAssistant = lazy(() => import('@/components/features/WebsiteAssista
 
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
-function App() {
+// `serviceId` set: one service's landing page. Unset: the homepage.
+function App({ serviceId }) {
   useScrollAnimation();
 
   // The assistant is browser-only (it reads saved chat from storage). Mounting it after
@@ -32,8 +34,9 @@ function App() {
   return (
     <div className="app-root">
       <a className="skip-to-content" href="#main-content">Skip to main content</a>
-      <Navbar />
+      <Navbar basePath={serviceId ? '/' : ''} />
       <main id="main-content" tabIndex={-1}>
+        {serviceId ? <ServicePage serviceId={serviceId} /> : <>
         <Hero />
         <Clients />
         <WhoWeWorkWith />
@@ -45,13 +48,14 @@ function App() {
         <Leadership />
         <BrandStatement />
         <ContactForm />
+        </>}
       </main>
       {isHydrated && (
         <Suspense fallback={null}>
           <WebsiteAssistant />
         </Suspense>
       )}
-      <Footer />
+      <Footer basePath={serviceId ? '/' : ''} />
       <MobileActionBar />
     </div>
   );

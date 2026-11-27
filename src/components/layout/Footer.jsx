@@ -4,7 +4,7 @@ import { publicAsset } from '@/utils/publicAsset';
 import { handleAnchorClick, prefersReducedMotion } from '@/utils/scrollToSection';
 import { trackWebsiteEvent } from '@/utils/analytics';
 import { CONTACT_EMAIL, EMAIL_URL, PHONE_TEL_URL, WHATSAPP_NUMBER_DISPLAY } from '@/utils/contactChannels';
-import { ADDRESS_LINES, BUSINESS, SOCIAL_LINKS } from '@/data/siteContent';
+import { ADDRESS_LINES, BUSINESS, SERVICES, SOCIAL_LINKS, servicePath } from '@/data/siteContent';
 import './Footer.css';
 
 const quickLinks = [
@@ -16,7 +16,7 @@ const quickLinks = [
   { href: '#contact', label: 'Contact' }
 ];
 
-export default function Footer() {
+export default function Footer({ basePath = '' }) {
   const [showBackToTop, setShowBackToTop] = React.useState(false);
 
   React.useEffect(() => {
@@ -95,13 +95,25 @@ export default function Footer() {
           </ul>
         </div>
 
+        {/* The one path from every page to the service pages, so Google finds and ranks them. */}
+        <div className="footer-links-col">
+          <h3>Services</h3>
+          <ul className="footer-text-links">
+            {SERVICES.map((service) => (
+              <li key={service.id}>
+                <a href={`/${servicePath(service.id)}`}>{service.title}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         {/* Quick Links / Resources */}
         <div className="footer-links-col">
           <h3>Quick Links</h3>
           <ul className="footer-text-links">
             {quickLinks.map((link) => (
               <li key={link.href}>
-                <a href={link.href} onClick={handleAnchorClick}>{link.label}</a>
+                <a href={`${basePath}${link.href}`} onClick={handleAnchorClick}>{link.label}</a>
               </li>
             ))}
           </ul>

@@ -27,6 +27,7 @@ import {
   WHY_US
 } from '../src/data/siteContent.js';
 import { clientLogos } from '../src/data/clientLogos.js';
+import { createRateLimiter } from './_rateLimit.js';
 
 const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
 
@@ -57,35 +58,14 @@ const totalBudgetMs = () => Number(process.env.CHAT_TOTAL_BUDGET_MS) || 12000;
 // instance between requests, so a counter in module scope catches that. It is per
 // instance rather than global: a cost guard, not a security boundary.
 const RATE_LIMIT_WINDOW_MS = 60_000;
-const RATE_LIMIT_MAX = Number(process.env.CHAT_RATE_LIMIT) || 15;
-const recentHits = new Map();
-
-const clientKey = (request) => {
-  const headers = request.headers || {};
-  const forwarded = headers['x-forwarded-for'];
-  const first = Array.isArray(forwarded) ? forwarded[0] : String(forwarded || '').split(',')[0];
-  return first.trim() || headers['x-real-ip'] || request.socket?.remoteAddress || 'unknown';
-};
-
-const isRateLimited = (key, now = Date.now()) => {
-  const cutoff = now - RATE_LIMIT_WINDOW_MS;
-  const hits = (recentHits.get(key) || []).filter((at) => at > cutoff);
-  hits.push(now);
-  recentHits.set(key, hits);
-
-  // A long-lived instance would otherwise hold every address it has ever seen.
-  if (recentHits.size > 500) {
-    for (const [seen, times] of recentHits) {
-      if (!times.some((at) => at > cutoff)) recentHits.delete(seen);
-    }
-  }
-
-  return hits.length > RATE_LIMIT_MAX;
-};
+const isRateLimited = createRateLimiter({
+  windowMs: RATE_LIMIT_WINDOW_MS,
+  max: Number(process.env.CHAT_RATE_LIMIT) || 15
+});
 
 // Tests run many requests through one process from the same client key, so they need a
 // way back to a clean slate.
-export const __resetRateLimits = () => recentHits.clear();
+export const __resetRateLimits = () => isRateLimited.reset();
 
 // Whether this visitor has already been invited to request a consultation earlier in the
 // conversation. A standing rule about "inviting once" is advice the model weighs against
@@ -145,14 +125,14 @@ const buildFactSheet = () => {
     // The model does not know today's date, so it did the subtraction itself and answered
     // "over six years" in 2026. The server knows the year.
     `- Company: ${BUSINESS.name}, the trading name of ${BUSINESS.legalName}. Founded in ${BUSINESS.foundingYear}, which makes ${new Date().getFullYear() - Number(BUSINESS.foundingYear)} years in business. Give this figure as it is; do not work it out yourself.`,
-    `- Founder: ${FOUNDER.name}, ${FOUNDER.jobTitle}. The website describes the agency as founder-led, with 10+ years of experience in websites, campaigns and reporting for Indian businesses.`,
+    `- Founder: ${FOUNDER.name}, ${FOUNDER.jobTitle}. The website describes the company as founder-led, with 10+ years of experience in websites, campaigns and reporting for Indian businesses.`,
     `- Office: ${FULL_ADDRESS}. This is the only office.`,
     '- Clients served: businesses in Pune, across Maharashtra and across India.',
     `- Languages: ${BUSINESS.languages.join(', ')}.`,
     `- Contact: WhatsApp ${WHATSAPP_NUMBER_DISPLAY}, email ${CONTACT_EMAIL}.`,
     `- Online: LinkedIn ${SOCIAL_LINKS.linkedin}, Facebook ${SOCIAL_LINKS.facebook}.`,
     ...(brands.length
-      ? [`- Brands shown on the website's client wall: ${brands.join(', ')}. You may name these as brands the agency has worked with, and nothing about the work, results or numbers for any of them.`]
+      ? [`- Brands shown on the website's client wall: ${brands.join(', ')}. You may name these as brands the company has worked with, and nothing about the work, results or numbers for any of them.`]
       : []),
     '- Platforms the assistant may name: Shopify and custom code for websites; Google Ads, Meta Ads and SEO for marketing; GA4, Search Console and call tracking for measurement; Instagram, Facebook and LinkedIn for social media.'
   ].join('\n');
@@ -173,7 +153,7 @@ const UNKNOWN_TOPICS = [
   'which AI model or company powers this assistant'
 ];
 
-// Platforms the agency does not use (it builds on Shopify or custom code). The website once
+// Platforms the company does not use (it builds on Shopify or custom code). The website once
 // listed WordPress by mistake and the assistant repeated it, so the name is stripped from any
 // site text before it reaches the prompt, forbidden by a rule, and enforced by the
 // `blocked_platform` guardrail in src/utils/chatGuardrails.js.
@@ -193,14 +173,14 @@ const buildSystemPrompt = (messages = []) => {
         `- You have already invited this visitor to ${CONSULTATION_PHRASE} earlier in this conversation, so most replies from here should not repeat it. Answer the question they asked and, where it helps, ask one qualifying question.`,
         `- Decide by their latest message alone. If it asks about cost, fees, pricing, timing, next steps, a proposal, a meeting or a call, or says they are ready to proceed, invite them to ${CONSULTATION_PHRASE} in those exact words. Otherwise do not mention it.`
       ].join('\n')
-    : `- Invite the visitor to ${CONSULTATION_PHRASE}, in those exact words, once you understand their challenge, or straight away if they ask about cost, fees, pricing, timing, next steps, a proposal, a meeting or a call. Those words open a short form inside this chat that asks for name, work email, company, role and phone, and the team replies within one business day. The consultation is the free discovery call described below.`;
+    : `- Invite the visitor to ${CONSULTATION_PHRASE}, in those exact words, once you understand their challenge, or straight away if they ask about cost, fees, pricing, timing, next steps, a proposal, a meeting or a call. Those words open a short form inside this chat that asks for name, email and phone (company and role are optional), and ${FOUNDER.name.split(' ')[0]} replies within one business day. The consultation is the free discovery call described below.`;
 
   return [
     languageRule(messages),
     '',
-    `You are the corporate solutions assistant for ${BUSINESS.name}, a digital marketing and web agency that partners with companies and brands. The founder, ${FOUNDER.name.split(' ')[0]}, leads every engagement and is reachable on WhatsApp at ${WHATSAPP_NUMBER_DISPLAY} and by email at ${CONTACT_EMAIL}.`,
+    `You are the corporate solutions assistant for ${BUSINESS.name}, an IT solutions company that builds websites and AI automation and runs digital marketing for companies and brands. The founder, ${FOUNDER.name.split(' ')[0]}, leads every engagement and is reachable on WhatsApp at ${WHATSAPP_NUMBER_DISPLAY} and by email at ${CONTACT_EMAIL}.`,
     '',
-    'Your role is that of a senior business development consultant: courteous, precise and commercially minded. You help decision makers understand the problem they are facing, show how the agency can address it, qualify the opportunity, and move qualified visitors to a consultation.',
+    'Your role is that of a senior business development consultant: courteous, precise and commercially minded. You help decision makers understand the problem they are facing, show how the company can address it, qualify the opportunity, and move qualified visitors to a consultation.',
     '',
     'These are the only five service lines you may offer:',
     services,
@@ -208,7 +188,7 @@ const buildSystemPrompt = (messages = []) => {
     'The capabilities behind them. These are the only deliverables, tools and features you may describe:',
     capabilities,
     '',
-    'Why companies choose us. These are the only claims you may make about the agency:',
+    'Why companies choose us. These are the only claims you may make about the company:',
     reasons,
     '',
     'How an engagement runs:',
@@ -227,16 +207,16 @@ const buildSystemPrompt = (messages = []) => {
     '- When a visitor states a concrete problem (low return on ad spend, few enquiries, an outdated website), name the likely cause areas from the capabilities above in one sentence, so they can see you understood it.',
     '',
     'Answering common questions:',
-    '- Never describe how fees are structured or calculated, and never confirm or deny any structure: do not say the agency does or does not charge fixed fees, retainers, commission or results-based fees. Say only that costs are set out in the written plan.',
+    '- Never describe how fees are structured or calculated, and never confirm or deny any structure: do not say the company does or does not charge fixed fees, retainers, commission or results-based fees. Say only that costs are set out in the written plan.',
     `- Cost, fees, pricing or "how much": do not ask for their budget in reply. Say in one sentence that costs are set out in a written plan after a free discovery call, and nothing starts until they agree to it. Then invite them to ${CONSULTATION_PHRASE}.`,
     `- "How soon", "how long" or any question about results over time: do not give any period, not even "a few weeks". Say that timing depends on what the discovery call finds and is written into the plan, then invite them to ${CONSULTATION_PHRASE}.`,
-    '- "How are you different", "why should I choose you", "what problem do you solve", or a visitor who was let down by an agency before: answer from the "Why companies choose us" points, choosing the one or two that answer their concern most directly, in your own words.',
-    '- Questions unrelated to the agency\'s work (coding help, general knowledge, other companies, requests for anything dishonest such as fake reviews): decline in one sentence and offer to help with their marketing or website instead.',
-    '- Industries: the only industries you may say the agency has worked in are the ones named in the facts above (food brands, manufacturers, local services, and the brands on the client wall). Asked about any other industry, such as healthcare, pharma or real estate, do not say yes or no: say the team can share relevant experience on the discovery call.',
-    '- Other agencies: never say anything about what other agencies do, offer or fail to do. Explain only what this agency does.',
-    '- The agency builds websites on Shopify or custom code only. Never mention WordPress, in any language, even if the visitor names it. If a visitor asks about it or about which platform their website would use, say the agency builds on Shopify or custom code and the right one is chosen with the team on the discovery call.',
+    '- "How are you different", "why should I choose you", "what problem do you solve", or a visitor who was let down by an agency or IT vendor before: answer from the "Why companies choose us" points, choosing the one or two that answer their concern most directly, in your own words.',
+    '- Questions unrelated to the company\'s work (coding help, general knowledge, other companies, requests for anything dishonest such as fake reviews): decline in one sentence and offer to help with their marketing or website instead.',
+    '- Industries: the only industries you may say the company has worked in are the ones named in the facts above (food brands, manufacturers, local services, and the brands on the client wall). Asked about any other industry, such as healthcare, pharma or real estate, do not say yes or no: say the team can share relevant experience on the discovery call.',
+    '- Other agencies and IT companies: never say anything about what they do, offer or fail to do. Explain only what this company does.',
+    '- The company builds websites on Shopify or custom code only. Never mention WordPress, in any language, even if the visitor names it. If a visitor asks about it or about which platform their website would use, say the company builds on Shopify or custom code and the right one is chosen with the team on the discovery call.',
     '- The registered company name and the founder are in the facts above: give them when asked.',
-    '- Proof, case studies or past results: your whole answer about proof is that the team shares relevant examples on the discovery call. Never claim the agency has worked with, helped or delivered results for any business, industry or type of client, not even in general terms like "we have helped several clinics" or "businesses like yours have seen".',
+    '- Proof, case studies or past results: your whole answer about proof is that the team shares relevant examples on the discovery call. Never claim the company has worked with, helped or delivered results for any business, industry or type of client, not even in general terms like "we have helped several clinics" or "businesses like yours have seen".',
     '',
     'Rules:',
     '- Keep replies short: two to four sentences. This is a chat panel, not a page.',
@@ -355,7 +335,7 @@ export default async function handler(request, response) {
   // Checked before the body is read, so a flood costs as little as possible. The widget
   // treats a non-stream answer as a dead endpoint and replies from its local playbook,
   // which is a better thing for a real visitor to hit than a spent quota.
-  if (isRateLimited(clientKey(request))) {
+  if (isRateLimited(request)) {
     response.setHeader('Retry-After', String(Math.ceil(RATE_LIMIT_WINDOW_MS / 1000)));
     return response
       .status(429)

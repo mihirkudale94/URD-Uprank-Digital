@@ -37,7 +37,7 @@ export default function Leadership() {
             <h4>Three things we won&rsquo;t do</h4>
             <p>
               We won&rsquo;t promise you a number-one ranking or a guaranteed lead count &mdash; no
-              honest agency can. We won&rsquo;t keep your website, ad accounts or analytics in our
+              honest IT partner can. We won&rsquo;t keep your website, ad accounts or analytics in our
               name. And we won&rsquo;t sell you a channel you don&rsquo;t need yet because it rounds
               out a package.
             </p>

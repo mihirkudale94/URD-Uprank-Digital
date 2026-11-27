@@ -149,6 +149,7 @@
 
 
 .input-group input,
+.input-group select,
 .input-group textarea {
   width: 100%;
   background: var(--bg-hover-pills);
@@ -162,6 +163,7 @@
 }
 
 .input-group input:focus,
+.input-group select:focus,
 .input-group textarea:focus {
   border-color: var(--primary);
   background: var(--bg-hover-pills-hover);
@@ -219,6 +221,7 @@
     padding: 1.35rem;
   }
   .input-group input,
+  .input-group select,
   .input-group textarea {
     padding: 0.9rem 1rem;
   }

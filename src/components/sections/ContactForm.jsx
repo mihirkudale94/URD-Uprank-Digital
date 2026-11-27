@@ -5,6 +5,7 @@ import {
   ADDRESS,
   BUSINESS,
   FULL_ADDRESS,
+  SERVICES,
   MAP_DIRECTIONS_URL,
   MAP_EMBED_URL
 } from '@/data/siteContent';
@@ -16,11 +17,13 @@ import {
 } from '@/utils/enquiryPrefill';
 import './ContactForm.css';
 
-export default function ContactForm() {
+// `defaultService` preselects the picker on a service page, so the lead arrives sorted.
+export default function ContactForm({ defaultService = '' }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
+    service: defaultService,
     message: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -84,6 +87,7 @@ export default function ContactForm() {
         event_category: 'conversion',
         form_id: 'contact_form',
         has_message: Boolean(payload.message),
+        service_interest: payload.service || 'not_sure',
         lead_source: source.utm_source || (source.gclid ? 'google_ads' : '') || source.referrer || 'direct',
         lead_medium: source.utm_medium || '',
         lead_campaign: source.utm_campaign || ''
@@ -94,6 +98,7 @@ export default function ContactForm() {
         name: '',
         email: '',
         phone: '',
+        service: defaultService,
         message: ''
       });
       // The chat context has reached Sachin, so it should not come back and refill the
@@ -183,6 +188,7 @@ export default function ContactForm() {
                     type="text" 
                     name="name" 
                     id="contact-name"
+                    autoComplete="name"
                     aria-label="Full Name"
                     placeholder="Full Name *" 
                     value={formData.name} 
@@ -197,6 +203,7 @@ export default function ContactForm() {
                     type="email" 
                     name="email" 
                     id="contact-email"
+                    autoComplete="email"
                     aria-label="Email Address"
                     placeholder="Email Address *" 
                     value={formData.email} 
@@ -211,6 +218,8 @@ export default function ContactForm() {
                     type="tel" 
                     name="phone" 
                     id="contact-phone"
+                    autoComplete="tel"
+                    inputMode="tel"
                     aria-label="Phone Number"
                     placeholder="Phone Number *" 
                     value={formData.phone} 
@@ -218,6 +227,21 @@ export default function ContactForm() {
                     maxLength={40}
                     required 
                   />
+                </div>
+                <div className="input-group">
+                  <select
+                    name="service"
+                    id="contact-service"
+                    aria-label="What do you need help with?"
+                    value={formData.service}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">What do you need help with? (optional)</option>
+                    {SERVICES.map((service) => (
+                      <option key={service.id} value={service.title}>{service.title}</option>
+                    ))}
+                    <option value="Not sure yet">Not sure yet</option>
+                  </select>
                 </div>
               </div>
 

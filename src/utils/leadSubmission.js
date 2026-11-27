@@ -18,6 +18,7 @@ export const buildLeadPayload = ({ formData, websiteConfirmation = '', leadSourc
   phone: cleanText(formData.phone, 40),
   company: cleanText(formData.company, 160),
   job_title: cleanText(formData.jobTitle, 120),
+  service: cleanText(formData.service, 80),
   lead_source: leadSource,
   message: cleanText(formData.message, 3000),
   // The honeypot travels with the lead so the endpoint can catch a bot that filled it in

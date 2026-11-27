@@ -26,7 +26,7 @@ export default function WhyPartner() {
             Six reasons clients <span className="gradient-text">stay with us.</span>
           </h2>
           <p className="section-description">
-            Most agencies promise results. Here is how we work so you can check them yourself.
+            Most IT vendors promise results. Here is how we work so you can check them yourself.
           </p>
         </div>
 

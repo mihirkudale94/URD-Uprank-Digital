@@ -14,6 +14,7 @@
 
 import { sanitizeTouch } from '../src/utils/attribution.js';
 import { CONTACT_EMAIL, WHATSAPP_NUMBER_E164 } from '../src/utils/contactChannels.js';
+import { createRateLimiter } from './_rateLimit.js';
 
 const DEFAULT_FROM = 'Up Rank Digital <onboarding@resend.dev>';
 const MAX_MESSAGES = 40;
@@ -21,31 +22,12 @@ const MAX_MESSAGE_LENGTH = 2000;
 
 // The endpoint is public and every accepted call is an email in someone's inbox, so one
 // address gets a handful per window. A real visitor sends one per page visit.
-const RATE_LIMIT_WINDOW_MS = 10 * 60_000;
-const RATE_LIMIT_MAX = Number(process.env.CHAT_LOG_RATE_LIMIT) || 5;
-const recentHits = new Map();
+const isRateLimited = createRateLimiter({
+  windowMs: 10 * 60_000,
+  max: Number(process.env.CHAT_LOG_RATE_LIMIT) || 5
+});
 
-export const __resetChatLogLimits = () => recentHits.clear();
-
-const clientKey = (request) => {
-  const headers = request.headers || {};
-  const forwarded = headers['x-forwarded-for'];
-  const first = Array.isArray(forwarded) ? forwarded[0] : String(forwarded || '').split(',')[0];
-  return first.trim() || headers['x-real-ip'] || request.socket?.remoteAddress || 'unknown';
-};
-
-const isRateLimited = (key, now = Date.now()) => {
-  const cutoff = now - RATE_LIMIT_WINDOW_MS;
-  const hits = (recentHits.get(key) || []).filter((at) => at > cutoff);
-  hits.push(now);
-  recentHits.set(key, hits);
-  if (recentHits.size > 500) {
-    for (const [seen, times] of recentHits) {
-      if (!times.some((at) => at > cutoff)) recentHits.delete(seen);
-    }
-  }
-  return hits.length > RATE_LIMIT_MAX;
-};
+export const __resetChatLogLimits = () => isRateLimited.reset();
 
 const cleanText = (value, maxLength) =>
   String(value ?? '')
@@ -135,7 +117,7 @@ export default async function handler(request, response) {
     return response.status(204).end();
   }
 
-  if (isRateLimited(clientKey(request))) {
+  if (isRateLimited(request)) {
     return response.status(429).json({ success: false });
   }
 

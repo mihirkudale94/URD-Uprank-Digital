@@ -1,7 +1,6 @@
 import React from 'react';
-import { Code2, Megaphone, TrendingUp, Cpu, PenLine, Check, MessageCircle } from 'lucide-react';
+import { Code2, Megaphone, TrendingUp, Cpu, PenLine, Check } from 'lucide-react';
 import { SERVICES } from '@/data/siteContent';
-import { requestOpenAssistant } from '@/utils/assistantEvents';
 import './Services.css';
 
 // Icons are presentation, so they stay here; the titles and copy come from siteContent.js.
@@ -22,7 +21,7 @@ export default function Services() {
         <div className="section-header scroll-animate">
           <span className="section-subtitle">What We Do</span>
           <h2 className="heading-md">
-            Five service lines. <span className="gradient-text">One growth partner.</span>
+            Five service lines. <span className="gradient-text">One IT partner.</span>
           </h2>
           <p className="section-description">
             Start with the one that moves your numbers most. Add the next when the results
@@ -48,18 +47,6 @@ export default function Services() {
                     </li>
                   ))}
                 </ul>
-              )}
-              {service.id === 'ai-solutions' && (
-                // The assistant in the corner of this page is the service, working. Showing
-                // it beats describing it.
-                <button
-                  type="button"
-                  className="service-card-demo"
-                  onClick={() => requestOpenAssistant('ai_service_card')}
-                >
-                  <MessageCircle size={15} aria-hidden="true" />
-                  Try it: the chat assistant on this page is one we built
-                </button>
               )}
               {service.forWho && <p className="service-card-for">{service.forWho}</p>}
             </article>

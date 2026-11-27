@@ -12,7 +12,11 @@ import { clearEnquiryPrefill } from '@/utils/enquiryPrefill';
 import { OPEN_ASSISTANT_EVENT } from '@/utils/assistantEvents';
 import { trimConversation } from '@/utils/conversationWindow';
 import { resetTranscriptLog, sendTranscriptLog } from '@/utils/chatTranscriptLog';
+import { FOUNDER } from '@/data/siteContent';
 import ConsultationCard from './ConsultationCard';
+
+// The site promises the founder handles every enquiry, so the chat says so by name.
+const FOUNDER_FIRST_NAME = FOUNDER.name.split(' ')[0];
 import './WebsiteAssistant.css';
 
 // Same-origin Vercel function, exactly like /api/submit-lead: no key reaches the browser and
@@ -47,7 +51,7 @@ const hasConsultationInvite = (text = '') => text.toLowerCase().includes(CONSULT
 // Every local reply that has a direction ends with the consultation invitation, in the
 // same words the model uses, so the panel offers the in-chat form either way.
 const contactPrompt =
-  'To take this forward, you can request a consultation here in the chat: a short form for your name, work email, company and phone. A senior strategist responds within one business day.';
+  `To take this forward, you can request a consultation here in the chat: a short form for your name, email and phone. ${FOUNDER_FIRST_NAME} replies within one business day.`;
 
 // Most replies land inside a second. Past this the visitor deserves a word rather than
 // dots that look the same at six seconds as they did at one.
@@ -75,7 +79,7 @@ const buildLocalAssistantReply = (input) => {
   }
 
   if (/(contact|call|phone|whatsapp|human|team)/i.test(lowerInput)) {
-    return `You can reach the Up Rank Digital team on WhatsApp at ${WHATSAPP_NUMBER_DISPLAY} or by email at ${CONTACT_EMAIL}. Alternatively, you can request a consultation here and a senior strategist will contact you within one business day.`;
+    return `You can reach the Up Rank Digital team on WhatsApp at ${WHATSAPP_NUMBER_DISPLAY} or by email at ${CONTACT_EMAIL}. Alternatively, you can request a consultation here and ${FOUNDER_FIRST_NAME} will contact you within one business day.`;
   }
 
   return [
@@ -603,12 +607,13 @@ export default function WebsiteAssistant() {
       // Storage blocked: the confirmation still shows for this page view.
     }
     const firstName = lead.name.trim().split(/\s+/)[0];
+    const company = lead.company.trim();
     setMessages((current) => [
       ...current,
       {
         role: 'assistant',
         local: true,
-        content: `Thank you, ${firstName}. Your consultation request for ${lead.company.trim()} has been received, together with the context from this conversation. A senior strategist will contact you within one business day. In the meantime, I am happy to answer any further questions.`
+        content: `Thank you, ${firstName}. Your consultation request${company ? ` for ${company}` : ''} has been received, together with the context from this conversation. ${FOUNDER_FIRST_NAME} will contact you within one business day. In the meantime, I am happy to answer any further questions.`
       }
     ]);
   };

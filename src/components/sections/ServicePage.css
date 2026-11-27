@@ -1,0 +1,117 @@
+/* A service page's hero carries one message, not the whole brand, so it does not need a
+   full screen. */
+.service-hero {
+  min-height: auto;
+  padding-top: 140px;
+  padding-bottom: 3rem;
+}
+
+.service-breadcrumb {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.service-breadcrumb a {
+  color: var(--navy);
+}
+
+.service-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.service-panel {
+  padding: 2rem;
+}
+
+.service-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.service-list li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  line-height: 1.5;
+}
+
+.service-list svg {
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+  color: var(--primary);
+}
+
+.service-list-problems svg {
+  color: var(--text-muted);
+}
+
+.service-panel-for {
+  margin: 1.5rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.service-faq {
+  max-width: 820px;
+}
+
+.service-faq-item {
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.service-faq-item summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.service-faq-item p {
+  margin: 0.85rem 0 0;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.service-others {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.service-others a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  padding: 1.5rem;
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+.service-others span {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.service-others svg {
+  margin-top: auto;
+  color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .service-hero {
+    padding-top: 110px;
+  }
+}
